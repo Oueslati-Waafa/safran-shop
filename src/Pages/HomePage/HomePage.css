@@ -1,0 +1,19 @@
+.carousel-indicators button {
+  border-radius: 50%;
+  width: 1rem !important;
+  height: 1rem !important;
+  background-color: #ffffd0 !important;
+  margin: 0 5px !important;
+  border: 1px solid transparent !important;
+  opacity: 1 !important;
+}
+
+.carousel-indicators .active {
+  background-color: var(--yellish) !important;
+  outline: 1px solid #fff;
+}
+
+.products-cont-home {
+  background-color: #fff;
+  padding: 0 6rem;
+}

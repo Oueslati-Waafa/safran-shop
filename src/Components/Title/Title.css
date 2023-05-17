@@ -1,0 +1,23 @@
+.title-cont p {
+  text-align: center;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.title-cont div:first-of-type {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.title-cont div:last-of-type {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.title-cont div div {
+  background-color: var(--redish);
+  height: 3px;
+  width: 80%;
+}
