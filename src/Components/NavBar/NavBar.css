@@ -1,11 +1,27 @@
+@media (min-width: 992px) {
+  .links-cont ul {
+    width: 55%;
+  }
+  .logo-cont {
+    padding-left: 3rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .links-cont-mobile ul {
+    width: 80%;
+    margin-top: 1rem;
+  }
+}
+
 nav {
   background-color: var(--primary);
-  max-height: 4rem;
+  margin: 0 !important;
+  max-width: 100%;
 }
 
 .logo-cont {
   max-height: 4rem;
-  padding-left: 3rem;
 }
 
 .nav-logo {
@@ -14,21 +30,34 @@ nav {
   cursor: pointer;
 }
 
-.links-cont {
-  display: flex;
-  justify-content: center;
-}
-
 .links-cont ul {
   list-style-type: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: var(--secondary);
-  width: 40%;
 }
 
 .links-cont ul li:hover {
+  background: var(--goldish);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  cursor: pointer;
+}
+
+.links-cont-mobile ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--secondary);
+}
+
+.links-cont-mobile {
+  transition: all 0.5s ease-in-out;
+}
+
+.links-cont-mobile ul li:hover {
   background: var(--goldish);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -55,5 +84,10 @@ nav {
 }
 
 .buttons-cont ul li img:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+ul {
+  margin: 0;
+  padding: 0;
 }

@@ -6,6 +6,7 @@ import NavBar from "./Components/NavBar/NavBar";
 import HomePage from "./Pages/HomePage/HomePage";
 import AboutUsPage from "./Pages/AboutUsPage/AboutUsPage";
 import Contact from "./Pages/Contact/Contact";
+import ProductPage from "./Pages/ProductPage/ProductPage";
 
 function App() {
   return (
@@ -14,9 +15,10 @@ function App() {
         <NavBar />
         <main>
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutUsPage />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route exact path="/" element={<HomePage />} />
+            <Route exact path="/about" element={<AboutUsPage />} />
+            <Route exact path="/contact" element={<Contact />} />
+            <Route exact path="/product/:slug" element={<ProductPage />} />
           </Routes>
         </main>
       </div>
