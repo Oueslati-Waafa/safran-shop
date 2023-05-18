@@ -29,10 +29,17 @@ const getProductById = async (req, res) => {
   }
 };
 
-
+/**CREATE A NEW PRODUCT */
 /**CREATE A NEW PRODUCT */
 const createProduct = async (req, res) => {
   try {
+    // Check if the user is an admin
+    const isAdmin = req.user.isAdmin; // Replace with the attribute that represents the user's role
+
+    if (!isAdmin) {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
+
     const { productNumber, name, description, price, weight, imageUrl } = req.body;
 
     // Check if the product already exists by its product number
@@ -68,11 +75,16 @@ const createProduct = async (req, res) => {
 };
 
 
-
-
 // PUT /products/:id
 const updateProduct = async (req, res) => {
   try {
+    // Check if the user is an admin
+    const isAdmin = req.user.isAdmin; // Replace with the attribute that represents the user's role
+
+    if (!isAdmin) {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
+
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
@@ -88,6 +100,13 @@ const updateProduct = async (req, res) => {
 // DELETE /products/:id
 const deleteProduct = async (req, res) => {
   try {
+    // Check if the user is an admin
+    const isAdmin = req.user.isAdmin; // Replace with the attribute that represents the user's role
+
+    if (!isAdmin) {
+      return res.status(403).json({ error: 'Unauthorized' });
+    }
+
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });

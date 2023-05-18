@@ -1,3 +1,12 @@
+import express from 'express';
+
+/**
+ * @swagger
+ * tags:
+ *   - name: Products
+ *     description: API endpoints for managing products
+ */
+
 import {
   getProducts,
   getProductById,
@@ -5,19 +14,23 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/Product.controller.js";
-import express from 'express';
+
+/** Defining the router */
+const productsRouter = express.Router();
 
 /**
  * @swagger
- * tags:
- *   name: Products
- *   description: API endpoints for managing products
  * /products/getall:
  *   get:
  *     summary: Retrieve a list of products
  *     responses:
  *       200:
  *         description: OK
+ */
+productsRouter.route("/getall").get(getProducts);
+
+/**
+ * @swagger
  * /products/add:
  *   post:
  *     summary: Create a new product
@@ -43,6 +56,11 @@ import express from 'express';
  *     responses:
  *       201:
  *         description: Created
+ */
+productsRouter.route("/add").post(createProduct);
+
+/**
+ * @swagger
  * /products/{id}:
  *   get:
  *     summary: Retrieve a product by ID
@@ -55,6 +73,12 @@ import express from 'express';
  *     responses:
  *       200:
  *         description: OK
+ */
+productsRouter.route("/:id").get(getProductById);
+
+/**
+ * @swagger
+ * /products/{id}:
  *   put:
  *     summary: Update a product
  *     parameters:
@@ -97,19 +121,6 @@ import express from 'express';
  *       200:
  *         description: OK
  */
-
-// routes handlers
-
-/** Defining the router */
-const productsRouter = express.Router();
-
-productsRouter.route("/add").post(createProduct);
-productsRouter.route("/getall").get(getProducts);
-
-productsRouter
-  .route("/:id")
-  .delete(deleteProduct)
-  .get(getProductById)
-  .put(updateProduct);
+productsRouter.route("/:id").put(updateProduct).delete(deleteProduct);
 
 export { productsRouter };
