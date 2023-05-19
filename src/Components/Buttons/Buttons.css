@@ -1,0 +1,39 @@
+.myButton {
+  background-color: var(--dark-redish) !important;
+}
+
+@media (min-width: 992px) {
+  .myButton {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .myButton {
+    font-size: 1rem;
+  }
+}
+
+.myButton:hover {
+  opacity: 0.9;
+}
+
+.myButton a {
+  color: var(--secondary) !important;
+}
+
+.xLargeButton {
+  width: 100%;
+}
+
+.largeButton {
+  width: 75%;
+}
+
+.mediumButton {
+  width: 50%;
+}
+
+.smallButton {
+  width: 25%;
+}

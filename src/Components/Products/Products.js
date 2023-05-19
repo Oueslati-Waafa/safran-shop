@@ -36,11 +36,14 @@ export default function Products(props) {
             <div className="product-caption d-flex align-items-center">
               <h4>
                 {product.weight} -{" "}
-                <Link to={`/product/${product.product_number}`}>
+                <Link
+                  to={`/product/${product.product_number}`}
+                  onClick={() => window.scrollTo(0, 0)}
+                >
                   {product.name}
                 </Link>
               </h4>
-              <div className="d-flex justify-content-between w-100">
+              <div className="d-flex justify-content-between w-100 product-rate-cont">
                 <Rating
                   initialValue={product.rate}
                   readonly

@@ -35,9 +35,6 @@
   bottom: 45px !important;
 }
 
-.Testimonial-card-text-cont {
-}
-
 .Testimonial-card-text {
   color: var(--secondary);
 }
@@ -47,18 +44,18 @@
     font-size: 0.5rem;
   }
   .userImg-cont {
-  height: 100%;
-  position: relative;
-  max-width: 150px;
-}
+    height: 100%;
+    position: relative;
+    max-width: 150px;
+  }
 }
 
 @media (min-width: 576px) {
   .userImg-cont {
-  height: 100%;
-  position: relative;
-  max-width: 250px;
-}
+    height: 100%;
+    position: relative;
+    max-width: 250px;
+  }
 }
 
 @media (min-width: 576px) and (max-width: 768px) {

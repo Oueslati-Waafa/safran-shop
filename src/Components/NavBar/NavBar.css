@@ -14,6 +14,13 @@
   }
 }
 
+@media (min-width: 576px) and (max-width: 992px) {
+  .links-cont-mobile ul {
+    width: 50%;
+    margin-top: 1rem;
+  }
+}
+
 nav {
   background-color: var(--primary);
   margin: 0 !important;
@@ -38,11 +45,23 @@ nav {
   color: var(--secondary);
 }
 
+.links-cont ul li a,
+.links-cont-mobile ul li a {
+  color: var(--secondary) !important;
+}
+
 .links-cont ul li:hover {
   background: var(--goldish);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   cursor: pointer;
+}
+
+.active {
+  background: var(--goldish);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
 }
 
 .links-cont-mobile ul {

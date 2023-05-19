@@ -7,6 +7,7 @@ import HomePage from "./Pages/HomePage/HomePage";
 import AboutUsPage from "./Pages/AboutUsPage/AboutUsPage";
 import Contact from "./Pages/Contact/Contact";
 import ProductPage from "./Pages/ProductPage/ProductPage";
+import Footer from "./Components/Footer/Footer";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route exact path="/product/:slug" element={<ProductPage />} />
           </Routes>
         </main>
+        <Footer />
       </div>
     </Router>
   );

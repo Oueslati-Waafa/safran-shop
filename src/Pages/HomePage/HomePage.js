@@ -145,9 +145,6 @@ export default function HomePage() {
       <section className="Testimonials-cont-home my-5">
         <Testimonials testimonials={testimonials} />
       </section>
-      <section className="footer-cont">
-        <Footer />
-      </section>
     </main>
   );
 }

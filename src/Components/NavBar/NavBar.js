@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./NavBar.css";
+import { Link, useLocation } from "react-router-dom";
 
 export default function NavBar() {
   const [showLinks, setShowLinks] = useState(false);
@@ -7,6 +8,10 @@ export default function NavBar() {
   const toggleLinks = () => {
     setShowLinks(!showLinks);
   };
+
+  const location = useLocation();
+  const path = location.pathname;
+  console.log(path);
 
   return (
     <nav className="row">
@@ -18,9 +23,21 @@ export default function NavBar() {
       </div>
       <div className="links-cont col-lg-6 d-lg-flex justify-content-lg-center d-none">
         <ul>
-          <li>HOME</li>
-          <li>ÜBER UNS</li>
-          <li>KONTAKT</li>
+          <li className={path === "/" ? "active" : ""}>
+            <Link to={"/"} onClick={() => window.scrollTo(0, 0)}>
+              HOME
+            </Link>
+          </li>
+          <li className={path.includes("about") ? "active" : ""}>
+            <Link to={"/about"} onClick={() => window.scrollTo(0, 0)}>
+              ÜBER UNS
+            </Link>
+          </li>
+          <li className={path.includes("contact") ? "active" : ""}>
+            <Link to={"/contact"} onClick={() => window.scrollTo(0, 0)}>
+              KONTAKT
+            </Link>
+          </li>
         </ul>
       </div>
       <div className="buttons-cont col-lg-3 col-6">
@@ -45,9 +62,21 @@ export default function NavBar() {
         }`}
       >
         <ul>
-          <li>HOME</li>
-          <li>ÜBER UNS</li>
-          <li>KONTAKT</li>
+          <li>
+            <Link to={"/"} onClick={toggleLinks}>
+              HOME
+            </Link>
+          </li>
+          <li>
+            <Link to={"/about"} onClick={toggleLinks}>
+              ÜBER UNS
+            </Link>
+          </li>
+          <li>
+            <Link to={"/contact"} onClick={toggleLinks}>
+              KONTAKT
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>
