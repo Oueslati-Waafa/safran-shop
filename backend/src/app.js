@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import { productsRouter } from './routes/products.routes.js';
 import { usersRouter } from './routes/users.routes.js';
 import { shippingDetailsRouter } from './routes/shippingdetails.routes.js';
+import { authentication } from './routes/authentication.routes.js';
 import dotenv from 'dotenv';
 
 /* Accessing .env content */
@@ -20,5 +21,6 @@ app.use(bodyParser.json());
 app.use('/products', productsRouter);
 app.use('/users', usersRouter);
 app.use('/shipping-details', shippingDetailsRouter);
+app.use('/auth', authentication);
 
 export default app;

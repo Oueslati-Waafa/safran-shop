@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
     },
     phoneNumber: {
       type: String,
-      required: true,
+      required: false,
       unique: true,
     },
     password: {
@@ -32,10 +32,23 @@ const userSchema = new mongoose.Schema(
     imageUrl: {
       type: Array,
       required: false,
-      default :"https://res.cloudinary.com/dw6pezn3k/image/upload/v1684405497/5770f01a32c3c53e90ecda61483ccb08_v66paa.jpg"
+      default:
+        "https://res.cloudinary.com/dw6pezn3k/image/upload/v1684405497/5770f01a32c3c53e90ecda61483ccb08_v66paa.jpg",
     },
-    shippingDetails: { type: mongoose.Schema.Types.ObjectId, ref: 'ShippingDetails' },
+    shippingDetails: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ShippingDetails",
+    },
+    verifCode: String,
+    verificationCode: {
+      type: String,
+    },
+    isVerified: { 
+      type: Boolean, 
+      default: false 
+    },
   },
+
   {
     timestamps: true,
   }
