@@ -57,7 +57,7 @@ nav {
   cursor: pointer;
 }
 
-.active {
+.nav-active {
   background: var(--goldish);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -109,4 +109,139 @@ nav {
 ul {
   margin: 0;
   padding: 0;
+}
+
+.user-dropdown-toggler {
+  position: relative;
+}
+
+.user-dropdown-cont {
+  position: absolute;
+  z-index: 100;
+  height: fit-content;
+}
+
+.user-dropdown-content {
+  background-color: var(--primary) !important;
+  color: var(--secondary) !important;
+  border-radius: 0 0 3rem 3rem;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 0.5rem solid transparent;
+  border-right: 0.5rem solid transparent;
+  border-bottom: 2.5rem solid var(--primary);
+}
+
+.user-info-img {
+  width: 35%;
+}
+
+.user-nav {
+  list-style: none;
+}
+
+.user-nav-cont,
+.user-nav,
+.user-nav li,
+.user-nav-button {
+  width: 100%;
+}
+
+.user-nav-button {
+  background: var(--goldish);
+  width: 100%;
+  font-weight: 800;
+}
+
+.user-nav-button:hover {
+  color: var(--primary);
+  scale: 1.1;
+}
+
+.user-logOut-button:hover {
+  scale: 1.1;
+}
+
+.user-logOut-cont span {
+  color: var(--secondary);
+}
+
+@media (min-width: 1440px) {
+  .user-nav-button {
+    padding: 1rem 0;
+    font-size: 1.1rem;
+  }
+
+  .user-dropdown-cont {
+    right: 0rem;
+    top: 4rem;
+    width: 20%;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .user-dropdown-cont {
+    right: 0rem;
+    top: 4rem;
+    width: 25%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .user-dropdown-cont {
+    right: 0rem;
+    top: 4rem;
+    width: 30%;
+  }
+
+  .user-info-name,
+  .user-nav-button,
+  .user-logOut-button {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  .user-dropdown-cont {
+    right: 0rem;
+    top: 4rem;
+    width: 40%;
+  }
+
+  .user-info-name,
+  .user-nav-button,
+  .user-logOut-button {
+    font-size: 0.8rem;
+  }
+}
+
+@media (min-width: 425px) and (max-width: 576px) {
+  .user-dropdown-cont {
+    right: 0rem;
+    top: 4rem;
+    width: 50%;
+  }
+
+  .user-info-name,
+  .user-nav-button,
+  .user-logOut-button {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 425px) {
+  .user-dropdown-cont {
+    right: 0rem;
+    top: 4rem;
+    width: 60%;
+  }
+
+  .user-info-name,
+  .user-nav-button,
+  .user-logOut-button {
+    font-size: 0.6rem;
+  }
 }

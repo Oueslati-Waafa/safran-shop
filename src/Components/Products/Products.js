@@ -12,6 +12,24 @@ export default function Products(props) {
     setWidth(window.innerWidth);
   }, []);
 
+  const handleAddToCart2 = (prod) => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingProduct = cart.find(
+      (item) => item.product_number == prod.product_number
+    );
+
+    console.log(existingProduct);
+
+    if (existingProduct) {
+      existingProduct.quantity += 1;
+    } else {
+      const newProduct = { ...prod, quantity: 1 };
+      cart.push(newProduct);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+  };
+
   return (
     <section className="products-cont">
       <div>
@@ -50,10 +68,15 @@ export default function Products(props) {
                   allowFraction
                   size={width > 768 ? 35 : 20}
                 />
-                <h3>{product.price}</h3>
+                <h3>{product.price}£</h3>
               </div>
             </div>
-            <button className="btn product-btn w-100">In den Warenkorb</button>
+            <button
+              className="btn product-btn w-100"
+              onClick={() => handleAddToCart2(product)}
+            >
+              In den Warenkorb
+            </button>
           </div>
         ))}
       </div>

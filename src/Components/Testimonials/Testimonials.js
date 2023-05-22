@@ -32,7 +32,6 @@ export default function Testimonials(props) {
                   />
                 </div>
                 <p className="Testimonial-card-text col-8">
-                  <span>
                     Lorem, ipsum dolor sit amet consectetur adipisicing elit.
                     Aperiam, quidem nihil maiores dolore rem libero ducimus
                     sint, eveniet inventore cumque dolorem nulla in
@@ -40,7 +39,6 @@ export default function Testimonials(props) {
                     sequi quasi, voluptates eaque est officia. Omnis cupiditate,
                     sed ex odio ab quam non nemo, cumque sunt delectus harum,
                     eum sit?
-                  </span>
                 </p>
                 <div className="col-2 d-flex justify-content-center align-items-end">
                   <img

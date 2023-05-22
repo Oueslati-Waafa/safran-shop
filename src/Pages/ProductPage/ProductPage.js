@@ -9,8 +9,8 @@ export default function ProductPage() {
   const products = [
     {
       name: "Super Negin Safranfäden",
-      weight: "10g",
-      price: "50£",
+      weight: "1g",
+      price: 5,
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
       imageUrl: [
@@ -22,8 +22,8 @@ export default function ProductPage() {
     },
     {
       name: "Super Negin Safranfäden",
-      weight: "10g",
-      price: "50£",
+      weight: "5g",
+      price: 25,
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
       imageUrl: [
@@ -36,7 +36,7 @@ export default function ProductPage() {
     {
       name: "Super Negin Safranfäden",
       weight: "10g",
-      price: "50£",
+      price: 50,
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
       imageUrl: [
@@ -48,8 +48,8 @@ export default function ProductPage() {
     },
     {
       name: "Super Negin Safranfäden",
-      weight: "10g",
-      price: "50£",
+      weight: "100g",
+      price: 500,
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
       imageUrl: [
@@ -62,7 +62,7 @@ export default function ProductPage() {
     {
       name: "Super Negin Safranfäden",
       weight: "1Kg",
-      price: "299£",
+      price: 5000,
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
       imageUrl: [
@@ -74,8 +74,8 @@ export default function ProductPage() {
     },
     {
       name: "Super Negin Safranfäden",
-      weight: "1Kg",
-      price: "299£",
+      weight: "2Kg",
+      price: 8000,
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
       imageUrl: [
@@ -87,8 +87,8 @@ export default function ProductPage() {
     },
     {
       name: "Super Negin Safranfäden",
-      weight: "1Kg",
-      price: "299£",
+      weight: "5Kg",
+      price: 20000,
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
       imageUrl: [
@@ -100,8 +100,8 @@ export default function ProductPage() {
     },
     {
       name: "Super Negin Safranfäden",
-      weight: "1Kg",
-      price: "299£",
+      weight: "10Kg",
+      price: 35000,
       description:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
       imageUrl: [
@@ -112,10 +112,22 @@ export default function ProductPage() {
       product_number: 7,
     },
   ];
+  const [productId, setProductId] = useState(null);
   const location = useLocation();
-  const path = location.pathname;
-  const parts = path.split("/");  
-  const productId = parts[2];
+  useEffect(() => {
+    const path = location.pathname;
+    const parts = path.split("/");
+    setProductId(parts[2]);
+  }, [location]);
+
+  console.log(productId);
+
+  const [currentProduct, setCurrentProduct] = useState();
+
+  useEffect(() => {
+    setCurrentProduct(products[productId]);
+  }, [productId]);
+
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [mightLike, setMightLike] = useState([]);
 
@@ -132,57 +144,80 @@ export default function ProductPage() {
     setMightLike(getRandomItems(products, 4));
   }, []);
 
+  const handleAddToCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingProduct = cart.find(
+      (item) => item.product_number == productId
+    );
+
+    if (existingProduct) {
+      existingProduct.quantity += 1;
+    } else {
+      const newProduct = { ...currentProduct, quantity: 1 };
+      cart.push(newProduct);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+  };
+
   return (
     <main className="mt-5 py-5 container product-page">
-      <div className="row">
-        <div className="col-md-5 col-12 mb-md-0 mb-5">
-          <div
-            className="product-page-img-cont"
-            onMouseEnter={() => setHoveredIndex(productId)}
-            onMouseLeave={() => setHoveredIndex(null)}
-          >
-            <img
-              src={
-                hoveredIndex === productId
-                  ? products[productId].imageUrl[1]
-                  : products[productId].imageUrl[0]
-              }
-              alt="product-image"
-              className="img-fluid product-page-img"
-            />
-          </div>
-        </div>
-        <div className="col-md-7 col-12 d-flex align-items-center flex-column justify-content-between">
-          <div className="product-page-caption d-flex align-items-center w-100 h-100 flex-column">
-            <h4>
-              {products[productId].weight} - {products[productId].name}
-            </h4>
-            <div className="d-flex justify-content-between w-100 product-page-rate">
-              <Rating
-                initialValue={products[productId].rate}
-                readonly
-                allowFraction
-                size={
-                  width < 576
-                    ? 25
-                    : width > 576 && width < 768
-                    ? 30
-                    : width > 768 && width < 992
-                    ? 35
-                    : 45
+      {currentProduct ? (
+        <div className="row">
+          <div className="col-md-5 col-12 mb-md-0 mb-5">
+            <div
+              className="product-page-img-cont"
+              onMouseEnter={() => setHoveredIndex(productId)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              <img
+                src={
+                  hoveredIndex === productId
+                    ? currentProduct.imageUrl[1]
+                    : currentProduct.imageUrl[0]
                 }
+                alt="product-image"
+                className="img-fluid product-page-img"
               />
-              <h3>{products[productId].price}</h3>
             </div>
-            <p>{products[productId].description}</p>
           </div>
-          <div className="w-100">
-            <button className="btn product-page-btn float-end">
-              In den Warenkorb
-            </button>
+          <div className="col-md-7 col-12 d-flex align-items-center flex-column justify-content-between">
+            <div className="product-page-caption d-flex align-items-center w-100 h-100 flex-column">
+              <h4>
+                {currentProduct.weight} - {currentProduct.name}
+              </h4>
+              <div className="d-flex justify-content-between w-100 product-page-rate">
+                <Rating
+                  initialValue={currentProduct.rate}
+                  readonly
+                  allowFraction
+                  size={
+                    width < 576
+                      ? 25
+                      : width > 576 && width < 768
+                      ? 30
+                      : width > 768 && width < 992
+                      ? 35
+                      : 45
+                  }
+                />
+                <h3>{currentProduct.price}£</h3>
+              </div>
+              <p>{currentProduct.description}</p>
+            </div>
+            <div className="w-100">
+              <button
+                className="btn product-page-btn float-end"
+                onClick={handleAddToCart}
+              >
+                In den Warenkorb
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        "Loading ..."
+      )}
       <Title content={"Das könnte Ihnen auch gefallen"} />
       <Products products={mightLike} />
     </main>
