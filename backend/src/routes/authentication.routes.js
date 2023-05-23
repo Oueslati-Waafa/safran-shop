@@ -17,6 +17,8 @@ const authentication = express.Router();
  * /auth/register:
  *   post:
  *     summary: Register a new user
+ *     tags:
+ *       - Authentication
  *     requestBody:
  *       required: true
  *       content:
@@ -48,6 +50,8 @@ authentication.post('/register', register);
  * /auth/verify/{email}:
  *   post:
  *     summary: Verify user's email
+ *     tags:
+ *       - Authentication
  *     parameters:
  *       - in: path
  *         name: email
@@ -55,6 +59,17 @@ authentication.post('/register', register);
  *         schema:
  *           type: string
  *           pattern: '^[^@\s]+@[^@\s]+\.[^@\s]+$'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               verificationCode:
+ *                 type: string
+ *             required:
+ *               - code
  *     responses:
  *       200:
  *         description: Email verified successfully
@@ -63,6 +78,7 @@ authentication.post('/register', register);
  *       500:
  *         description: Internal Server Error
  */
+
 authentication.post('/verify/:param', verifyEmail);
 
 
@@ -71,6 +87,8 @@ authentication.post('/verify/:param', verifyEmail);
  * /auth/resend-verification/{email}:
  *   get:
  *     summary: Resend verification email
+ *     tags:
+ *       - Authentication
  *     parameters:
  *       - in: path
  *         name: email
@@ -93,6 +111,8 @@ authentication.get('/resend-verification/:param', resendVerificationEmail);
  * /auth/login:
  *   post:
  *     summary: User login
+ *     tags:
+ *       - Authentication
  *     requestBody:
  *       required: true
  *       content:
@@ -121,6 +141,8 @@ authentication.post('/login', login);
  * /auth/reset/{email}:
  *   get:
  *     summary: Reset password email
+ *     tags:
+ *       - Authentication
  *     parameters:
  *       - in: path
  *         name: email
@@ -144,6 +166,8 @@ authentication.get('/reset/:param', resetPasswordByEmail);
  * /auth/reset/{email}:
  *   post:
  *     summary: Reset user's password
+ *     tags:
+ *       - Authentication
  *     parameters:
  *       - in: path
  *         name: email

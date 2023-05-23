@@ -168,20 +168,21 @@ export async function findOneUserByFilter(userFilter) {
 
  /**A FUNCTON TO ADD TOKEN */
  function addTokenToUser(user) {
-    const payload = {
-       user: {
-          id: user._id,
-          email: user.email,
-       },
-    };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
-       expiresIn: '2d',
-    });
-    const loggedUser = userFormat(user);
-    loggedUser.token = token;
-    return loggedUser;
+   const payload = {
+     user: {
+       id: user._id,
+       email: user.email,
+       isAdmin: user.isAdmin,
+     },
+   };
+   const token = jwt.sign(payload, process.env.JWT_SECRET, {
+     expiresIn: '24h',
+   });
+   const loggedUser = userFormat(user);
+   loggedUser.token = token;
+   return loggedUser;
  }
-
+ 
 
  export function userFormat(user) {
     return {
@@ -192,7 +193,7 @@ export async function findOneUserByFilter(userFilter) {
        password: user.password,
        phoneNumber: user.phoneNumber,
        isVerified: user.isVerified,
-       isAdmin: user.isVerified,
+       isAdmin: user.isAdmin,
        imageUrl: user.imageUrl,
     };
  }

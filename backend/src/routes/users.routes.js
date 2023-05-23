@@ -23,6 +23,8 @@ const usersRouter = express.Router();
  * /users/getall:
  *   get:
  *     summary: Retrieve a list of users
+ *     tags:
+ *       - Users
  *     responses:
  *       200:
  *         description: OK
@@ -34,6 +36,8 @@ usersRouter.route("/getall").get(getUsers);
  * /users/add:
  *   post:
  *     summary: Create a new user
+ *     tags:
+ *       - Users
  *     requestBody:
  *       required: true
  *       content:
@@ -53,9 +57,6 @@ usersRouter.route("/getall").get(getUsers);
  *                 type: string
  *               isAdmin:
  *                 type: boolean
- *               shippingDetails:
- *                 type: string
- *                 format: uuid
  *     responses:
  *       201:
  *         description: Created
@@ -67,6 +68,8 @@ usersRouter.route("/add").post(createUser);
  * /users/{id}:
  *   get:
  *     summary: Retrieve a user by ID
+ *     tags:
+ *       - Users
  *     parameters:
  *       - in: path
  *         name: id
@@ -84,6 +87,8 @@ usersRouter.route("/:id").get(getUserById);
  * /users/{id}:
  *   put:
  *     summary: Update a user
+ *     tags:
+ *       - Users
  *     parameters:
  *       - in: path
  *         name: id
@@ -109,13 +114,13 @@ usersRouter.route("/:id").get(getUserById);
  *                 type: string
  *               isAdmin:
  *                 type: boolean
- *               shippingDetails:
- *                 type: Schema.Types.ObjectId
  *     responses:
  *       200:
  *         description: OK
  *   delete:
  *     summary: Delete a user
+ *     tags:
+ *       - Users
  *     parameters:
  *       - in: path
  *         name: id

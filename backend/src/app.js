@@ -4,8 +4,8 @@ import bodyParser from 'body-parser';
 //const productsRouter = express.Router();
 import { productsRouter } from './routes/products.routes.js';
 import { usersRouter } from './routes/users.routes.js';
-import { shippingDetailsRouter } from './routes/shippingdetails.routes.js';
 import { authentication } from './routes/authentication.routes.js';
+import { ordersRouter } from './routes/order.routes.js';
 import dotenv from 'dotenv';
 
 /* Accessing .env content */
@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 /* Using routers */
 app.use('/products', productsRouter);
 app.use('/users', usersRouter);
-app.use('/shipping-details', shippingDetailsRouter);
 app.use('/auth', authentication);
+app.use('/orders', ordersRouter);
 
 export default app;

@@ -29,17 +29,10 @@ const getProductById = async (req, res) => {
   }
 };
 
-/**CREATE A NEW PRODUCT */
+
 /**CREATE A NEW PRODUCT */
 const createProduct = async (req, res) => {
   try {
-    // Check if the user is an admin
-    const isAdmin = req.user.isAdmin; // Replace with the attribute that represents the user's role
-
-    if (!isAdmin) {
-      return res.status(403).json({ error: 'Unauthorized' });
-    }
-
     const { productNumber, name, description, price, weight, imageUrl } = req.body;
 
     // Check if the product already exists by its product number
@@ -73,7 +66,6 @@ const createProduct = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
 
 // PUT /products/:id
 const updateProduct = async (req, res) => {

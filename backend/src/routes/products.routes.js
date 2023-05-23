@@ -1,4 +1,5 @@
 import express from 'express';
+import {ensureLoggedIn, ensureAdmin} from '../middlewares/auth.middleware.js'
 
 /**
  * @swagger
@@ -23,6 +24,8 @@ const productsRouter = express.Router();
  * /products/getall:
  *   get:
  *     summary: Retrieve a list of products
+ *     tags:
+ *       - Products
  *     responses:
  *       200:
  *         description: OK
@@ -34,6 +37,10 @@ productsRouter.route("/getall").get(getProducts);
  * /products/add:
  *   post:
  *     summary: Create a new product
+ *     tags:
+ *       - Products
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -56,14 +63,28 @@ productsRouter.route("/getall").get(getProducts);
  *     responses:
  *       201:
  *         description: Created
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
+ *
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  */
-productsRouter.route("/add").post(createProduct);
+
+productsRouter.route("/add").post(ensureAdmin,createProduct);
 
 /**
  * @swagger
  * /products/{id}:
  *   get:
  *     summary: Retrieve a product by ID
+ *     tags:
+ *       - Products
  *     parameters:
  *       - in: path
  *         name: id
@@ -81,6 +102,10 @@ productsRouter.route("/:id").get(getProductById);
  * /products/{id}:
  *   put:
  *     summary: Update a product
+ *     tags:
+ *       - Products
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -111,6 +136,8 @@ productsRouter.route("/:id").get(getProductById);
  *         description: OK
  *   delete:
  *     summary: Delete a product
+ *     tags:
+ *       - Products
  *     parameters:
  *       - in: path
  *         name: id
@@ -120,7 +147,13 @@ productsRouter.route("/:id").get(getProductById);
  *     responses:
  *       200:
  *         description: OK
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  */
-productsRouter.route("/:id").put(updateProduct).delete(deleteProduct);
+productsRouter.route(ensureAdmin,"/:id").put(updateProduct).delete(deleteProduct);
 
 export { productsRouter };

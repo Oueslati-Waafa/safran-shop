@@ -40,7 +40,6 @@ const getUsers = async (req, res) => {
         return res.status(409).json({ error: 'User already exists' });
       }
   
-      const createdShippingDetails = await ShippingDetails.create(shippingDetails);
   
       const user = await User.create({
         fname,
@@ -49,8 +48,8 @@ const getUsers = async (req, res) => {
         phoneNumber,
         password,
         isAdmin,
-        shippingDetails: createdShippingDetails, // Save the full shippingDetails object
-      }).populate('shippingDetails');
+ 
+      });
   
       res.status(201).json(user);
     } catch (error) {
