@@ -6,6 +6,7 @@
  */
 import {
   ensureAdmin,
+  ensureLoggedIn,
   ensureUser,
 } from "../middlewares/auth.middleware.js";
 
@@ -16,11 +17,54 @@ import {
   getOrderById,
   updateOrder,
   deleteOrder,
-  getMyOrders
+  getMyOrders,
+  cancelMyOrder,
+  cancelOrderAdmin,
 } from "../controllers/Order.controller.js";
 
 /** Defining the router */
 const ordersRouter = express.Router();
+
+/**
+ * @swagger
+ * /orders/my-orders:
+ *   get:
+ *     summary: Get all orders for the connected user
+ *     tags:
+ *       - Orders
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved orders
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 orders:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Order'
+ *       401:
+ *         description: Unauthorized - Invalid or missing authentication token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *     securitySchemes:
+ *       bearerAuth:
+ *         type: http
+ *         scheme: bearer
+ *         bearerFormat: JWT
+ */
+ordersRouter.route("/my-orders").get(ensureUser, getMyOrders);
 
 /**
  * @swagger
@@ -248,7 +292,7 @@ ordersRouter.route("/add").post(ensureUser, createOrder);
  *       scheme: bearer
  *       bearerFormat: JWT
  */
-ordersRouter.route(ensureAdmin, "/getAll").get(getAllOrders);
+ordersRouter.route("/getAll").get(ensureAdmin, getAllOrders);
 
 /**
  * @swagger
@@ -291,11 +335,11 @@ ordersRouter.route(ensureAdmin, "/getAll").get(getAllOrders);
  *       scheme: bearer
  *       bearerFormat: JWT
  */
-ordersRouter.route(ensureAdmin, "/:orderId").get(getOrderById);
+ordersRouter.route("/:orderId").get(ensureAdmin, getOrderById);
 
 /**
  * @swagger
- * /orders/{orderId}:
+ * /orders/{id}:
  *   put:
  *     summary: Update an order
  *     tags:
@@ -304,7 +348,7 @@ ordersRouter.route(ensureAdmin, "/:orderId").get(getOrderById);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: orderId
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
@@ -313,39 +357,82 @@ ordersRouter.route(ensureAdmin, "/:orderId").get(getOrderById);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UpdateOrderInput'
+ *             $ref: '#/components/schemas/OrderUpdateInput'
  *     responses:
  *       200:
- *         description: Order updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Order'
- *       400:
- *         description: Invalid request or missing required fields
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       404:
- *         description: Order not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
- *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
+ *         description: OK
+ *     securitySchemes:
+ *       bearerAuth:
+ *         type: http
+ *         scheme: bearer
+ *         bearerFormat: JWT
  * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- *
+ *   schemas:
+ *     OrderUpdateInput:
+ *       type: object
+ *       properties:
+ *         shippingInfo:
+ *           type: object
+ *           properties:
+ *             address:
+ *               type: string
+ *             city:
+ *               type: string
+ *             state:
+ *               type: string
+ *             country:
+ *               type: string
+ *             postalCode:
+ *               type: number
+ *         orderItems:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/OrderItemUpdateInput'
+ *         paymentInfo:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: string
+ *             status:
+ *               type: string
+ *         totalPrice:
+ *           type: number
+ *         orderStatus:
+ *           type: string
+ *           enum:
+ *             - Processing
+ *             - Shipped
+ *             - Delivered
+ *             - Cancelled
+ *         isPaid:
+ *           type: boolean
+ *         shippingPrice:
+ *           type: number
+ *         taxPrice:
+ *           type: number
+ *         deliveredAt:
+ *           type: string
+ *           format: date-time
+ *         shippedAt:
+ *           type: string
+ *           format: date-time
+ *     OrderItemUpdateInput:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         price:
+ *           type: number
+ *         quantity:
+ *           type: number
+ *         product:
+ *           type: string
+ */
+ordersRouter.route("/:id").put(ensureAdmin, updateOrder);
+
+/**
+ * @swagger
+ * /orders/{id}:
  *   delete:
  *     summary: Delete an order
  *     tags:
@@ -354,75 +441,91 @@ ordersRouter.route(ensureAdmin, "/:orderId").get(getOrderById);
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: orderId
+ *         name: id
  *         required: true
  *         schema:
  *           type: string
  *     responses:
  *       200:
- *         description: Order deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Success'
+ *         description: OK
  *       404:
  *         description: Order not found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
  *       500:
- *         description: Server error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Error'
+ *         description: Internal Server Error
+ *     operationId: deleteOrder
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  */
-ordersRouter
-  .route(ensureAdmin, "/:orderId")
-  .put(updateOrder)
-  .delete(deleteOrder);
+ordersRouter.route("/:id").delete(ensureAdmin, deleteOrder);
 
-  /**
+
+/**
  * @swagger
- * /orders/my-orders:
- *   get:
- *     summary: Get all orders for the connected user
+ * /orders/{id}/cancel:
+ *   put:
+ *     summary: Cancel an order
  *     tags:
  *       - Orders
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: Successfully retrieved orders
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 orders:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Order'
- *       401:
- *         description: Unauthorized - Invalid or missing authentication token
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *     securitySchemes:
- *       bearerAuth:
- *         type: http
- *         scheme: bearer
- *         bearerFormat: JWT
+ *         description: OK
+ *       400:
+ *         description: Order cannot be canceled
+ *       403:
+ *         description: Unauthorized to cancel this order
+ *       404:
+ *         description: Order not found
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  */
-ordersRouter.route('/orders/my-orders').get(ensureUser, getMyOrders);
+ordersRouter.put("/:id/cancel", ensureUser, cancelMyOrder);
+
+/**
+ * @swagger
+ * /orders/{id}/admin-cancel:
+ *   put:
+ *     summary: Cancel an order
+ *     tags:
+ *       - Orders
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *       400:
+ *         description: Order cannot be canceled
+ *       404:
+ *         description: Order not found
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+ordersRouter.route("/:id/admin-cancel").put( ensureAdmin, cancelOrderAdmin);
 
 
 export { ordersRouter };

@@ -5,24 +5,23 @@ import jwt from "jsonwebtoken";
 /**ENSURE THAT THE USER IS LOGGED IN */
 export function ensureUser(req, res, next) {
   try {
-      //console.log(req.headers.authorization);
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedTokenUser = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("user decoded token:", decodedTokenUser);
+    console.log("ensureUser middleware called");
 
-      const token = req.headers.authorization.split(' ')[1];
-      //console.log(req);
-      const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-      console.log('user decoded token: '+decodedToken)
-      req.user = {
-          id: decodedToken.user.id,
-          email: decodedToken.user.email,
-      };
-      next();
+    req.user = {
+      id: decodedTokenUser.user.id,
+      email: decodedTokenUser.user.email,
+    };
+    next();
   } catch (err) {
-      res.status(401).json({
-          //message: 'Auth failed',
-          message: err.message,
-      });
+    res.status(401).json({
+      message: err.message,
+    });
   }
 }
+
 
 /**ENSURE THAT USER IS LOGGED IN */
 export function ensureLoggedIn(req, res, next) {
@@ -62,7 +61,7 @@ export function ensureLoggedIn(req, res, next) {
       // Verify the token
       const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
   
-      console.log('admin decoded token: '+decodedToken)
+      console.log('admin decoded token: ', decodedToken)
       // Check if the user is an admin
       if (!decodedToken.user.isAdmin) {
         return res.status(401).json({

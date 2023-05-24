@@ -1,5 +1,5 @@
-import express from 'express';
-import {ensureLoggedIn, ensureAdmin} from '../middlewares/auth.middleware.js'
+import express from "express";
+import { ensureLoggedIn, ensureAdmin } from "../middlewares/auth.middleware.js";
 
 /**
  * @swagger
@@ -76,7 +76,7 @@ productsRouter.route("/getall").get(getProducts);
  *       bearerFormat: JWT
  */
 
-productsRouter.route("/add").post(ensureAdmin,createProduct);
+productsRouter.route("/add").post(ensureAdmin, createProduct);
 
 /**
  * @swagger
@@ -96,6 +96,32 @@ productsRouter.route("/add").post(ensureAdmin,createProduct);
  *         description: OK
  */
 productsRouter.route("/:id").get(getProductById);
+
+/**
+ * @swagger
+ * /products/{id}:
+ *   delete:
+ *     summary: Delete a product
+ *     tags:
+ *       - Products
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *     securitySchemes:
+ *       bearerAuth:
+ *         type: http
+ *         scheme: bearer
+ *         bearerFormat: JWT
+ */
+productsRouter.route("/:id").delete(ensureAdmin, deleteProduct);
 
 /**
  * @swagger
@@ -134,19 +160,6 @@ productsRouter.route("/:id").get(getProductById);
  *     responses:
  *       200:
  *         description: OK
- *   delete:
- *     summary: Delete a product
- *     tags:
- *       - Products
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: OK
  * components:
  *   securitySchemes:
  *     bearerAuth:
@@ -154,6 +167,6 @@ productsRouter.route("/:id").get(getProductById);
  *       scheme: bearer
  *       bearerFormat: JWT
  */
-productsRouter.route(ensureAdmin,"/:id").put(updateProduct).delete(deleteProduct);
+productsRouter.route("/:id").put(ensureAdmin, updateProduct);
 
 export { productsRouter };
