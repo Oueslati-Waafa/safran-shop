@@ -1,7 +1,7 @@
 import User from "../models/Users.js";
 import Product from "../models/Products.js";
 import mongoose from "mongoose";
-
+import { validationResult } from "express-validator";
 // GET /users
 const getUsers = async (req, res) => {
   try {
@@ -139,30 +139,20 @@ export const addToWishlist = async (req, res) => {
 
 /**DELETE A PRODUCT FROM A WISHLIST */
 export const deleteFromWishlist = async (req, res) => {
-   try {
-     const userId = req.user.id; // Retrieve the user ID from the authenticated request
-     const productId = req.params.id; // Retrieve the product ID from the request parameters
-
-     const user = await User.findById(userId); // Find the user by ID
-     if (!user) {
-       return res.status(404).json({ error: "User not found" });
-     }
-
-     // Check if the product exists in the wishlist
-     if (!user.wishlist.includes(productId)) {
-       return res.status(404).json({ error: "Product not found in wishlist" });
-     }
-
-     // Remove the product from the wishlist
-     user.wishlist = user.wishlist.filter((item) => item !== productId);
-     await user.save();
-
-     res
-       .status(200)
-       .json({ message: "Product removed from wishlist successfully" });
-   } catch (error) {
-     res.status(500).json({ error: error.message });
-   }
+    if (!validationResult(req).isEmpty()) {
+      res.status(400).json({ error: validationResult(req).array() });
+    } else {
+      const productId = req.params.id;
+      const userId = req.user.id;
+      User
+        .findByIdAndUpdate(userId, { $pull: { wishlist: productId } })
+        .then(() => {
+          res
+            .status(200)
+            .json({ message: "Product removed from wishlist successfully!" });
+        })
+        .catch((err) => res.status(500).json({ error: err.message }));
+    }
 };
 
 /**GET THE USERS WISHLIST */
