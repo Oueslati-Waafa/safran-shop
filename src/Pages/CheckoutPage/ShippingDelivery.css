@@ -1,0 +1,114 @@
+.delivery-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.delivery-page .myButton-cont {
+  width: 100%;
+}
+
+.shipping-delivery {
+  background-color: var(--dark-redish);
+  width: 100%;
+  border-radius: 2rem;
+  padding: 2rem;
+}
+
+.shipping-delivery .shipping-delivery-title {
+  color: var(--secondary);
+  font-size: 1.2rem;
+}
+
+.shipping-delivery-form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--secondary);
+  font-size: 1.2rem;
+}
+
+.shipping-delivery-form-group .form-check-input {
+  background-color: transparent !important;
+  border: 1px solid var(--secondary) !important;
+}
+
+.shipping-delivery-form-group .form-check-input:checked[type="radio"] {
+  background: var(--yellish) !important;
+  background-image: none !important;
+}
+
+.goBack-btn,
+.goBack-btn a {
+  text-decoration: none !important;
+  color: var(--dark-secondary) !important;
+}
+
+.goBack-btn:hover,
+.goBack-btn a:hover {
+  text-decoration: underline !important;
+  color: var(--primary) !important;
+}
+
+.shipping-delivery-form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--secondary);
+}
+
+.shipping-delivery .shipping-delivery-title {
+  color: var(--secondary);
+}
+
+/* media querries */
+
+@media (min-width: 1440px) {
+  .shipping-delivery .shipping-delivery-title,
+  .shipping-delivery-form-group {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+  .shipping-delivery .shipping-delivery-title,
+  .shipping-delivery-form-group {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+  .shipping-delivery .shipping-delivery-title,
+  .shipping-delivery-form-group {
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .shipping-delivery .shipping-delivery-title,
+  .shipping-delivery-form-group {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  .shipping-delivery .shipping-delivery-title,
+  .shipping-delivery-form-group {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 425px) and (max-width: 576px) {
+  .shipping-delivery .shipping-delivery-title,
+  .shipping-delivery-form-group {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 425px) {
+  .shipping-delivery .shipping-delivery-title,
+  .shipping-delivery-form-group {
+    font-size: 0.7rem;
+  }
+}

@@ -50,9 +50,6 @@
   .testimonial-field {
     width: 100%;
   }
-  .footer {
-    margin-top: 10rem;
-  }
 }
 
 @media (max-width: 576px) {
@@ -77,8 +74,5 @@
 @media (min-width: 992px) {
   .testimonial-field {
     width: 70%;
-  }
-  .footer {
-    margin-top: 15rem;
   }
 }

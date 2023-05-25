@@ -1,0 +1,65 @@
+.pay-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+.pay-page .myButton-cont {
+  width: 100%;
+}
+
+.pay-meth {
+  padding: 1rem;
+  border: 2px solid #263577;
+  border-radius: 1rem;
+  background-color: #f6f1ff;
+}
+
+.pay-meth-selected {
+  position: relative;
+  padding-top: 30px;
+}
+
+.border-icon {
+  position: absolute;
+  top: -15px; /* Adjust as needed to center the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px; /* Icon width */
+  height: 30px; /* Icon height */
+  /* Add your icon styles (e.g., background image, icon font, etc.) */
+}
+
+/* .pay-meth-icon {
+    object-fit: fill;
+    width: 100%;
+    height: 100%;
+} */
+
+.pay-meth-icon:hover {
+  scale: 1.1;
+  cursor: pointer;
+}
+
+/* media querries */
+
+@media (min-width: 576px) {
+  .pay-meths-cont {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .pay-meths-cont {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+  }
+
+  .pay-meth {
+    margin-bottom: 1rem;
+  }
+}

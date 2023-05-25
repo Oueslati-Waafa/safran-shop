@@ -1,0 +1,76 @@
+.orderPay-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+.orderPay-page .myButton-cont {
+  width: 100%;
+}
+
+.orderSummary {
+  background-color: var(--dark-redish);
+  width: 100%;
+  padding: 2rem;
+  border-radius: 2rem;
+  color: var(--secondary);
+}
+
+.orderSummary-divider {
+  height: 2px;
+  background-color: var(--yellish);
+  margin: 1rem 0;
+}
+
+.orderSummary-item,
+.orderSummary-fee,
+.orderSummary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* media querries */
+
+@media (min-width: 1440px) {
+  .orderSummary {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+  .orderSummary {
+    font-size: 1.3rem;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+  .orderSummary {
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .orderSummary {
+    font-size: 1.1rem;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  .orderSummary {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 425px) and (max-width: 576px) {
+  .orderSummary {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 425px) {
+  .orderSummary {
+    font-size: 0.7rem;
+  }
+}

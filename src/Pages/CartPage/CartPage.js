@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./CartPage.css";
 import { Rating } from "react-simple-star-rating";
 import { DashLg, PlusLg } from "react-bootstrap-icons";
+import MyButton from "../../Components/Buttons/MyButton";
 
 export default function CartPage() {
   const [cart, setCart] = useState([]);
@@ -45,7 +46,7 @@ export default function CartPage() {
   };
 
   return (
-    <main className="cart-page container">
+    <main className="cart-page container mb-5">
       <h1 className="text-center fw-bold display-3 my-5">Ihr Warenkorb</h1>
       <div className="cart-items row d-flex justify-content-lg-between justify-content-center">
         {cart ? (
@@ -119,6 +120,17 @@ export default function CartPage() {
           <p className="text-center text-dark display-2">No items</p>
         )}
       </div>
+      <MyButton
+        size={
+          width > 992
+            ? "smallButton"
+            : width < 992 && width > 576
+            ? "mediumButton"
+            : "largeButton"
+        }
+        text={cart.length > 0 ? "WEITER ZUR Zahlungsart" : "EINKAUFEN GEHEN"}
+        direction={cart.length > 0 ? "/checkout" : "/"}
+      />
     </main>
   );
 }

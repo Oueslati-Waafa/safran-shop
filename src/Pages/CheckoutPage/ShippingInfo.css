@@ -1,0 +1,265 @@
+.checkout-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.checkout-page .myButton-cont {
+  width: 100%;
+}
+
+/* steps styles */
+
+.step-name-done {
+  color: green;
+}
+
+.step-name-active {
+  color: var(--dark-redish);
+}
+
+.step-name-inactive {
+  color: var(--dark-secondary);
+}
+
+.steps-divider-cont {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.steps-cont {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.steps-cont p {
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .steps-divider {
+    height: 2px;
+    width: 2.5rem;
+    background-color: var(--yellish);
+  }
+}
+
+@media (min-width: 1200px) {
+  .steps-cont {
+    margin: 6rem 0;
+    width: 75%;
+  }
+
+  .step-name {
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+  .steps-cont {
+    margin: 6rem 0;
+    width: 80%;
+  }
+
+  .step-name {
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .steps-cont {
+    margin: 6rem 0;
+    width: 90%;
+  }
+
+  .step-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-align: center;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  .steps-cont {
+    margin: 6rem 0;
+    width: 95%;
+  }
+
+  .step-name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .steps-divider {
+    height: 2px;
+    width: 1.5rem;
+    background-color: var(--yellish);
+  }
+}
+
+@media (min-width: 425px) and (max-width: 576px) {
+  .steps-cont {
+    margin: 6rem 0;
+  }
+
+  .step-name {
+    font-size: 1rem;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .steps-divider {
+    height: 2px;
+    width: 1.3rem;
+    background-color: var(--yellish);
+  }
+}
+
+@media (max-width: 425px) {
+  .steps-cont {
+    margin: 3rem 0;
+  }
+
+  .step-name {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-align: center;
+  }
+
+  .steps-divider {
+    height: 2px;
+    width: 0.8rem;
+    background-color: var(--yellish);
+  }
+}
+
+.shipping-info {
+  background-color: var(--dark-redish);
+  width: 100%;
+  border-radius: 2rem;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.shipping-info-divider {
+  height: 17rem;
+}
+
+.shipping-info-divider div {
+  width: 2px;
+  height: 100%;
+  background-color: var(--yellish);
+  margin: 0 auto;
+}
+
+.shipping-info-form-title {
+  color: var(--secondary);
+  font-size: 1.2rem;
+}
+
+.shipping-info-form .form-label {
+  color: var(--secondary);
+}
+
+.shipping-info-form .react-international-phone-input {
+  width: 75%;
+  margin-left: auto;
+}
+
+/* shipping-info-form-label */
+
+/* media querries */
+
+/* form */
+
+@media (min-width: 992px) {
+  .shipping-info {
+    background-color: var(--dark-redish);
+    width: 100%;
+    border-radius: 2rem;
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .shipping-info-divider {
+    height: 17rem;
+  }
+
+  .shipping-info-divider div {
+    width: 2px;
+    height: 100%;
+    background-color: var(--yellish);
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 992px) {
+  .shipping-info {
+    background-color: var(--dark-redish);
+    width: 100%;
+    border-radius: 2rem;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .shipping-info-divider {
+    display: none;
+  }
+}
+
+/* label */
+
+@media (min-width: 1440px) {
+  .shipping-info-form-label {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1200px) and (max-width: 1440px) {
+  .shipping-info-form-label {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+  .shipping-info-form-label {
+    font-size: 0.8rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .shipping-info-form-label {
+    font-size: 0.8rem;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+}
+
+@media (min-width: 425px) and (max-width: 576px) {
+  .shipping-info-form-label {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 425px) {
+  .shipping-info-form-label {
+    font-size: 0.6rem;
+  }
+}

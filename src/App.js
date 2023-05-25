@@ -9,6 +9,7 @@ import Contact from "./Pages/Contact/Contact";
 import ProductPage from "./Pages/ProductPage/ProductPage";
 import Footer from "./Components/Footer/Footer";
 import CartPage from "./Pages/CartPage/CartPage";
+import CheckoutPage from "./Pages/CheckoutPage/CheckoutPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route exact path="/about" element={<AboutUsPage />} />
             <Route exact path="/contact" element={<Contact />} />
             <Route exact path="/cart" element={<CartPage />} />
+            <Route exact path="/checkout" element={<CheckoutPage />} />
             <Route exact path="/product/:slug" element={<ProductPage />} />
           </Routes>
         </main>
