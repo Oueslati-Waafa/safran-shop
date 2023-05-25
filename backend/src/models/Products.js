@@ -20,28 +20,29 @@ const productSchema = new mongoose.Schema(
         validator: (value) => {
           return validator.isLength(value, { min: 10, max: 250 });
         },
-        message: 'Description must be between 10 and 250 characters',
+        message: "Description must be between 10 and 250 characters",
       },
     },
     price: {
       type: Number,
       required: true,
-      min: [0, 'Price must be greater than or equal to 0'],
+      min: [0, "Price must be greater than or equal to 0"],
     },
     weight: {
       type: Number,
       required: true,
-      min: [0, 'Weight must be greater than or equal to 0'],
+      min: [0, "Weight must be greater than or equal to 0"],
     },
     imageUrl: {
       type: Array,
       required: true,
-      default: 'https://res.cloudinary.com/dw6pezn3k/image/upload/v1684495286/defaultProduct_nyoogn.jpg',
+      default:
+        "https://res.cloudinary.com/dw6pezn3k/image/upload/v1684495286/defaultProduct_nyoogn.jpg",
     },
     countInStock: {
       type: Number,
       required: false,
-      min: [0, 'Count in stock must be greater than or equal to 0'],
+      min: [0, "Count in stock must be greater than or equal to 0"],
     },
   },
   {

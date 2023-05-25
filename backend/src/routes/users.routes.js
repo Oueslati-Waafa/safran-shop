@@ -13,8 +13,11 @@ import {
   createUser,
   updateUser,
   deleteUser,
+  addToWishlist,
+  getWishlist,
+  deleteFromWishlist
 } from "../controllers/User.controller.js";
-
+import { ensureUser, ensureAdmin } from "../middlewares/auth.middleware.js";
 /** Defining the router */
 const usersRouter = express.Router();
 
@@ -62,6 +65,38 @@ usersRouter.route("/getall").get(getUsers);
  *         description: Created
  */
 usersRouter.route("/add").post(createUser);
+/**
+ * @swagger
+ * /users/wishlist:
+ *   get:
+ *     summary: Get the user's wishlist
+ *     tags: [Wishlist]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successful operation
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 wishlist:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Product'
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal Server Error
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+usersRouter.route("/wishlist").get(ensureUser, getWishlist);
 
 /**
  * @swagger
@@ -132,5 +167,72 @@ usersRouter.route("/:id").get(getUserById);
  *         description: OK
  */
 usersRouter.route("/:id").put(updateUser).delete(deleteUser);
+
+
+/**
+ * @swagger
+ * /users/wishlist/add/{id}:
+ *   post:
+ *     summary: Add a product to the wishlist
+ *     tags: [Wishlist]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the product to add
+ *     responses:
+ *       200:
+ *         description: Product added to wishlist successfully
+ *       404:
+ *         description: User or Product not found
+ *       500:
+ *         description: Internal Server Error
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
+usersRouter.route("/wishlist/add/:id").post(ensureUser, addToWishlist);
+
+/**
+ * @swagger
+ * /users/wishlist/delete/{id}:
+ *   delete:
+ *     summary: Delete a product from the wishlist
+ *     tags: [Wishlist]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the product to delete
+ *     responses:
+ *       200:
+ *         description: Product removed from wishlist successfully
+ *       404:
+ *         description: User or Product not found
+ *       500:
+ *         description: Internal Server Error
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+usersRouter.route("/wishlist/delete/:id").delete(ensureUser, deleteFromWishlist);
+
+
+
 
 export { usersRouter };
