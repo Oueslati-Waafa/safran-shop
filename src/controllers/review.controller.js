@@ -105,10 +105,17 @@ export const updateReview = async (req, res) => {
 export const deleteReview = async (req, res) => {
   try {
     const reviewId = req.params.reviewId;
+    const userId = req.user.id; // Retrieve the user ID from the authenticated request
 
-    const review = await Review.findByIdAndDelete(reviewId);
+    const review = await Review.findOneAndDelete({
+      _id: reviewId,
+      User: userId, // Only delete the review if it belongs to the logged-in user
+    });
+
     if (!review) {
-      return res.status(404).json({ error: "Review not found" });
+      return res
+        .status(404)
+        .json({ error: "Review not found or unauthorized" });
     }
 
     const product = await Product.findOneAndUpdate(
@@ -119,7 +126,10 @@ export const deleteReview = async (req, res) => {
     if (product) {
       product.numOfRatings -= 1;
       product.sumOfRatings -= review.Rating;
-      product.rating = product.sumOfRatings / product.numOfRatings;
+      product.rating =
+        product.numOfRatings > 0
+          ? product.sumOfRatings / product.numOfRatings
+          : 0;
       await product.save();
     }
 

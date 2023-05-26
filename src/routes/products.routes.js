@@ -15,7 +15,7 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/Product.controller.js";
-import { createReview, getProductReviews, updateReview } from "../controllers/review.controller.js";
+import { createReview, deleteReview, getProductReviews, updateReview } from "../controllers/review.controller.js";
 
 /** Defining the router */
 const productsRouter = express.Router();
@@ -287,5 +287,38 @@ productsRouter.route("/:id/reviews").get( getProductReviews);
  *       bearerFormat: JWT
  */
 productsRouter.route("/reviews/:id").put(ensureUser, updateReview);
+
+/**
+ * @swagger
+ * /products/reviews/{id}:
+ *   delete:
+ *     summary: Delete a review
+ *     tags: [Reviews]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the review
+ *     responses:
+ *       200:
+ *         description: OK
+ *       404:
+ *         description: Review not found
+ *       500:
+ *         description: Internal Server Error
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
+productsRouter.route("/reviews/:reviewId").delete(ensureUser, deleteReview);
+
 
 export { productsRouter };
