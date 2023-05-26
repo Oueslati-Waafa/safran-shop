@@ -139,20 +139,33 @@ export const addToWishlist = async (req, res) => {
 
 /**DELETE A PRODUCT FROM A WISHLIST */
 export const deleteFromWishlist = async (req, res) => {
-    if (!validationResult(req).isEmpty()) {
-      res.status(400).json({ error: validationResult(req).array() });
-    } else {
-      const productId = req.params.id;
-      const userId = req.user.id;
-      User
-        .findByIdAndUpdate(userId, { $pull: { wishlist: productId } })
-        .then(() => {
-          res
-            .status(200)
-            .json({ message: "Product removed from wishlist successfully!" });
-        })
-        .catch((err) => res.status(500).json({ error: err.message }));
+  if (!validationResult(req).isEmpty()) {
+    return res.status(400).json({ error: validationResult(req).array() });
+  }
+
+  try {
+    const productId = req.params.id;
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
     }
+
+    const wishlistIndex = user.wishlist.indexOf(productId);
+    if (wishlistIndex === -1) {
+      return res.status(404).json({ error: "Product not found in wishlist" });
+    }
+
+    user.wishlist.splice(wishlistIndex, 1);
+    await user.save();
+
+    res
+      .status(200)
+      .json({ message: "Product removed from wishlist successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 /**GET THE USERS WISHLIST */

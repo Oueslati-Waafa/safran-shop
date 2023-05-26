@@ -44,6 +44,23 @@ const productSchema = new mongoose.Schema(
       required: false,
       min: [0, "Count in stock must be greater than or equal to 0"],
     },
+
+    sumOfRatings: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    numOfRatings: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    rating: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review", required: false }],
   },
   {
     timestamps: true,
