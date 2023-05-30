@@ -29,9 +29,8 @@ const productSchema = new mongoose.Schema(
       min: [0, "Price must be greater than or equal to 0"],
     },
     weight: {
-      type: Number,
+      type: String,
       required: true,
-      min: [0, "Weight must be greater than or equal to 0"],
     },
     imageUrl: {
       type: Array,
