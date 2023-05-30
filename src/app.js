@@ -16,6 +16,11 @@ const app = express();
 
 app.use(cors({ origin: '*' }));
 
+/**Configuring stripe */
+
+
+
+
 app.use(bodyParser.json());
 /* Using routers */
 app.use('/products', productsRouter);

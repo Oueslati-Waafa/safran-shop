@@ -1,4 +1,5 @@
 import Order from "../models/Order.js";
+import Stripe from "stripe";
 
 /**CREATE NEW ORDER */
 
@@ -6,56 +7,62 @@ export const createOrder = async (req, res) => {
   try {
     const {
       shippingInfo,
+      paymentMethod,
       orderItems,
-      user,
-      paymentInfo,
-      paidAt,
       totalPrice,
-      orderStatus,
-      isPaid,
       shippingPrice,
       taxPrice,
-      deliveredAt,
-      shippedAt,
-      createdAt,
     } = req.body;
+    const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-    const orderExist = await Order.findOne({
-      "paymentInfo.id": paymentInfo.id,
-    });
+    // Convert totalPrice from USD to EUR
+    const usdToEurRate = 0.85; // Example exchange rate
+    const totalPriceEur = totalPrice * usdToEurRate;
 
-    if (orderExist) {
-      return res.status(400).json({ error: "Order Already Placed" });
-    }
-
+    // Create the order in your database
     const order = new Order({
       shippingInfo,
+      paymentMethod,
       orderItems,
-      user,
-      paymentInfo,
-      paidAt,
-      totalPrice,
-      orderStatus,
-      isPaid,
+      user: req.user.id,
+      totalPrice: totalPriceEur,
+      orderStatus: "Processing",
       shippingPrice,
       taxPrice,
-      deliveredAt,
-      shippedAt,
-      createdAt,
-      user: req.user.id,
     });
 
+    // Save the order to the database
     await order.save();
 
-    res.status(201).json({
-      success: true,
-      order,
+    // Create the checkout session
+    const session = await stripeClient.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: orderItems.map((item) => ({
+        price_data: {
+          currency: "eur",
+          product_data: {
+            name: item.name,
+          },
+          unit_amount: Math.round(item.price * usdToEurRate * 100), // Convert price from USD to EUR
+        },
+        quantity: item.quantity,
+      })),
+      mode: "payment",
+      success_url: "http://localhost:9090/orders/success",
+      cancel_url: "http://localhost:9090/orders/cancel",
     });
+
+    // Update the order's paymentInfo with the sessionId
+    order.paymentInfo = { sessionId: session.id };
+    await order.save();
+
+    // Redirect the user to the Stripe payment page
+    res.redirect(303, session.url);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Server error" });
+    res.status(500).json({ error: error.message });
   }
 };
+
 
 /**GET MY ORDERS*/
 export const getMyOrders = async (req, res) => {
@@ -135,42 +142,6 @@ export const deleteOrder = async (req, res) => {
   }
 };
 
-/**CANCEL MY ORDERS */
-
-export const cancelMyOrder = async (req, res) => {
-  try {
-    const userId = req.user.id; // Retrieve the user ID from the authenticated request
-
-    const order = await Order.findById(req.params.id); // Find the order by ID
-
-    if (!order) {
-      return res.status(404).json({ error: "Order not found" });
-    }
-
-    if (order.user.toString() !== userId) {
-      // Check if the order belongs to the logged-in user
-      return res
-        .status(403)
-        .json({ error: "Unauthorized to cancel this order" });
-    }
-
-    if (order.orderStatus !== "Processing") {
-      // Check if the order status is "Processing"
-      return res.status(400).json({ error: "Order cannot be canceled" });
-    }
-
-    // Update the order status to "Cancelled"
-    order.orderStatus = "Cancelled";
-
-    // Save the updated order
-    await order.save();
-
-    res.status(200).json({ message: "Order canceled successfully" });
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
-
 export const cancelOrderAdmin = async (req, res) => {
   try {
     const orderId = req.params.id; // Retrieve the order ID from the request parameters
@@ -195,4 +166,38 @@ export const cancelOrderAdmin = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
+};
+
+/**HANDLE PAYMENT SUCCESS */
+export const handlePaymentSuccess = async (req, res) => {
+  try {
+    const { sessionId } = req.query;
+
+    // Retrieve the order associated with the session ID
+    const order = await Order.findOne({ "paymentInfo.id": sessionId });
+
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    // Update the order status as paid and set the paidAt timestamp
+    order.isPaid = true;
+    order.paidAt = Date.now();
+    order.paymentInfo.id = sessionId;
+    order.paymentInfo.status = "succeeded";
+
+    // Save the updated order
+    await order.save();
+
+    // Send a response to the client
+    res.status(200).json({ message: "Payment successful", orderId: order._id });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+/**HANDLE CANCEL PAYMENT */
+export const handlePaymentCancel = (req, res) => {
+  // Handle payment cancellation logic
+  res.status(200).json({ message: "Payment cancelled" });
 };

@@ -18,8 +18,9 @@ import {
   updateOrder,
   deleteOrder,
   getMyOrders,
-  cancelMyOrder,
   cancelOrderAdmin,
+  handlePaymentSuccess,
+  handlePaymentCancel,
 } from "../controllers/Order.controller.js";
 
 /** Defining the router */
@@ -82,21 +83,8 @@ ordersRouter.route("/my-orders").get(ensureUser, getMyOrders);
  *           schema:
  *             $ref: '#/components/schemas/OrderRequest'
  *     responses:
- *       201:
- *         description: Order created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/OrderResponse'
- *       400:
- *         description: Invalid request or missing required fields
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
+ *       303:
+ *         description: Redirect to the Stripe payment page
  *       500:
  *         description: Server error
  *         content:
@@ -151,115 +139,21 @@ ordersRouter.route("/my-orders").get(ensureUser, getMyOrders);
  *             - product
  *         user:
  *           type: string
- *         paymentInfo:
- *           type: object
- *           properties:
- *             id:
- *               type: string
- *             status:
- *               type: string
- *         paidAt:
- *           type: string
- *           format: date-time
  *         totalPrice:
  *           type: number
  *         orderStatus:
  *           type: string
  *           enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled']
- *         isPaid:
- *           type: boolean
  *         shippingPrice:
  *           type: number
  *         taxPrice:
  *           type: number
- *         deliveredAt:
- *           type: string
- *           format: date-time
- *         shippedAt:
- *           type: string
- *           format: date-time
- *         createdAt:
- *           type: string
- *           format: date-time
- *     OrderResponse:
- *       type: object
- *       properties:
- *         success:
- *           type: boolean
- *           example: true
- *         order:
- *           $ref: '#/components/schemas/Order'
- *     Order:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *         shippingInfo:
- *           type: object
- *           properties:
- *             address:
- *               type: string
- *             city:
- *               type: string
- *             state:
- *               type: string
- *             country:
- *               type: string
- *             postalCode:
- *               type: number
- *         orderItems:
- *           type: array
- *           items:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               price:
- *                 type: number
- *               quantity:
- *                 type: number
- *               product:
- *                 type: string
- *           required:
- *             - name
- *             - price
- *             - quantity
- *             - product
- *         user:
- *           type: string
- *         paymentInfo:
- *           type: object
- *           properties:
- *             id:
- *               type: string
- *             status:
- *               type: string
- *         paidAt:
- *           type: string
- *           format: date-time
- *         totalPrice:
- *           type: number
- *         orderStatus:
- *           type: string
- *           enum: ['Processing', 'Shipped', 'Delivered', 'Cancelled']
- *         isPaid:
- *           type: boolean
- *         shippingPrice:
- *           type: number
- *         taxPrice:
- *           type: number
- *         deliveredAt:
- *           type: string
- *           format: date-time
- *         shippedAt:
- *           type: string
- *           format: date-time
  *         createdAt:
  *           type: string
  *           format: date-time
  */
-
 ordersRouter.route("/add").post(ensureUser, createOrder);
+
 
 /**
  * @swagger
@@ -463,38 +357,6 @@ ordersRouter.route("/:id").put(ensureAdmin, updateOrder);
 ordersRouter.route("/:id").delete(ensureAdmin, deleteOrder);
 
 
-/**
- * @swagger
- * /orders/{id}/cancel:
- *   put:
- *     summary: Cancel an order
- *     tags:
- *       - Orders
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: OK
- *       400:
- *         description: Order cannot be canceled
- *       403:
- *         description: Unauthorized to cancel this order
- *       404:
- *         description: Order not found
- * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- */
-ordersRouter.put("/:id/cancel", ensureUser, cancelMyOrder);
 
 /**
  * @swagger
@@ -525,7 +387,11 @@ ordersRouter.put("/:id/cancel", ensureUser, cancelMyOrder);
  *       scheme: bearer
  *       bearerFormat: JWT
  */
-ordersRouter.route("/:id/admin-cancel").put( ensureAdmin, cancelOrderAdmin);
+ordersRouter.route("/:id/admin-cancel").put(ensureAdmin, cancelOrderAdmin);
+
+
+ordersRouter.route("/success").get(handlePaymentSuccess);
+ordersRouter.route("/cancel").get(handlePaymentCancel);
 
 
 export { ordersRouter };

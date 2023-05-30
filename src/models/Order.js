@@ -23,6 +23,7 @@ const OrderSchema = new mongoose.Schema({
       required: true,
     },
   },
+  paymentMethod: { type: String, required: true },
   orderItems: [
     {
       name: {
@@ -55,7 +56,6 @@ const OrderSchema = new mongoose.Schema({
   },
   paidAt: {
     type: Date,
-    required: true,
   },
   totalPrice: {
     type: Number,
