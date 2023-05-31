@@ -27,10 +27,6 @@ const userSchema = new mongoose.Schema(
     phoneNumber: {
       type: String,
       unique: true,
-      validate: {
-        validator: (value) => validator.isMobilePhone(value, "any"),
-        message: "Invalid phone number",
-      },
     },
     password: {
       type: String,

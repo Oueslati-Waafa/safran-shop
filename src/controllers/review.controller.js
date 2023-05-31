@@ -1,9 +1,10 @@
-import Review from '../models/Reviews.js'
-import Product from '../models/Products.js';
-import Reviews from '../models/Reviews.js';
+import Review from "../models/Reviews.js";
+import Product from "../models/Products.js";
+import Reviews from "../models/Reviews.js";
 
 /**CREATE A REVIEW */
 export const createReview = async (req, res) => {
+  console.log(req);
   try {
     const { rating, description } = req.body;
     const productId = req.params.id;
@@ -35,12 +36,11 @@ export const createReview = async (req, res) => {
   }
 };
 
-
 /**GET ALL REVIEWS FOR A PRODUCT */
 export const getProductReviews = async (req, res) => {
   try {
     const productId = req.params.id;
-    console.log(productId)
+    console.log(productId);
     const product = await Product.findById(productId).populate("reviews");
 
     if (!product) {
@@ -99,8 +99,6 @@ export const updateReview = async (req, res) => {
   }
 };
 
-
-
 /**DELETE A REVIEW */
 export const deleteReview = async (req, res) => {
   try {
@@ -138,5 +136,3 @@ export const deleteReview = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
