@@ -6,7 +6,6 @@
  */
 import {
   ensureAdmin,
-  ensureLoggedIn,
   ensureUser,
 } from "../middlewares/auth.middleware.js";
 
@@ -19,8 +18,7 @@ import {
   deleteOrder,
   getMyOrders,
   cancelOrderAdmin,
-  handlePaymentSuccess,
-  handlePaymentCancel,
+  handlePaymentStripe,
 } from "../controllers/Order.controller.js";
 
 /** Defining the router */
@@ -83,8 +81,8 @@ ordersRouter.route("/my-orders").get(ensureUser, getMyOrders);
  *           schema:
  *             $ref: '#/components/schemas/OrderRequest'
  *     responses:
- *       303:
- *         description: Redirect to the Stripe payment page
+ *       200:
+ *         description: Order Placed Successfully
  *       500:
  *         description: Server error
  *         content:
@@ -137,8 +135,6 @@ ordersRouter.route("/my-orders").get(ensureUser, getMyOrders);
  *             - price
  *             - quantity
  *             - product
- *         user:
- *           type: string
  *         totalPrice:
  *           type: number
  *         orderStatus:
@@ -148,6 +144,8 @@ ordersRouter.route("/my-orders").get(ensureUser, getMyOrders);
  *           type: number
  *         taxPrice:
  *           type: number
+ *         paymentMethod:
+ *           type: string
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -389,9 +387,7 @@ ordersRouter.route("/:id").delete(ensureAdmin, deleteOrder);
  */
 ordersRouter.route("/:id/admin-cancel").put(ensureAdmin, cancelOrderAdmin);
 
-
-ordersRouter.route("/success").get(handlePaymentSuccess);
-ordersRouter.route("/cancel").get(handlePaymentCancel);
+ordersRouter.route("/stripe-payment").post(ensureUser,handlePaymentStripe)
 
 
 export { ordersRouter };
