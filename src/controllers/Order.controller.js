@@ -1,6 +1,34 @@
 import Order from "../models/Order.js";
 import Stripe from "stripe";
 
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2020-08-27",
+});
+
+export async function createCustomer(foundUser) {
+  if (foundUser.stripeCustomerID) {
+    return foundUser.stripeCustomerID;
+  }
+
+  const customer = await stripe.customers.create({
+    email: foundUser.email,
+    metadata: {
+      userId: foundUser.id.toString(),
+    },
+  });
+
+  foundUser.stripeCustomerID = customer.id;
+  await foundUser.save();
+
+  return customer.id;
+}
+
+
+// Create an instance of the Stripe client
+
+
+
 /**CREATE NEW ORDER */
 
 export const createOrder = async (req, res) => {
@@ -13,11 +41,6 @@ export const createOrder = async (req, res) => {
       shippingPrice,
       taxPrice,
     } = req.body;
-    const stripeClient = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-    // Convert totalPrice from USD to EUR
-    const usdToEurRate = 0.85; // Example exchange rate
-    const totalPriceEur = totalPrice * usdToEurRate;
 
     // Create the order in your database
     const order = new Order({
@@ -25,7 +48,7 @@ export const createOrder = async (req, res) => {
       paymentMethod,
       orderItems,
       user: req.user.id,
-      totalPrice: totalPriceEur,
+      totalPrice,
       orderStatus: "Processing",
       shippingPrice,
       taxPrice,
@@ -34,30 +57,15 @@ export const createOrder = async (req, res) => {
     // Save the order to the database
     await order.save();
 
-    // Create the checkout session
-    const session = await stripeClient.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: orderItems.map((item) => ({
-        price_data: {
-          currency: "eur",
-          product_data: {
-            name: item.name,
-          },
-          unit_amount: Math.round(item.price * usdToEurRate * 100), // Convert price from USD to EUR
-        },
-        quantity: item.quantity,
-      })),
-      mode: "payment",
-      success_url: "http://localhost:9090/orders/success",
-      cancel_url: "http://localhost:9090/orders/cancel",
-    });
-
-    // Update the order's paymentInfo with the sessionId
-    order.paymentInfo = { sessionId: session.id };
+    // Create the customer and associate the customer ID with the order
+    const customerID = await createCustomer(req.user); // Pass the foundUser object to createCustomer
+    order.customerID = customerID;
     await order.save();
 
     // Redirect the user to the Stripe payment page
-    res.redirect(303, session.url);
+    res
+      .status(200)
+      .json({ message: "Order placed successfully", orderId: order._id });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -142,6 +150,7 @@ export const deleteOrder = async (req, res) => {
   }
 };
 
+/**CANCEL ORDER FOR ADMIN */
 export const cancelOrderAdmin = async (req, res) => {
   try {
     const orderId = req.params.id; // Retrieve the order ID from the request parameters
@@ -168,36 +177,54 @@ export const cancelOrderAdmin = async (req, res) => {
   }
 };
 
-/**HANDLE PAYMENT SUCCESS */
-export const handlePaymentSuccess = async (req, res) => {
-  try {
-    const { sessionId } = req.query;
 
-    // Retrieve the order associated with the session ID
-    const order = await Order.findOne({ "paymentInfo.id": sessionId });
+export const handlePaymentStripe = async (req, res) => {
+  try {
+    const { orderId } = req.body;
+    const order = await Order.findById(orderId);
 
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
 
-    // Update the order status as paid and set the paidAt timestamp
+    // Create a payment intent using the Stripe secret key
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+    // Create a payment method for the card details
+    const paymentMethod = await stripe.paymentMethods.create({
+      type: "card",
+      card: {
+        number: "4242424242424242",
+        exp_month: 12,
+        exp_year: 2024,
+        cvc: "123",
+      },
+    });
+
+    // Associate the payment method with the customer
+    await stripe.paymentMethods.attach(paymentMethod.id, {
+      customer: order.customerID, // Use the customer ID associated with the order
+    });
+
+    // Confirm the payment intent with the payment method
+    const paymentIntent = await stripe.paymentIntents.confirm(
+      order.paymentInfo.id,
+      {
+        payment_method: paymentMethod.id,
+      }
+    );
+
+    // Update the order with payment details
+    order.paymentInfo = {
+      id: paymentIntent.id,
+      status: paymentIntent.status,
+    };
     order.isPaid = true;
     order.paidAt = Date.now();
-    order.paymentInfo.id = sessionId;
-    order.paymentInfo.status = "succeeded";
-
-    // Save the updated order
     await order.save();
 
-    // Send a response to the client
     res.status(200).json({ message: "Payment successful", orderId: order._id });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-};
-
-/**HANDLE CANCEL PAYMENT */
-export const handlePaymentCancel = (req, res) => {
-  // Handle payment cancellation logic
-  res.status(200).json({ message: "Payment cancelled" });
 };

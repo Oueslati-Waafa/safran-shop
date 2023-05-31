@@ -63,6 +63,11 @@ const userSchema = new mongoose.Schema(
     wishlist: [
       { type: mongoose.Schema.ObjectId, ref: "Product", required: false },
     ],
+
+    stripeCustomerID: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
