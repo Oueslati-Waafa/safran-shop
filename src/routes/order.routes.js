@@ -18,7 +18,7 @@ import {
   deleteOrder,
   getMyOrders,
   cancelOrderAdmin,
-  handlePaymentStripe,
+  payOrder,
 } from "../controllers/Order.controller.js";
 
 /** Defining the router */
@@ -387,7 +387,7 @@ ordersRouter.route("/:id").delete(ensureAdmin, deleteOrder);
  */
 ordersRouter.route("/:id/admin-cancel").put(ensureAdmin, cancelOrderAdmin);
 
-ordersRouter.route("/stripe-payment").post(ensureUser,handlePaymentStripe)
+ordersRouter.route("/stripe-payment").post(ensureUser, payOrder);
 
 
 export { ordersRouter };

@@ -23,7 +23,7 @@ const OrderSchema = new mongoose.Schema({
       required: true,
     },
   },
-  paymentMethod: { type: String, required: true },
+  paymentMethod: { type: String, required: false },
   orderItems: [
     {
       name: {
