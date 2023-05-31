@@ -1,11 +1,11 @@
 import Order from "../models/Order.js";
 import Stripe from "stripe";
-import User from "../models/Users.js";
-
+import dotenv from "dotenv";
+dotenv.config();
 // Create an instance of the Stripe client
 const key =
   "sk_test_51Moo6YHR4eKJdhow9ffFixaIiLSm6FlXjhfnheHGnyBS5yVgVncZDPLlNdSBCQbUOUYtyXh1GlWLlXvmXNUdKs0H00ba59H0X0";
-const stripe = new Stripe(key, {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2020-08-27",
 });
 
