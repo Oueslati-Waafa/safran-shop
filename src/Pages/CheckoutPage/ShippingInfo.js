@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import { PatchCheck } from "react-bootstrap-icons";
 import "react-international-phone/style.css";
+import PhoneInput from "react-phone-input-2";
 import MyButton from "../../Components/Buttons/MyButton";
 import "./ShippingInfo.css";
 
@@ -11,8 +12,8 @@ export default function ShippingInfo({ setCurrentStep }) {
     setWidth(window.innerWidth);
   }, []);
 
-  const [name, setName] = useState("");
-  const [familyName, setFamilyName] = useState("");
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
   const [address, setAddress] = useState("");
@@ -23,23 +24,22 @@ export default function ShippingInfo({ setCurrentStep }) {
   // const [] = useState("");
 
   const [shippingInfo, setShippingInfo] = useState();
-  const [contactInfo, setContactInfo] = useState();
+  const [user, setUser] = useState();
 
   useEffect(() => {
     const savedShippingInfo =
       JSON.parse(localStorage.getItem("shippingInfo")) || [];
-    const savedContactInfo =
-      JSON.parse(localStorage.getItem("contactInfo")) || [];
-    setContactInfo(savedContactInfo);
+    const savedUser = JSON.parse(localStorage.getItem("user")) || [];
+    setUser(savedUser);
     setShippingInfo(savedShippingInfo);
   }, []);
 
   useEffect(() => {
-    if (contactInfo) {
-      setName(contactInfo.name);
-      setFamilyName(contactInfo.familyName);
-      setEmail(contactInfo.email);
-      setNumber(contactInfo.number);
+    if (user) {
+      setFname(user.fname);
+      setLname(user.lname);
+      setEmail(user.email);
+      setNumber(user.phoneNumber);
     }
 
     if (shippingInfo) {
@@ -49,7 +49,7 @@ export default function ShippingInfo({ setCurrentStep }) {
       setCountry(shippingInfo.country);
       setZipCode(shippingInfo.zipCode);
     }
-  }, [contactInfo, shippingInfo]);
+  }, [user, shippingInfo]);
 
   const saveInformation = () => {
     // Save shipping info in local storage
@@ -63,35 +63,25 @@ export default function ShippingInfo({ setCurrentStep }) {
     localStorage.setItem("shippingInfo", JSON.stringify(shippingInfo));
 
     // Save contact info in local storage
-    const contactInfo = {
-      name,
-      familyName,
-      email,
-      number,
-    };
-    localStorage.setItem("contactInfo", JSON.stringify(contactInfo));
+    // const user = {
+    //   name,
+    //   familyName,
+    //   email,
+    //   number,
+    // };
+    // localStorage.setItem("user", JSON.stringify(user));
     setCurrentStep("delivery");
   };
 
   const [blockNextPage, setBlockNextPage] = useState(true);
 
   useEffect(() => {
-    if (
-      name &&
-      familyName &&
-      email &&
-      number &&
-      address &&
-      city &&
-      state &&
-      country &&
-      zipCode
-    ) {
+    if (address && city && state && country && zipCode) {
       setBlockNextPage(false);
     } else {
       setBlockNextPage(true);
     }
-  }, [name, familyName, email, number, address, city, state, country, zipCode]);
+  }, [address, city, state, country, zipCode]);
 
   return (
     <main className="checkout-page container mb-5">
@@ -125,7 +115,7 @@ export default function ShippingInfo({ setCurrentStep }) {
               <Form.Label className="shipping-info-form-label">
                 Vorname
               </Form.Label>
-              <Form.Control type="text" value={name} readOnly />
+              <Form.Control type="text" value={fname} readOnly />
             </Form.Group>
             <Form.Group
               className="mb-3 col-sm-6 col-12"
@@ -134,7 +124,7 @@ export default function ShippingInfo({ setCurrentStep }) {
               <Form.Label className="shipping-info-form-label">
                 Familienname, Nachname
               </Form.Label>
-              <Form.Control type="text" value={familyName} readOnly />
+              <Form.Control type="text" value={lname} readOnly />
             </Form.Group>
 
             <Form.Group className="mb-3 col-12" controlId="shippingEmail">
@@ -147,7 +137,12 @@ export default function ShippingInfo({ setCurrentStep }) {
               <Form.Label className="shipping-info-form-label">
                 Telefonnummer
               </Form.Label>
-              <Form.Control type="text" value={number} readOnly />
+              <PhoneInput
+                inputClass="accountNumberInput"
+                value={number}
+                forceDialCode
+                disabled
+              />
             </Form.Group>
           </Form>
         </div>

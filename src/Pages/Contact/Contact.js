@@ -3,6 +3,7 @@ import Title from "../../Components/Title/Title";
 import "./Contact.css";
 import { Link } from "react-router-dom";
 import ContinueShopping from "../../Components/Buttons/ContinueShopping";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function Contact() {
   const [width, setWidth] = useState(window.innerWidth);
@@ -10,13 +11,14 @@ export default function Contact() {
     setWidth(window.innerWidth);
   }, []);
   return (
-    <main className="contact-page container">
+    <main className="contact-page container mb-5">
       <h1 className="text-center my-5 fw-bold display-5">Kontakt</h1>
       <Title content={"Kundendienst"} />
       <section className="customer-service">
         <div className="row mb-5 customer-service-calling">
           <div className="col-md-1 col-sm-2 col-3">
-            <img
+            <LazyLoadImage
+              effect="blur"
               src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684510670/Saafran/logos%20and%20icons/gmu1cgpjtbbhd15m9gee.png"
               alt="service icon"
               className="img-fluid customer-service-img"
@@ -38,7 +40,8 @@ export default function Contact() {
         </div>
         <div className="row mb-5 customer-service-location">
           <div className="col-md-1 col-sm-2 col-3">
-            <img
+            <LazyLoadImage
+              effect="blur"
               src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684510681/Saafran/logos%20and%20icons/bzcf4naohc84yq3yg1pu.png"
               alt="service icon"
               className="img-fluid customer-service-img"
@@ -60,7 +63,8 @@ export default function Contact() {
         </div>
         <div className="row customer-service-mailing">
           <div className="col-md-1 col-sm-2 col-3">
-            <img
+            <LazyLoadImage
+              effect="blur"
               src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684510691/Saafran/logos%20and%20icons/okp9avgrbb4tusegapw9.png"
               alt="service icon"
               className="img-fluid customer-service-img"
@@ -92,7 +96,8 @@ export default function Contact() {
         <div className="row d-flex justify-content-evenly">
           <div className="col-sm col-3 d-flex justify-content-center">
             <Link to={"https://www.instagram.com"}>
-              <img
+              <LazyLoadImage
+                effect="blur"
                 src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684511784/Saafran/logos%20and%20icons/b5calkncgd0erhrizgch.png"
                 alt="social media icon"
                 className="img-fluid social-media-icon"
@@ -101,7 +106,8 @@ export default function Contact() {
           </div>
           <div className="col-sm col-3 d-flex justify-content-center">
             <Link to={"https://www.linkedin.com"}>
-              <img
+              <LazyLoadImage
+                effect="blur"
                 src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684511835/Saafran/logos%20and%20icons/xnn6czxerzoxz7pfskpl.png"
                 alt="social media icon"
                 className="img-fluid social-media-icon"
@@ -110,7 +116,8 @@ export default function Contact() {
           </div>
           <div className="col-sm col-3 d-flex justify-content-center">
             <Link to={"https://www.facebook.com"}>
-              <img
+              <LazyLoadImage
+                effect="blur"
                 src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684511852/Saafran/logos%20and%20icons/igwbicaid5iimslnopkb.png"
                 alt="social media icon"
                 className="img-fluid social-media-icon"

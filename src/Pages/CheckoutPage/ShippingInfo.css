@@ -263,3 +263,7 @@
     font-size: 0.6rem;
   }
 }
+
+.react-tel-input :disabled {
+  cursor: text !important;
+}

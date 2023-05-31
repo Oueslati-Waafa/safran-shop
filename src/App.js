@@ -10,6 +10,11 @@ import ProductPage from "./Pages/ProductPage/ProductPage";
 import Footer from "./Components/Footer/Footer";
 import CartPage from "./Pages/CartPage/CartPage";
 import CheckoutPage from "./Pages/CheckoutPage/CheckoutPage";
+import WishlistPage from "./Pages/WishlistPage/WishlistPage";
+import AccountDetails from "./Pages/AccountDetails/AccountDetails";
+import OrderHistory from "./Pages/OrderHistory/OrderHistory";
+import Login from "./Components/Login/Login";
+import NotFoundPage from "./Pages/404Page/NotFoundPage";
 
 function App() {
   return (
@@ -23,7 +28,12 @@ function App() {
             <Route exact path="/contact" element={<Contact />} />
             <Route exact path="/cart" element={<CartPage />} />
             <Route exact path="/checkout" element={<CheckoutPage />} />
+            <Route exact path="/wishlist" element={<WishlistPage />} />
+            <Route exact path="/account" element={<AccountDetails />} />
+            <Route exact path="/orders" element={<OrderHistory />} />
             <Route exact path="/product/:slug" element={<ProductPage />} />
+            <Route exact path="/log" element={<Login />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
         <Footer />

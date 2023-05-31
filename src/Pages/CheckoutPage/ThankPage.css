@@ -1,14 +1,10 @@
 .smoke-gradient {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(255, 110, 139, 0.678),
-    rgba(255, 130, 155, 0.1)
-  );
+  background: radial-gradient(ellipse at center, #841315, #020404);
   height: 100vh;
 }
 
 .thank-page {
-  color: var(--secondary);
+  color: var(--dark-secondary);
   letter-spacing: 0.1rem;
   text-align: center;
 }

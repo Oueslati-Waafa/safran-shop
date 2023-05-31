@@ -4,6 +4,7 @@ import { Rating } from "react-simple-star-rating";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { Link } from "react-router-dom";
+import { BookmarkHeart, BookmarkHeartFill } from "react-bootstrap-icons";
 
 export default function Products(props) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -15,7 +16,7 @@ export default function Products(props) {
   const handleAddToCart2 = (prod) => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingProduct = cart.find(
-      (item) => item.product_number == prod.product_number
+      (item) => item.productNumber == prod.productNumber
     );
 
     console.log(existingProduct);
@@ -34,7 +35,36 @@ export default function Products(props) {
     <section className="products-cont">
       <div>
         {props.products.map((product, index) => (
-          <div className="product-card mb-5" key={index}>
+          <div className="product-card mb-5" key={product.productNumber}>
+            {product.liked ? (
+              <BookmarkHeartFill
+                className="product-like-icon"
+                size={
+                  width > 992
+                    ? 40
+                    : width < 992 && width > 576
+                    ? 50
+                    : width < 576 && width > 425
+                    ? 40
+                    : 30
+                }
+                color="#f5f5f5"
+              />
+            ) : (
+              <BookmarkHeart
+                className="product-like-icon"
+                size={
+                  width > 992
+                    ? 40
+                    : width < 992 && width > 576
+                    ? 50
+                    : width < 576 && width > 425
+                    ? 40
+                    : 30
+                }
+                color="#f5f5f5"
+              />
+            )}
             <div
               className="product-img-cont mb-5"
               onMouseEnter={() => setHoveredIndex(index)}
@@ -55,7 +85,7 @@ export default function Products(props) {
               <h4>
                 {product.weight} -{" "}
                 <Link
-                  to={`/product/${product.product_number}`}
+                  to={`/product/${product._id}`}
                   onClick={() => window.scrollTo(0, 0)}
                 >
                   {product.name}

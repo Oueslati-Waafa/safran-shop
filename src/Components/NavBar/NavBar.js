@@ -5,9 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 export default function NavBar() {
   const [showLinks, setShowLinks] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
-  // const [showCartDropdown, setShowCartDropdown] = useState(false);
   const dropdownRef = useRef(null);
-  // const cartDropdownRef = useRef(null);
 
   const toggleLinks = () => {
     setShowLinks(!showLinks);
@@ -18,27 +16,12 @@ export default function NavBar() {
     setShowUserDropdown(!showUserDropdown);
   };
 
-  // const toggleCartDropdown = (e) => {
-  //   e.stopPropagation();
-  //   setShowCartDropdown(!showCartDropdown);
-  // };
-
   const closeUserDropdown = () => {
     setShowUserDropdown(false);
   };
 
-  // const closeCartDropdown = () => {
-  //   setShowCartDropdown(false);
-  // };
-
   const location = useLocation();
   const path = location.pathname;
-  console.log(path);
-  const [user, setUser] = useState({
-    name: "Vollständiger Name",
-    img: "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684749461/Saafran/logos%20and%20icons/rpsyo19pqbdfnatqgllh.png",
-    role: "user",
-  });
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -46,31 +29,37 @@ export default function NavBar() {
         closeUserDropdown();
       }
     };
-    // const handleClickOutsideCart = (event) => {
-    //   if (
-    //     cartDropdownRef.current &&
-    //     !cartDropdownRef.current.contains(event.target)
-    //   ) {
-    //     closeCartDropdown();
-    //   }
-    // };
 
     document.addEventListener("click", handleClickOutside);
-    // document.addEventListener("click", handleClickOutsideCart);
 
     return () => {
       document.removeEventListener("click", handleClickOutside);
-      // document.removeEventListener("click", handleClickOutsideCart);
     };
   }, []);
+
+  const [user, setUser] = useState();
+
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user")) || null;
+    setUser(savedUser);
+  }, [path]);
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const loggedIn = JSON.parse(localStorage.getItem("loggedIn"));
+    setIsLoggedIn(loggedIn);
+  }, [path]);
 
   return (
     <nav className="row">
       <div className="logo-cont col-lg-3 col-6">
-        <img
-          className="nav-logo"
-          src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684323842/Saafran/logos%20and%20icons/uehtxj5z00msvam1holg.png"
-        />
+        <Link to={"/"}>
+          <img
+            className="nav-logo"
+            src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684323842/Saafran/logos%20and%20icons/uehtxj5z00msvam1holg.png"
+          />
+        </Link>
       </div>
       <div className="links-cont col-lg-6 d-lg-flex justify-content-lg-center d-none">
         <ul>
@@ -92,10 +81,18 @@ export default function NavBar() {
         </ul>
       </div>
       <div className="buttons-cont col-lg-3 col-6">
-        <ul>
-          <li onClick={toggleUserDropdown} className="user-dropdown-toggler">
-            <img src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684329432/Saafran/logos%20and%20icons/ajmb86leiopbfjjqjbkn.png" />
-          </li>
+        <ul className={isLoggedIn ? "loggedUl" : "notLoggedUl"}>
+          {isLoggedIn ? (
+            <li onClick={toggleUserDropdown} className="user-dropdown-toggler">
+              <img src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684329432/Saafran/logos%20and%20icons/ajmb86leiopbfjjqjbkn.png" />
+            </li>
+          ) : (
+            <li>
+              <button className="btn btn-light me-4">
+                <Link to={"/log"}>Log in</Link>
+              </button>
+            </li>
+          )}
           <li>
             {/* onClick={toggleCartDropdown} */}
             <Link to={"/cart"}>
@@ -146,53 +143,66 @@ export default function NavBar() {
                 alt="user image"
                 className="img-fluid rounded-circle img-thumbnail user-info-img"
               />
-              <span className="user-info-name">{user.name} </span>
+              <span className="user-info-name">
+                {user.fname} {user.lname}
+              </span>
             </div>
             <div className="user-nav-cont mb-3">
               <ul className="user-nav d-flex flex-column align-items-center">
                 <li>
-                  <button className="user-nav-button mb-2 btn">
-                    Konto verwalten
+                  <button
+                    className="user-nav-button mb-2 btn"
+                    onClick={() => {
+                      setShowUserDropdown(false);
+                    }}
+                  >
+                    <Link to={"/account"}>Konto verwalten</Link>
                   </button>
                 </li>
                 <li>
-                  <button className="user-nav-button mb-2 btn">
-                    Wunschliste
+                  <button
+                    className="user-nav-button mb-2 btn"
+                    onClick={() => {
+                      setShowUserDropdown(false);
+                    }}
+                  >
+                    <Link to={"/wishlist"}>Wunschliste</Link>
                   </button>
                 </li>
                 <li>
-                  <button className="user-nav-button btn">Kaufhistorie</button>
+                  <button
+                    className="user-nav-button btn"
+                    onClick={() => {
+                      setShowUserDropdown(false);
+                    }}
+                  >
+                    <Link to={"/orders"}>Kaufhistorie</Link>
+                  </button>
                 </li>
               </ul>
             </div>
             <div className="user-logOut-cont">
-              <button className="user-logOut-button btn d-flex flex-column align-items-center">
-                <img
-                  src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684748678/Saafran/logos%20and%20icons/cceecuc034wqhh38ol7i.png"
-                  alt="log out icon"
-                  className="img-fluid"
-                />
-                <span>Ausloggen</span>
+              <button
+                className="user-logOut-button btn d-flex flex-column align-items-center"
+                onClick={() => {
+                  setShowUserDropdown(false);
+                  localStorage.setItem("loggedIn", false);
+                  localStorage.removeItem("user");
+                }}
+              >
+                <Link to={"/log"}>
+                  <img
+                    src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684748678/Saafran/logos%20and%20icons/cceecuc034wqhh38ol7i.png"
+                    alt="log out icon"
+                    className="img-fluid"
+                  />
+                  <p>Ausloggen</p>
+                </Link>
               </button>
             </div>
           </div>
         </div>
       )}
-      {/* {showCartDropdown && (
-        <div
-          className="user-dropdown-cont d-flex flex-column align-items-center"
-          ref={cartDropdownRef}
-        >
-          <div class="triangle"></div>
-          <div className="user-dropdown-content d-flex flex-column align-items-center justify-content-center p-3">
-            {cart.map((item) => (
-              <div className="cart-item">
-                {item.weight} {item.name} X {item.quantity}
-              </div>
-            ))}
-          </div>
-        </div>
-      )} */}
     </nav>
   );
 }

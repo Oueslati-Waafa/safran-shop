@@ -4,114 +4,11 @@ import { useLocation } from "react-router-dom";
 import { Rating } from "react-simple-star-rating";
 import Title from "../../Components/Title/Title";
 import Products from "../../Components/Products/Products";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { BookmarkHeart, BookmarkHeartFill } from "react-bootstrap-icons";
+import axios from "axios";
 
 export default function ProductPage() {
-  const products = [
-    {
-      name: "Super Negin Safranfäden",
-      weight: "1g",
-      price: 5,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
-      imageUrl: [
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684323843/Saafran/products/mfmvo4hs6uogettr6ojg.png",
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684323842/Saafran/products/kwxpyspgvsimqe5zplvx.png",
-      ],
-      rate: 3.5,
-      product_number: 0,
-    },
-    {
-      name: "Super Negin Safranfäden",
-      weight: "5g",
-      price: 25,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
-      imageUrl: [
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684323843/Saafran/products/mfmvo4hs6uogettr6ojg.png",
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684323842/Saafran/products/kwxpyspgvsimqe5zplvx.png",
-      ],
-      rate: 3.5,
-      product_number: 1,
-    },
-    {
-      name: "Super Negin Safranfäden",
-      weight: "10g",
-      price: 50,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
-      imageUrl: [
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684323843/Saafran/products/mfmvo4hs6uogettr6ojg.png",
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684323842/Saafran/products/kwxpyspgvsimqe5zplvx.png",
-      ],
-      rate: 3.5,
-      product_number: 2,
-    },
-    {
-      name: "Super Negin Safranfäden",
-      weight: "100g",
-      price: 500,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
-      imageUrl: [
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684323843/Saafran/products/mfmvo4hs6uogettr6ojg.png",
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684323842/Saafran/products/kwxpyspgvsimqe5zplvx.png",
-      ],
-      rate: 3.5,
-      product_number: 3,
-    },
-    {
-      name: "Super Negin Safranfäden",
-      weight: "1Kg",
-      price: 5000,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
-      imageUrl: [
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684420439/Saafran/products/m1cf2kjmfxdagdtgvrsi.png",
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684420440/Saafran/products/hcshpcu0b1i0dnjyfp0c.png",
-      ],
-      rate: 4,
-      product_number: 4,
-    },
-    {
-      name: "Super Negin Safranfäden",
-      weight: "2Kg",
-      price: 8000,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
-      imageUrl: [
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684420439/Saafran/products/m1cf2kjmfxdagdtgvrsi.png",
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684420440/Saafran/products/hcshpcu0b1i0dnjyfp0c.png",
-      ],
-      rate: 4,
-      product_number: 5,
-    },
-    {
-      name: "Super Negin Safranfäden",
-      weight: "5Kg",
-      price: 20000,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
-      imageUrl: [
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684420439/Saafran/products/m1cf2kjmfxdagdtgvrsi.png",
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684420440/Saafran/products/hcshpcu0b1i0dnjyfp0c.png",
-      ],
-      rate: 4,
-      product_number: 6,
-    },
-    {
-      name: "Super Negin Safranfäden",
-      weight: "10Kg",
-      price: 35000,
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed dictum mauris justo, id facilisis lorem posuere et. Sed ut malesuada nisi. Phasellus interdum quam nec luctus pulvinar. Maecenas quis feugiat elit. Ut ullamcorper turpis sed ligula rutrum, in fringilla odio rhoncus. Maecenas dignissim posuere libero vitae facilisis.",
-      imageUrl: [
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684420439/Saafran/products/m1cf2kjmfxdagdtgvrsi.png",
-        "https://res.cloudinary.com/dvjvlobqp/image/upload/v1684420440/Saafran/products/hcshpcu0b1i0dnjyfp0c.png",
-      ],
-      rate: 4,
-      product_number: 7,
-    },
-  ];
   const [productId, setProductId] = useState(null);
   const location = useLocation();
   useEffect(() => {
@@ -120,12 +17,27 @@ export default function ProductPage() {
     setProductId(parts[2]);
   }, [location]);
 
-  console.log(productId);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:9090/products/getAll").then((result) => {
+      setProducts(result.data);
+      console.log(products);
+    });
+  }, [productId]);
 
   const [currentProduct, setCurrentProduct] = useState();
 
   useEffect(() => {
-    setCurrentProduct(products[productId]);
+    if (productId) {
+      axios
+        .get(`http://localhost:9090/products/${productId}`)
+        .then((result) => {
+          setCurrentProduct(result.data);
+        });
+    } else {
+      return;
+    }
   }, [productId]);
 
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -142,12 +54,12 @@ export default function ProductPage() {
       return shuffled.slice(0, count);
     }
     setMightLike(getRandomItems(products, 4));
-  }, []);
+  }, [products]);
 
   const handleAddToCart = () => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingProduct = cart.find(
-      (item) => item.product_number == productId
+      (item) => item.productNumber === productId
     );
 
     if (existingProduct) {
@@ -160,17 +72,116 @@ export default function ProductPage() {
     localStorage.setItem("cart", JSON.stringify(cart));
   };
 
+  const savedUser = JSON.parse(localStorage.getItem("user"));
+  const userToken = savedUser.token;
+
+  const [likedProducts, setLikedProducts] = useState([]);
+  useEffect(() => {
+    axios
+      .get("http://localhost:9090/users/wishlist", {
+        headers: {
+          Authorization: `Bearer ${savedUser.token}`,
+        },
+        params: {
+          savedUser: savedUser,
+        },
+      })
+      .then((result) => {
+        setLikedProducts(result.data.wishlist);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const [liked, setLiked] = useState(false);
+
+  const handleToggleLike = (productId) => {
+    if (likedProducts.some((item) => item.id === productId)) {
+      // Object with matching id found in likedProducts
+      fetch(`http://localhost:9090/users/wishlist/delete/${productId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+        },
+        body: JSON.stringify(savedUser),
+      })
+        .then(() => {
+          setLikedProducts((prevWishlist) =>
+            prevWishlist.filter((item) => item.id !== productId)
+          );
+          setLiked(false);
+        })
+        .catch((error) => console.log(error));
+    } else {
+      // Object with matching id not found in likedProducts
+      fetch(`http://localhost:9090/users/wishlist/add/${productId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userToken}`,
+          body: JSON.stringify(savedUser),
+        },
+      })
+        .then(() => {
+          setLikedProducts((prevWishlist) => [
+            ...prevWishlist,
+            { id: productId },
+          ]);
+          setLiked(true);
+        })
+        .catch((error) => console.log(error));
+    }
+  };
+
   return (
     <main className="mt-5 py-5 container product-page">
       {currentProduct ? (
         <div className="row">
           <div className="col-md-5 col-12 mb-md-0 mb-5">
+            {liked ? (
+              <BookmarkHeartFill
+                className="product-like-icon"
+                size={
+                  width > 992
+                    ? 40
+                    : width < 992 && width > 576
+                    ? 50
+                    : width < 576 && width > 425
+                    ? 40
+                    : 30
+                }
+                color="#f5f5f5"
+                onClick={() => {
+                  handleToggleLike(productId);
+                }}
+              />
+            ) : (
+              <BookmarkHeart
+                className="product-like-icon"
+                size={
+                  width > 992
+                    ? 40
+                    : width < 992 && width > 576
+                    ? 50
+                    : width < 576 && width > 425
+                    ? 40
+                    : 30
+                }
+                color="#f5f5f5"
+                onClick={() => {
+                  handleToggleLike(productId);
+                }}
+              />
+            )}
             <div
               className="product-page-img-cont"
               onMouseEnter={() => setHoveredIndex(productId)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              <img
+              <LazyLoadImage
+                effect="blur"
                 src={
                   hoveredIndex === productId
                     ? currentProduct.imageUrl[1]

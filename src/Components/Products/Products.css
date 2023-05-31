@@ -55,6 +55,46 @@
   display: inline-block;
 }
 
+.product-like-icon {
+  position: absolute;
+  z-index: 100;
+}
+
+@media (min-width: 992px) {
+  .product-like-icon {
+    margin-top: 1rem;
+    margin-left: 1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .product-like-icon {
+    margin-top: 1rem;
+    left: 20%;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  .product-like-icon {
+    margin-top: 1rem;
+    left: 12%;
+  }
+}
+
+@media (min-width: 425px) and (max-width: 576px) {
+  .product-like-icon {
+    margin-top: 1rem;
+    left: 17%;
+  }
+}
+
+@media (max-width: 425px) {
+  .product-like-icon {
+    margin-top: 1rem;
+    left: 20%;
+  }
+}
+
 .product-img-cont::before {
   content: "";
   position: absolute;

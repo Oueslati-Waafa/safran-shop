@@ -3,6 +3,7 @@ import "./CartPage.css";
 import { Rating } from "react-simple-star-rating";
 import { DashLg, PlusLg } from "react-bootstrap-icons";
 import MyButton from "../../Components/Buttons/MyButton";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function CartPage() {
   const [cart, setCart] = useState([]);
@@ -17,7 +18,7 @@ export default function CartPage() {
 
   const handleRemoveFromCart = (productNumber) => {
     const updatedCart = cart.filter(
-      (item) => item.product_number !== productNumber
+      (item) => item.productNumber !== productNumber
     );
     setCart(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
@@ -25,7 +26,7 @@ export default function CartPage() {
 
   const handleDecreaseQuantity = (productNumber) => {
     const updatedCart = cart.map((item) => {
-      if (item.product_number === productNumber && item.quantity > 1) {
+      if (item.productNumber === productNumber && item.quantity > 1) {
         return { ...item, quantity: item.quantity - 1 };
       }
       return item;
@@ -36,7 +37,7 @@ export default function CartPage() {
 
   const handleIncreaseQuantity = (productNumber) => {
     const updatedCart = cart.map((item) => {
-      if (item.product_number === productNumber) {
+      if (item.productNumber === productNumber) {
         return { ...item, quantity: item.quantity + 1 };
       }
       return item;
@@ -53,7 +54,8 @@ export default function CartPage() {
           cart.map((item) => (
             <div className="cart-item-card col-lg-6 col-11 row mb-3">
               <div className="col-sm-4 col-12 mb-sm-0 mb-3 cart-item-img">
-                <img
+                <LazyLoadImage
+                  effect="blur"
                   src={item.imageUrl[0]}
                   alt="delete icon"
                   className="img-fluid"
@@ -68,11 +70,12 @@ export default function CartPage() {
                     <p>{item.price * item.quantity}£</p>
                   </div>
                   <div className="col-2 cart-item-delete">
-                    <img
+                    <LazyLoadImage
+                      effect="blur"
                       src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684767941/Saafran/logos%20and%20icons/wih8jbmrrqvxmiszexnw.png"
                       alt="delete icon"
                       className="img-fluid"
-                      onClick={() => handleRemoveFromCart(item.product_number)}
+                      onClick={() => handleRemoveFromCart(item.productNumber)}
                     />
                   </div>
                 </div>
@@ -97,7 +100,7 @@ export default function CartPage() {
                     <button
                       className="card-item-quantity-btn btn"
                       onClick={() =>
-                        handleDecreaseQuantity(item.product_number)
+                        handleDecreaseQuantity(item.productNumber)
                       }
                     >
                       <DashLg />
@@ -106,7 +109,7 @@ export default function CartPage() {
                     <button
                       className="card-item-quantity-btn btn"
                       onClick={() =>
-                        handleIncreaseQuantity(item.product_number)
+                        handleIncreaseQuantity(item.productNumber)
                       }
                     >
                       <PlusLg />

@@ -1,0 +1,62 @@
+.personal-info-edit {
+  background-color: var(--dark-redish);
+  border-radius: 2rem;
+  color: var(--secondary);
+}
+
+.personal-info-name {
+  color: var(--dark-redish);
+  font-weight: 800;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.order-info-label {
+  font-weight: 800;
+}
+
+.order-info-value {
+  font-weight: 800;
+  color: var(--secondary);
+  background-color: var(--dark-redish);
+  border-radius: 2rem;
+  padding: 1rem 1.5rem;
+  margin: 0 auto;
+}
+
+@media (min-width: 576px) {
+  .order-info-value {
+    width: 50%;
+  }
+}
+
+@media (max-width: 576px) {
+  .order-info-value {
+    width: 75%;
+  }
+}
+
+.accountNumberInput {
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+  color: var(--primary) !important;
+}
+
+.account-btn {
+  width: 20%;
+}
+
+.changePW-btn {
+  background-color: var(--dark-redish);
+  color: var(--secondary);
+}
+
+.changePW-btn:hover {
+  background-color: var(--primary);
+  color: var(--secondary);
+  font-weight: 800;
+}
+
+.hidePassword {
+  cursor: pointer;
+}

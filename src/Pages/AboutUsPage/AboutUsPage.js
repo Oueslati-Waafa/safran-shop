@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Title from "../../Components/Title/Title";
 import "./AboutUsPage.css";
 import ContinueShopping from "../../Components/Buttons/ContinueShopping";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export default function AboutUsPage() {
   const [width, setWidth] = useState(window.innerWidth);
@@ -9,7 +10,7 @@ export default function AboutUsPage() {
     setWidth(window.innerWidth);
   }, []);
   return (
-    <main className="about-page container">
+    <main className="about-page container mb-5">
       <h1 className="text-center my-5 fw-bold display-5">Über uns</h1>
       <Title content={"UNSERE GESCHICHTE"} />
       <section className="history p-2">
@@ -33,10 +34,11 @@ export default function AboutUsPage() {
             </div>
           </div>
           <div className="col-lg-4 col-12">
-            <img
+            <LazyLoadImage
               src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684502112/Saafran/logos%20and%20icons/znby2wijekw4hqizo5vh.png"
               alt="flower image"
               className="img-fluid history-img"
+              effect="blur"
             />
           </div>
         </div>
@@ -62,10 +64,11 @@ export default function AboutUsPage() {
             </p>
           </div>
           <div className="col-lg-5 col-12">
-            <img
+            <LazyLoadImage
               src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684503458/Saafran/logos%20and%20icons/bwmuavrb0rpjefoctuxb.png"
               alt="mission image"
               className="img-fluid mission-img"
+              effect="blur"
             />
           </div>
         </div>
@@ -74,10 +77,11 @@ export default function AboutUsPage() {
       <section className="team">
         <div className="row d-flex justify-content-md-evenly justify-content-center">
           <div className="col-md-3 col-10 mb-md-0 mb-5 team-person">
-            <img
+            <LazyLoadImage
               className="team-person-img img-fluid"
               src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684504157/Saafran/logos%20and%20icons/gvn3dincdhbinmuh9bvh.png"
               alt="team memeber image"
+              effect="blur"
             />
             <div className="team-person-info mt-3 text-center">
               <h5 className="fw-bold">VOLLSTÄNDIGER NAME</h5>
@@ -85,10 +89,11 @@ export default function AboutUsPage() {
             </div>
           </div>
           <div className="col-md-3 col-10 mb-md-0 mb-5 team-person">
-            <img
+            <LazyLoadImage
               className="team-person-img img-fluid"
               src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684504128/Saafran/logos%20and%20icons/cpb3gwdpk8gamesrir3s.png"
               alt="team memeber image"
+              effect="blur"
             />
             <div className="team-person-info mt-3 text-center">
               <h5 className="fw-bold">VOLLSTÄNDIGER NAME</h5>
@@ -96,10 +101,11 @@ export default function AboutUsPage() {
             </div>
           </div>
           <div className="col-md-3 col-10 team-person">
-            <img
+            <LazyLoadImage
               className="team-person-img img-fluid"
               src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684504102/Saafran/logos%20and%20icons/dqf4ki5vmjttvtmhycut.png"
               alt="team memeber image"
+              effect="blur"
             />
             <div className="team-person-info mt-3 text-center">
               <h5 className="fw-bold">VOLLSTÄNDIGER NAME</h5>

@@ -90,7 +90,15 @@ nav {
   padding-right: 3rem;
 }
 
-.buttons-cont ul {
+.buttons-cont .notLoggedUl {
+  list-style-type: none;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+.buttons-cont .loggedUl {
   list-style-type: none;
   display: flex;
   justify-content: space-between;
@@ -165,8 +173,8 @@ ul {
   scale: 1.1;
 }
 
-.user-logOut-cont span {
-  color: var(--secondary);
+.user-logOut-button a {
+  color: var(--secondary) !important;
 }
 
 @media (min-width: 1440px) {
