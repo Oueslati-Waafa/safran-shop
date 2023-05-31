@@ -1,4 +1,5 @@
 import Order from "../models/Order.js";
+import User from "../models/Users.js"
 import Stripe from "stripe";
 import dotenv from "dotenv";
 dotenv.config();
@@ -42,6 +43,17 @@ export const createOrder = async (req, res) => {
 export const payOrder = async (req, res) => {
   try {
     const { orderId } = req.body;
+    const  userId  = req.user.id; // Assuming the user ID is available as userId
+
+    console.log(userId)
+    
+    // Retrieve the user from the database based on the user ID
+    const user = await User.findById(userId);
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
 
     // Retrieve the order from the database
     const order = await Order.findById(orderId);
@@ -62,10 +74,23 @@ export const payOrder = async (req, res) => {
       },
     });
 
-    // Create a payment intent with the test payment method and order amount
+    // Create a customer
+    const customer = await stripe.customers.create({
+      email: user.email, // Provide the customer's email here
+      name: `${user.fname} ${user.lname}`,
+      payment_method: paymentMethod.id,
+    });
+
+    // Attach the payment method to the customer
+    await stripe.paymentMethods.attach(paymentMethod.id, {
+      customer: customer.id,
+    });
+
+    // Create a payment intent with the customer and order amount
     const paymentIntent = await stripe.paymentIntents.create({
       amount: order.totalPrice * 100, // Stripe requires the amount in cents
       currency: "eur",
+      customer: customer.id,
       payment_method: paymentMethod.id,
       confirmation_method: "manual",
       confirm: true,
@@ -76,6 +101,11 @@ export const payOrder = async (req, res) => {
     order.paymentInfo = {
       id: paymentIntent.id,
       status: paymentIntent.status,
+      customer: {
+        id: customer.id,
+        email: customer.email,
+        name: customer.name,
+      },
     };
     order.isPaid = true;
     order.paidAt = new Date();
@@ -89,10 +119,12 @@ export const payOrder = async (req, res) => {
   }
 };
 
+
+
 /**GET MY ORDERS*/
 export const getMyOrders = async (req, res) => {
   try {
-    console.log(req.user); // Check if req.user is populated correctly
+    console.log(req.user.id); // Check if req.user is populated correctly
 
     const userId = req.user.id;
     const orders = await Order.find({ user: userId });
