@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import validator from "validator";
 
-
 const productSchema = new mongoose.Schema(
   {
     productNumber: {
@@ -16,12 +15,12 @@ const productSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
-      validate: {
-        validator: (value) => {
-          return validator.isLength(value, { min: 10, max: 250 });
-        },
-        message: "Description must be between 10 and 250 characters",
-      },
+      // validate: {
+      //   validator: (value) => {
+      //     return validator.isLength(value, { min: 10, max: 250 });
+      //   },
+      //   message: "Description must be between 10 and 250 characters",
+      // },
     },
     price: {
       type: Number,
@@ -59,13 +58,14 @@ const productSchema = new mongoose.Schema(
       required: false,
       default: 0,
     },
-    reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review", required: false }],
+    reviews: [
+      { type: mongoose.Schema.Types.ObjectId, ref: "Review", required: false },
+    ],
   },
   {
     timestamps: true,
   }
 );
-
 
 const Product = mongoose.model("Product", productSchema);
 
