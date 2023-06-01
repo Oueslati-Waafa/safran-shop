@@ -188,3 +188,40 @@ function sendResetPasswordEmail(user) {
      }
   });
 }
+
+
+/**RECEIPT MAIL */
+export function sendReceiptEmail(user, receipt) {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    },
+  });
+
+  const template = handlebars.compile(emailTemplateSource);
+  const title = "Soleil Safran Receipt";
+  const message = `Hi ${user.fname}, Thank you for your purchase. Here is your receipt.`;
+
+  const htmlToSend = template({
+    title: title,
+    message: message,
+    code: receipt,
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: user.email,
+    subject: "Soleil Safran Receipt",
+    html: htmlToSend,
+  };
+
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(`Email sent to ${user.email} successfully`);
+    }
+  });
+}

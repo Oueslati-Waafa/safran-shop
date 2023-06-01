@@ -2,6 +2,7 @@ import Order from "../models/Order.js";
 import User from "../models/Users.js"
 import Stripe from "stripe";
 import dotenv from "dotenv";
+import { sendReceiptEmail } from "./mailling.controller.js";
 dotenv.config();
 // Create an instance of the Stripe client
 const key =
@@ -43,10 +44,10 @@ export const createOrder = async (req, res) => {
 export const payOrder = async (req, res) => {
   try {
     const { orderId } = req.body;
-    const  userId  = req.user.id; // Assuming the user ID is available as userId
+    const userId = req.user.id; // Assuming the user ID is available as userId
 
-    console.log(userId)
-    
+    console.log(userId);
+
     // Retrieve the user from the database based on the user ID
     const user = await User.findById(userId);
 
@@ -110,6 +111,11 @@ export const payOrder = async (req, res) => {
     order.isPaid = true;
     order.paidAt = new Date();
     await order.save();
+
+    // Send receipt email to the customer
+    const receipt = order.paymentInfo.id; // Assuming paymentInfo contains the receipt ID
+    await sendReceiptEmail(user, receipt);
+
 
     // Handle any additional order fulfillment logic, such as sending confirmation emails
 
