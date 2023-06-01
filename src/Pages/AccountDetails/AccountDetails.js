@@ -217,9 +217,9 @@ export default function AccountDetails() {
       <section className="personal-info-cont row d-flex justify-content-evenly">
         <div className="col-lg-2 col-6 d-flex flex-column align-items-center justify-content-center">
           <img
-            className="img-fluid personal-info-img"
+            className="img-fluid personal-info-img rounded-circle img-thumbnail"
             alt="profile image"
-            src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1685028523/Saafran/logos%20and%20icons/vxa76gmqws5ank9j7a9q.png"
+            src={user?.img}
           />
           <p className="personal-info-name mt-3">
             {user?.fname} {user?.lname}

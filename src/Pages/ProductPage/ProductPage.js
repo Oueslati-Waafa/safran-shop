@@ -7,6 +7,7 @@ import Products from "../../Components/Products/Products";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { BookmarkHeart, BookmarkHeartFill } from "react-bootstrap-icons";
 import axios from "axios";
+import ReviewsBox from "./ReviewsBox";
 
 export default function ProductPage() {
   const [productId, setProductId] = useState(null);
@@ -28,6 +29,8 @@ export default function ProductPage() {
 
   const [currentProduct, setCurrentProduct] = useState();
 
+  const [refreshProduct, setRefreshProduct] = useState(0);
+
   useEffect(() => {
     if (productId) {
       axios
@@ -38,7 +41,7 @@ export default function ProductPage() {
     } else {
       return;
     }
-  }, [productId]);
+  }, [productId, refreshProduct]);
 
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [mightLike, setMightLike] = useState([]);
@@ -96,8 +99,16 @@ export default function ProductPage() {
 
   const [liked, setLiked] = useState(false);
 
+  useEffect(() => {
+    if (likedProducts.some((item) => item._id === productId)) {
+      setLiked(true);
+    } else {
+      setLiked(false);
+    }
+  }, [productId, likedProducts]);
+
   const handleToggleLike = (productId) => {
-    if (likedProducts.some((item) => item.id === productId)) {
+    if (likedProducts.some((item) => item._id === productId)) {
       // Object with matching id found in likedProducts
       fetch(`http://localhost:9090/users/wishlist/delete/${productId}`, {
         method: "DELETE",
@@ -109,7 +120,7 @@ export default function ProductPage() {
       })
         .then(() => {
           setLikedProducts((prevWishlist) =>
-            prevWishlist.filter((item) => item.id !== productId)
+            prevWishlist.filter((item) => item._id !== productId)
           );
           setLiked(false);
         })
@@ -127,7 +138,7 @@ export default function ProductPage() {
         .then(() => {
           setLikedProducts((prevWishlist) => [
             ...prevWishlist,
-            { id: productId },
+            { _id: productId },
           ]);
           setLiked(true);
         })
@@ -199,7 +210,7 @@ export default function ProductPage() {
               </h4>
               <div className="d-flex justify-content-between w-100 product-page-rate">
                 <Rating
-                  initialValue={currentProduct.rate}
+                  initialValue={currentProduct.rating}
                   readonly
                   allowFraction
                   size={
@@ -231,6 +242,13 @@ export default function ProductPage() {
       )}
       <Title content={"Das könnte Ihnen auch gefallen"} />
       <Products products={mightLike} />
+      <Title content={"Product reviews"} />
+      <ReviewsBox
+        productId={productId}
+        setProductId={setProductId}
+        refreshProduct={refreshProduct}
+        setRefreshProduct={setRefreshProduct}
+      />
     </main>
   );
 }
