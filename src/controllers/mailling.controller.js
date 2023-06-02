@@ -14,6 +14,12 @@ const emailTemplateSource = fs.readFileSync(
   "utf8"
 );
 
+const recieptTemplateSource = fs.readFileSync(
+  path.join(__dirname, "../public/templates/receipt.hbs"),
+  "utf8"
+);
+
+
 /**SEND VERIFICATION CODE */
 export function sendVerificationEmail(user) {
   const transporter = nodemailer.createTransport({
@@ -191,7 +197,7 @@ function sendResetPasswordEmail(user) {
 
 
 /**RECEIPT MAIL */
-export function sendReceiptEmail(user, receipt) {
+export function sendReceiptEmail(user, orderDetails) {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -200,14 +206,24 @@ export function sendReceiptEmail(user, receipt) {
     },
   });
 
-  const template = handlebars.compile(emailTemplateSource);
+  const template = handlebars.compile(recieptTemplateSource);
   const title = "Soleil Safran Receipt";
   const message = `Hi ${user.fname}, Thank you for your purchase. Here is your receipt.`;
 
   const htmlToSend = template({
     title: title,
     message: message,
-    code: receipt,
+    user: {
+      name: `${user.fname} ${user.lname}`,
+      email: user.email,
+      address: user.address,
+    },
+    order: {
+      id: orderDetails.receiptId,
+      totalPrice: orderDetails.total,
+      orderStatus: orderDetails.status,
+      shippingFees: orderDetails.shippingFees,
+    },
   });
 
   const mailOptions = {

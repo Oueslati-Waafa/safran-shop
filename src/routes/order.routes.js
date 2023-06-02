@@ -4,10 +4,7 @@
  *   - name: Orders
  *     description: API endpoints for managing orders
  */
-import {
-  ensureAdmin,
-  ensureUser,
-} from "../middlewares/auth.middleware.js";
+import { ensureAdmin, ensureUser } from "../middlewares/auth.middleware.js";
 
 import express from "express";
 import {
@@ -19,6 +16,7 @@ import {
   getMyOrders,
   cancelOrderAdmin,
   payOrder,
+  createPaypalPayment,
 } from "../controllers/Order.controller.js";
 
 /** Defining the router */
@@ -152,7 +150,6 @@ ordersRouter.route("/my-orders").get(ensureUser, getMyOrders);
  */
 ordersRouter.route("/add").post(ensureUser, createOrder);
 
-
 /**
  * @swagger
  * /orders/getAll:
@@ -227,7 +224,7 @@ ordersRouter.route("/getAll").get(ensureAdmin, getAllOrders);
  *       scheme: bearer
  *       bearerFormat: JWT
  */
-ordersRouter.route("/:orderId").get(ensureAdmin, getOrderById);
+ordersRouter.route("/:orderId").get(ensureUser, getOrderById);
 
 /**
  * @swagger
@@ -354,8 +351,6 @@ ordersRouter.route("/:id").put(ensureAdmin, updateOrder);
  */
 ordersRouter.route("/:id").delete(ensureAdmin, deleteOrder);
 
-
-
 /**
  * @swagger
  * /orders/{id}/admin-cancel:
@@ -388,6 +383,6 @@ ordersRouter.route("/:id").delete(ensureAdmin, deleteOrder);
 ordersRouter.route("/:id/admin-cancel").put(ensureAdmin, cancelOrderAdmin);
 
 ordersRouter.route("/stripe-payment").post(ensureUser, payOrder);
-
+ordersRouter.route("/create-paypal-payment").post(ensureUser,createPaypalPayment);
 
 export { ordersRouter };

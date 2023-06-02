@@ -2,11 +2,10 @@ import Order from "../models/Order.js";
 import User from "../models/Users.js"
 import Stripe from "stripe";
 import dotenv from "dotenv";
+import paypal from '../paypalConfig.js'
 import { sendReceiptEmail } from "./mailling.controller.js";
 dotenv.config();
 // Create an instance of the Stripe client
-const key =
-  "sk_test_51Moo6YHR4eKJdhow9ffFixaIiLSm6FlXjhfnheHGnyBS5yVgVncZDPLlNdSBCQbUOUYtyXh1GlWLlXvmXNUdKs0H00ba59H0X0";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
   apiVersion: "2020-08-27",
 });
@@ -41,6 +40,7 @@ export const createOrder = async (req, res) => {
   }
 };
 
+/**PAY THE ORDER WITH STRIPE */
 export const payOrder = async (req, res) => {
   try {
     const { orderId } = req.body;
@@ -113,13 +113,80 @@ export const payOrder = async (req, res) => {
     await order.save();
 
     // Send receipt email to the customer
-    const receipt = order.paymentInfo.id; // Assuming paymentInfo contains the receipt ID
-    await sendReceiptEmail(user, receipt);
+    const orderDetails = {
+      receiptId: order.paymentInfo.id,
+      total: order.totalPrice,
+      status: order.orderStatus,
+      shippingFees: order.shippingPrice,
+    }; 
+    await sendReceiptEmail(user, orderDetails);
 
 
     // Handle any additional order fulfillment logic, such as sending confirmation emails
 
     res.status(200).json({ message: "Payment confirmed" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+/**PAY THE ORDER WITH PAYPAL */
+
+export const createPaypalPayment = async (req, res) => {
+  try {
+    const { orderId } = req.body;
+
+    // Retrieve the order from the database
+    const order = await Order.findById(orderId);
+
+    // Check if the order has already been paid
+    if (order.isPaid) {
+      return res.status(400).json({ error: "Order has already been paid" });
+    }
+
+    // Create a PayPal payment object
+    const createPaymentJson = {
+      intent: "sale",
+      payer: {
+        payment_method: "paypal",
+      },
+      transactions: [
+        {
+          amount: {
+            total: order.totalPrice.toString(),
+            currency: "USD", // Replace with your desired currency
+          },
+          description: "Payment description", // Replace with your payment description
+        },
+      ],
+      note_to_payer: "Thank you for your purchase. Please approve the payment.",
+    };
+
+    // Create a PayPal payment
+    paypal.payment.create(createPaymentJson, (error, payment) => {
+      if (error) {
+        console.error(error);
+        res.status(500).json({ error: "Failed to create PayPal payment" });
+      } else {
+        // Update the order with payment information
+        order.paymentInfo = {
+          id: payment.id,
+          status: payment.state,
+        };
+        order.isPaid = true;
+        order.paidAt = new Date();
+        order.save();
+
+        // Get the PayPal approval message
+        const approvalMessage =
+          payment.transactions[0].related_resources[0].sale.payment_instruction
+            .link.href;
+
+        res
+          .status(200)
+          .json({ message: "Payment approval required", approvalMessage });
+      }
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
