@@ -135,6 +135,15 @@ export const payOrder = async (req, res) => {
 export const createPaypalPayment = async (req, res) => {
   try {
     const { orderId } = req.body;
+    const userId = req.user.id; // Assuming the user ID is available as userId
+
+    // Retrieve the user from the database based on the user ID
+    const user = await User.findById(userId);
+
+    // Check if the user exists
+    if (!user) {
+      return res.status(400).json({ error: "User not found" });
+    }
 
     // Retrieve the order from the database
     const order = await Order.findById(orderId);
@@ -154,12 +163,16 @@ export const createPaypalPayment = async (req, res) => {
         {
           amount: {
             total: order.totalPrice.toString(),
-            currency: "USD", // Replace with your desired currency
+            currency: "EUR", // Replace with your desired currency
           },
           description: "Payment description", // Replace with your payment description
         },
       ],
       note_to_payer: "Thank you for your purchase. Please approve the payment.",
+      redirect_urls: {
+        return_url: "http://yourwebsite.com/success", // Replace with your success URL
+        cancel_url: "http://yourwebsite.com/cancel", // Replace with your cancel URL
+      },
     };
 
     // Create a PayPal payment
@@ -177,21 +190,18 @@ export const createPaypalPayment = async (req, res) => {
         order.paidAt = new Date();
         order.save();
 
-        // Get the PayPal approval message
-        const approvalMessage =
-          payment.transactions[0].related_resources[0].sale.payment_instruction
-            .link.href;
+        // Get the PayPal approval URL
+        const approvalUrl = payment.links.find(
+          (link) => link.rel === "approval_url"
+        ).href;
 
-        res
-          .status(200)
-          .json({ message: "Payment approval required", approvalMessage });
+        res.status(200).json({ approvalUrl });
       }
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 
 /**GET MY ORDERS*/
