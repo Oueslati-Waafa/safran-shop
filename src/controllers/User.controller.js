@@ -15,7 +15,7 @@ const getUsers = async (req, res) => {
 const getUserById = async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await User.findById(userId).populate("shippingDetails");
+    const user = await User.findById(userId);
 
     if (!user) {
       console.log(`User not found for ID: ${userId}`);

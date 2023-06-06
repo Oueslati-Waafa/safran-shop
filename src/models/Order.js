@@ -26,7 +26,7 @@ const OrderSchema = new mongoose.Schema({
   paymentMethod: { type: String, required: false },
   orderItems: [
     {
-      name: {
+      pName: {
         type: String,
         required: true,
       },
@@ -38,7 +38,7 @@ const OrderSchema = new mongoose.Schema({
         type: Number,
         required: true,
       },
-      product: {
+      productId: {
         type: mongoose.Schema.ObjectId,
         ref: "Product",
         required: true,

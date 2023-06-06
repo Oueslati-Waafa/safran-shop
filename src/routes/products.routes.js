@@ -1,5 +1,5 @@
 import express from "express";
-import {ensureAdmin, ensureUser } from "../middlewares/auth.middleware.js";
+import { ensureAdmin, ensureUser } from "../middlewares/auth.middleware.js";
 
 /**
  * @swagger
@@ -15,7 +15,12 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/Product.controller.js";
-import { createReview, deleteReview, getProductReviews, updateReview } from "../controllers/review.controller.js";
+import {
+  createReview,
+  deleteReview,
+  getProductReviews,
+  updateReview,
+} from "../controllers/review.controller.js";
 
 /** Defining the router */
 const productsRouter = express.Router();
@@ -244,7 +249,7 @@ productsRouter.route("/:id/reviews").post(ensureUser, createReview);
  *         description: Internal Server Error
  */
 
-productsRouter.route("/:id/reviews").get( getProductReviews);
+productsRouter.route("/:id/reviews").get(getProductReviews);
 
 /**
  * @swagger
@@ -319,6 +324,5 @@ productsRouter.route("/reviews/:id").put(ensureUser, updateReview);
  */
 
 productsRouter.route("/reviews/:reviewId").delete(ensureUser, deleteReview);
-
 
 export { productsRouter };
