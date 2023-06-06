@@ -1,8 +1,8 @@
 import Order from "../models/Order.js";
-import User from "../models/Users.js"
+import User from "../models/Users.js";
 import Stripe from "stripe";
 import dotenv from "dotenv";
-import paypal from '../paypalConfig.js'
+import paypal from "../paypalConfig.js";
 import { sendReceiptEmail } from "./mailling.controller.js";
 dotenv.config();
 // Create an instance of the Stripe client
@@ -42,11 +42,11 @@ export const createOrder = async (req, res) => {
 
 /**PAY THE ORDER WITH STRIPE */
 export const payOrder = async (req, res) => {
+  console.log("request body", req.body);
   try {
-    const { orderId } = req.body;
+    const { orderId } = req.body.orderId;
+    const { card } = req.body.card;
     const userId = req.user.id; // Assuming the user ID is available as userId
-
-    console.log(userId);
 
     // Retrieve the user from the database based on the user ID
     const user = await User.findById(userId);
@@ -68,10 +68,10 @@ export const payOrder = async (req, res) => {
     const paymentMethod = await stripe.paymentMethods.create({
       type: "card",
       card: {
-        number: "4242424242424242",
-        exp_month: 12,
-        exp_year: 2024,
-        cvc: "123",
+        number: card.number,
+        exp_month: card.exp_month,
+        exp_year: card.exp_year,
+        cvc: card.cvc,
       },
     });
 
@@ -118,9 +118,8 @@ export const payOrder = async (req, res) => {
       total: order.totalPrice,
       status: order.orderStatus,
       shippingFees: order.shippingPrice,
-    }; 
+    };
     await sendReceiptEmail(user, orderDetails);
-
 
     // Handle any additional order fulfillment logic, such as sending confirmation emails
 
