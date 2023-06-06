@@ -8,6 +8,7 @@ export default function Products(props) {
       <div>
         {props.products.map((product, index) => (
           <ProductCard
+            key={index}
             product={product}
             index={index}
             refresh={props.refresh}

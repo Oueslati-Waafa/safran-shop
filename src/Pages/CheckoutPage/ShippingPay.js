@@ -54,7 +54,7 @@ export default function ShippingPay({ setCurrentStep }) {
       <section className="pay-page container mb-5">
         <div className="pay-meths-cont row">
           <div
-            className={`pay-meth col-lg-2 col-sm-3 col-10 ${
+            className={`pay-meth col-sm-4 col-10 ${
               selectedPayMeth === "payPal" ? "pay-meth-selected" : ""
             }`}
             onClick={() => {
@@ -69,51 +69,30 @@ export default function ShippingPay({ setCurrentStep }) {
               }`}
             />
             <img
-              className="img-fluid pay-meth-icon"
+              className="img-fluid pay-meth-icon paypal-icon"
               alt="payment method icon"
               src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684922713/Saafran/logos%20and%20icons/ekyeumi0y6ou1dpynh5u.png"
             />
           </div>
           <div
-            className={`pay-meth col-lg-2 col-sm-3 col-10 ${
-              selectedPayMeth === "visaCard" ? "pay-meth-selected" : ""
+            className={`pay-meth col-sm-4 col-10 ${
+              selectedPayMeth === "CreditCard" ? "pay-meth-selected" : ""
             }`}
             onClick={() => {
-              setSelectedPayMeth("visaCard");
+              setSelectedPayMeth("CreditCard");
             }}
           >
             <img
               src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684856152/Saafran/logos%20and%20icons/qbo4wiibjaje8e57ziqv.png"
               alt="border icon"
               className={`border-icon img-fluid ${
-                selectedPayMeth === "visaCard" ? "" : "d-none"
+                selectedPayMeth === "CreditCard" ? "" : "d-none"
               }`}
             />
             <img
-              className="img-fluid pay-meth-icon"
+              className="img-fluid pay-meth-icon credit-icon"
               alt="payment method icon"
-              src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684922713/Saafran/logos%20and%20icons/egoyhjeohlmwlscjmdp9.png"
-            />
-          </div>
-          <div
-            className={`pay-meth col-lg-2 col-sm-3 col-10 ${
-              selectedPayMeth === "masterCard" ? "pay-meth-selected" : ""
-            }`}
-            onClick={() => {
-              setSelectedPayMeth("masterCard");
-            }}
-          >
-            <img
-              src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684856152/Saafran/logos%20and%20icons/qbo4wiibjaje8e57ziqv.png"
-              alt="border icon"
-              className={`border-icon img-fluid ${
-                selectedPayMeth === "masterCard" ? "" : "d-none"
-              }`}
-            />
-            <img
-              className="img-fluid pay-meth-icon"
-              alt="payment method icon"
-              src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684922712/Saafran/logos%20and%20icons/inqqdvsyxnn4snnqeg9a.png"
+              src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1685974713/Saafran/logos%20and%20icons/vjlu9ihg0wb8oaudeqjc.png"
             />
           </div>
         </div>

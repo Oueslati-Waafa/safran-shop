@@ -9,6 +9,7 @@ export default function MyButton(props) {
         className={`btn myButton ${props.size}`}
         onClick={props.toDo}
         disabled={props.disabled}
+        onMouseEnter={props.hover}
       >
         <Link to={props.direction} onClick={() => window.scrollTo(0, 0)}>
           {props.text}

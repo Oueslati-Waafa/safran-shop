@@ -2,10 +2,6 @@ import React, { useEffect } from "react";
 import "./ThankPage.css";
 
 export default function ThankPage() {
-  useEffect(() => {
-    localStorage.removeItem("cart");
-  }, []);
-
   return (
     <main className="thank-page smoke-gradient d-flex flex-column align-items-center justify-content-center">
       <p className="thank-page-title">

@@ -31,6 +31,10 @@
   border-radius: 2rem;
 }
 
+.userImg {
+  border-radius: 2rem;
+}
+
 .carousel-indicators {
   bottom: 45px !important;
 }

@@ -31,13 +31,21 @@
   /* Add your icon styles (e.g., background image, icon font, etc.) */
 }
 
-/* .pay-meth-icon {
-    object-fit: fill;
-    width: 100%;
-    height: 100%;
-} */
+.pay-meth-icon {
+    object-fit: contain;
+    aspect-ratio: 3/1;
+}
 
-.pay-meth-icon:hover {
+.credit-icon {
+  scale: 1.7;
+}
+
+.credit-icon:hover {
+  scale: 1.9;
+  cursor: pointer;
+}
+
+.paypal-icon:hover {
   scale: 1.1;
   cursor: pointer;
 }
@@ -61,5 +69,7 @@
 
   .pay-meth {
     margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
   }
 }

@@ -28,12 +28,12 @@ export default function OrderHistory() {
   return (
     <main className="orders-cont container">
       <h1 className="text-center fw-bold display-3 my-5">Kaufhistorie</h1>
-      {orders.map((order) => (
-        <div className="order-cont">
+      {orders.map((order, index) => (
+        <div className="order-cont" key={index}>
           <Title content={order.createdAt} />
           <div className="cart-items row d-flex justify-content-lg-between justify-content-center">
-            {order.orderItems.map((item) => (
-              <div className="cart-item-card col-lg-6 col-11 row mb-3">
+            {order.orderItems.map((item, index) => (
+              <div className="cart-item-card col-lg-6 col-11 row mb-3" key={index}>
                 <div className="col-sm-4 col-12 mb-sm-0 mb-3 cart-item-img">
                   <LazyLoadImage
                     effect="blur"

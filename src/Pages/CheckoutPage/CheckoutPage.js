@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./CheckoutPage.css";
 import OrderSummary from "./OrderSummary";
 import ShippingDelivery from "./ShippingDelivery";
@@ -8,6 +8,7 @@ import ThankPage from "./ThankPage";
 
 export default function CheckoutPage() {
   const [currentStep, setCurrentStep] = useState("info");
+
   return (
     <main>
       {currentStep === "info" ? (

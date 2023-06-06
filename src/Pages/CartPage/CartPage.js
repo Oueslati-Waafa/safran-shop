@@ -46,13 +46,25 @@ export default function CartPage() {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
+  const [savedUser, setSavedUser] = useState();
+  const [loggedIn, setLoggedin] = useState(false);
+  const [showNotice, setShowNotice] = useState(false);
+
+  useEffect(() => {
+    setSavedUser(JSON.parse(localStorage.getItem("user")) || []);
+    setLoggedin(JSON.parse(localStorage.getItem("loggedIn")) || false);
+  }, []);
+
   return (
     <main className="cart-page container mb-5">
       <h1 className="text-center fw-bold display-3 my-5">Ihr Warenkorb</h1>
       <div className="cart-items row d-flex justify-content-lg-between justify-content-center">
         {cart ? (
-          cart.map((item) => (
-            <div className="cart-item-card col-lg-6 col-11 row mb-3">
+          cart.map((item, index) => (
+            <div
+              className="cart-item-card col-lg-6 col-11 row mb-3"
+              key={index}
+            >
               <div className="col-sm-4 col-12 mb-sm-0 mb-3 cart-item-img">
                 <LazyLoadImage
                   effect="blur"
@@ -99,18 +111,14 @@ export default function CartPage() {
                   <div className="col-sm-4 col card-item-quantity-cont d-flex justify-content-between align-items-center">
                     <button
                       className="card-item-quantity-btn btn"
-                      onClick={() =>
-                        handleDecreaseQuantity(item.productNumber)
-                      }
+                      onClick={() => handleDecreaseQuantity(item.productNumber)}
                     >
                       <DashLg />
                     </button>
                     <span className="card-item-quantity">{item.quantity} </span>
                     <button
                       className="card-item-quantity-btn btn"
-                      onClick={() =>
-                        handleIncreaseQuantity(item.productNumber)
-                      }
+                      onClick={() => handleIncreaseQuantity(item.productNumber)}
                     >
                       <PlusLg />
                     </button>
@@ -133,7 +141,13 @@ export default function CartPage() {
         }
         text={cart.length > 0 ? "WEITER ZUR Zahlungsart" : "EINKAUFEN GEHEN"}
         direction={cart.length > 0 ? "/checkout" : "/"}
+        disabled={savedUser !== [] && loggedIn !== false ? false : true}
       />
+      {savedUser !== [] && loggedIn !== false ? null : (
+        <p className="text-dark text-muted text-center">
+          Bitte loggen Sie sich zuerst ein!
+        </p>
+      )}
     </main>
   );
 }

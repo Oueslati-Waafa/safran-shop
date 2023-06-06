@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Footer.css";
 import { Form, Modal } from "react-bootstrap";
+import axios from "axios";
 
 export default function Footer() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,6 +18,39 @@ export default function Footer() {
   const handleModalOk = () => {
     setIsModalOpen(false);
     console.log("Input value:", inputValue);
+  };
+
+  const [user, setUser] = useState();
+  const [userToken, setUserToken] = useState();
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user")) || [];
+    setUser(savedUser);
+    setUserToken(savedUser.token);
+  }, []);
+
+  const addTestimonial = async (e) => {
+    e.preventDefault();
+    if (!userToken) {
+      return;
+    }
+    try {
+      const response = await axios.post(
+        "http://localhost:9090/testimonials/add",
+        {
+          text: inputValue,
+          savedUser: user,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      console.log(response.data);
+      setInputValue("");
+    } catch (error) {
+      console.error(error);
+    }
   };
   return (
     <footer className="footer p-lg-5 p-3">
@@ -37,7 +71,12 @@ export default function Footer() {
         <div className="col-lg-7 col-12 d-flex justify-content-lg-end justify-content-center align-items-center mt-lg-0 mt-5">
           <div className="testimonial-field">
             <p>Erhalten Sie die aktuellsten Nachrichten von uns</p>
-            <Form className="d-flex w-100">
+            <Form
+              className="d-flex w-100"
+              onSubmit={(e) => {
+                addTestimonial(e);
+              }}
+            >
               <Form.Group controlId="testimonial-text-input" className="w-75">
                 <Form.Control
                   type="text"

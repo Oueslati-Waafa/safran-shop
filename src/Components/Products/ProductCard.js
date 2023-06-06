@@ -33,7 +33,7 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
   };
 
   const savedUser = JSON.parse(localStorage.getItem("user"));
-  const userToken = savedUser.token;
+  const userToken = savedUser?.token;
 
   const [likedProducts, setLikedProducts] = useState([]);
   useEffect(() => {
@@ -168,7 +168,7 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
         </h4>
         <div className="d-flex justify-content-between w-100 product-rate-cont">
           <Rating
-            initialValue={product.rate}
+            initialValue={product.rating}
             readonly
             allowFraction
             size={width > 768 ? 35 : 20}

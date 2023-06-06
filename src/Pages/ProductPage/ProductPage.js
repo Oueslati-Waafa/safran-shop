@@ -7,7 +7,8 @@ import Products from "../../Components/Products/Products";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { BookmarkHeart, BookmarkHeartFill } from "react-bootstrap-icons";
 import axios from "axios";
-import ReviewsBox from "./ReviewsBox";
+import { Form } from "react-bootstrap";
+import ReviewCard from "./ReviewCard";
 
 export default function ProductPage() {
   const [productId, setProductId] = useState(null);
@@ -28,7 +29,6 @@ export default function ProductPage() {
   }, [productId]);
 
   const [currentProduct, setCurrentProduct] = useState();
-
   const [refreshProduct, setRefreshProduct] = useState(0);
 
   useEffect(() => {
@@ -41,7 +41,9 @@ export default function ProductPage() {
     } else {
       return;
     }
-  }, [productId, refreshProduct]);
+  }, [refreshProduct, productId]);
+
+  console.log(refreshProduct);
 
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [mightLike, setMightLike] = useState([]);
@@ -75,18 +77,23 @@ export default function ProductPage() {
     localStorage.setItem("cart", JSON.stringify(cart));
   };
 
-  const savedUser = JSON.parse(localStorage.getItem("user"));
-  const userToken = savedUser.token;
+  const [user, setUser] = useState();
+  const [userToken, setUserToken] = useState();
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem("user")) || [];
+    setUser(savedUser);
+    setUserToken(savedUser.token);
+  }, []);
 
   const [likedProducts, setLikedProducts] = useState([]);
   useEffect(() => {
     axios
       .get("http://localhost:9090/users/wishlist", {
         headers: {
-          Authorization: `Bearer ${savedUser.token}`,
+          Authorization: `Bearer ${userToken}`,
         },
         params: {
-          savedUser: savedUser,
+          savedUser: user,
         },
       })
       .then((result) => {
@@ -116,7 +123,7 @@ export default function ProductPage() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${userToken}`,
         },
-        body: JSON.stringify(savedUser),
+        body: JSON.stringify(user),
       })
         .then(() => {
           setLikedProducts((prevWishlist) =>
@@ -132,7 +139,7 @@ export default function ProductPage() {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${userToken}`,
-          body: JSON.stringify(savedUser),
+          body: JSON.stringify(user),
         },
       })
         .then(() => {
@@ -144,6 +151,76 @@ export default function ProductPage() {
         })
         .catch((error) => console.log(error));
     }
+  };
+
+  /* product review section */
+
+  const [reviews, setReviews] = useState([]);
+
+  const [rating, setRating] = useState(5);
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    if (productId) {
+      axios
+        .get(`http://localhost:9090/products/${productId}/reviews`)
+        .then((result) => {
+          setReviews(result.data.reviews);
+        });
+    } else {
+      return;
+    }
+  }, [productId]);
+
+  const addReview = async (pId, e) => {
+    e.preventDefault();
+
+    if (!userToken) {
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `http://localhost:9090/products/${pId}/reviews`,
+        {
+          rating: rating,
+          description: description,
+          savedUser: user,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      );
+      setReviews((prevReviews) => [...prevReviews, response.data.review]);
+      setRating(5);
+      setDescription("");
+      setRefreshProduct(refreshProduct + 1);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleRating = (rate) => {
+    setRating(rate);
+  };
+
+  const removeReview = (rvId) => {
+    setReviews((prevReviews) =>
+      prevReviews.filter((review) => review._id !== rvId)
+    );
+  };
+
+  const changeReview = (id, newRv) => {
+    setReviews((prevReviews) =>
+      prevReviews.map((review) => {
+        if (review._id === id) {
+          return newRv;
+        }
+        return review;
+      })
+    );
   };
 
   return (
@@ -243,12 +320,82 @@ export default function ProductPage() {
       <Title content={"Das könnte Ihnen auch gefallen"} />
       <Products products={mightLike} />
       <Title content={"Product reviews"} />
-      <ReviewsBox
-        productId={productId}
-        setProductId={setProductId}
-        refreshProduct={refreshProduct}
-        setRefreshProduct={setRefreshProduct}
-      />
+      <section className="container reviews-section">
+        <div className="add-review-box row d-flex justify-content-between align-items-center">
+          <div className="user-info col-lg-3 col-12 d-flex flex-column justify-content-center align-items-center">
+            <img
+              className="img-fluid personal-info-img rounded-circle img-thumbnail"
+              alt="profile image"
+              src={user?.img}
+            />
+            <p className="personal-info-name mt-3">
+              {user?.fname} {user?.lname}
+            </p>
+          </div>
+          <div className="add-review-form col-lg-8 col-12">
+            <Form
+              onSubmit={(e) => {
+                addReview(productId, e);
+              }}
+            >
+              <Form.Group className="mb-3">
+                <Form.Label className="text-light fs-4 fw-bold">
+                  Notiz
+                </Form.Label>
+                <Form.Control
+                  as="textarea"
+                  placeholder="Hinterlasse hier eine Notiz"
+                  className="add-review-form-input"
+                  value={description}
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
+                />
+              </Form.Group>
+              <div className="row d-flex justify-content-between align-items-center">
+                <div className="col-6">
+                  <Rating
+                    allowFraction
+                    initialValue={5}
+                    emptyColor="#f5f5f5"
+                    size={
+                      width > 992
+                        ? 40
+                        : width < 992 && width > 576
+                        ? 50
+                        : width < 576 && width > 425
+                        ? 40
+                        : 30
+                    }
+                    onClick={handleRating}
+                  />
+                </div>
+                <button type="submit" className="rate-btn btn col-2 me-3">
+                  Absenden
+                </button>
+              </div>
+            </Form>
+            {reviews.length === 0 ? (
+              <small className="text-light muted">
+                Seien Sie der Erste, der diesem Produkt eine Bewertung gibt.
+              </small>
+            ) : null}
+          </div>
+        </div>
+        <div className="reviews-divider"></div>
+        <div className="reviews-container row d-lg-flex justify-content-lg-between">
+          {reviews?.map((review) => (
+            <ReviewCard
+              key={review._id}
+              review={review}
+              removeReview={removeReview}
+              changeReview={changeReview}
+              refreshProduct={refreshProduct}
+              setRefreshProduct={setRefreshProduct}
+            />
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
