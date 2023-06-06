@@ -120,19 +120,19 @@ ordersRouter.route("/my-orders").get(ensureUser, getMyOrders);
  *           items:
  *             type: object
  *             properties:
- *               name:
+ *               pName:
  *                 type: string
  *               price:
  *                 type: number
  *               quantity:
  *                 type: number
- *               product:
+ *               productId:
  *                 type: string
  *           required:
- *             - name
+ *             - pName
  *             - price
  *             - quantity
- *             - product
+ *             - productId
  *         totalPrice:
  *           type: number
  *         orderStatus:
@@ -308,13 +308,13 @@ ordersRouter.route("/:orderId").get(ensureUser, getOrderById);
  *     OrderItemUpdateInput:
  *       type: object
  *       properties:
- *         name:
+ *         pName:
  *           type: string
  *         price:
  *           type: number
  *         quantity:
  *           type: number
- *         product:
+ *         productId:
  *           type: string
  */
 ordersRouter.route("/:id").put(ensureAdmin, updateOrder);
