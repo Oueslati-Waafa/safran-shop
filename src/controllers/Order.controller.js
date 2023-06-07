@@ -44,8 +44,8 @@ export const createOrder = async (req, res) => {
 export const payOrder = async (req, res) => {
   console.log("request body", req.body);
   try {
-    const { orderId } = req.body.orderId;
-    const { card } = req.body.card;
+    const orderId = req.body.orderId;
+    const card = req.body.card;
     const userId = req.user.id; // Assuming the user ID is available as userId
 
     // Retrieve the user from the database based on the user ID
