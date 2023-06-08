@@ -129,6 +129,7 @@ export const payOrder = async (req, res) => {
   }
 };
 
+/**CREATE PAYPAL PAYMENT */
 export const createPaypalPayment = async (req, res) => {
   try {
     const { orderId } = req.body;
@@ -202,9 +203,8 @@ export const createPaypalPayment = async (req, res) => {
 };
 
 
-// paypalController.js
 
-// Controller function for processing PayPal webhook events
+/**CONTROLLER FUNCTION FOR PROCESSING PAYPAL WEBHOOK EVENTS*/
 export const processPayPalWebhookEvent = async (req, res) => {
   // Retrieve the webhook event data from the request body
   const event = req.body;
@@ -257,11 +257,6 @@ export const processPayPalWebhookEvent = async (req, res) => {
     res.status(500).json({ error: "Failed to process webhook event" });
   }
 };
-
-
-
-
-
 
 
 /**GET MY ORDERS*/
