@@ -17,7 +17,6 @@ import {
   cancelOrderAdmin,
   payOrder,
   createPaypalPayment,
-  successUrlEndpoint,
 } from "../controllers/Order.controller.js";
 
 /** Defining the router */
@@ -385,8 +384,6 @@ ordersRouter.route("/:id/admin-cancel").put(ensureAdmin, cancelOrderAdmin);
 
 ordersRouter.route("/stripe-payment").post(ensureUser, payOrder);
 ordersRouter.route("/create-paypal-payment").post(ensureUser,createPaypalPayment);
-ordersRouter
-  .route("/success-paypal-payment")
-  .post(ensureUser, successUrlEndpoint);
+
 
 export { ordersRouter };

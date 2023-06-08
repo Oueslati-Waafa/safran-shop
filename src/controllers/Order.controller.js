@@ -202,47 +202,66 @@ export const createPaypalPayment = async (req, res) => {
 };
 
 
-/**PAYMENT SECEDED */
-export const successUrlEndpoint = async (req, res) => {
+// paypalController.js
+
+// Controller function for processing PayPal webhook events
+export const processPayPalWebhookEvent = async (req, res) => {
+  // Retrieve the webhook event data from the request body
+  const event = req.body;
+
   try {
-    const { paymentId } = req.body;
+    // Process the webhook event based on its type
+    switch (event.event_type) {
+      case "PAYMENTS.PAYMENT.CREATED":
+        // Handle the payment created event
+        // Retrieve the payment details
+        const paymentId = event.resource.id;
 
-    console.log("Payment ID:", paymentId);
-    console.log("User ID:", req.user.id);
+        // Retrieve the order from the database based on the payment ID or any other relevant identifier
+        const order = await Order.findOne({
+          "paymentInfo.id": paymentId,
+        });
 
-    // Check if user is authenticated
-    if (!req.user) {
-      return res.status(401).json({ error: "User not authenticated" });
+        // Check if the order exists
+        if (!order) {
+          return res.status(400).json({ error: "Order not found" });
+        }
+
+        // Check if the order has already been paid
+        if (order.isPaid) {
+          return res.status(400).json({ error: "Order has already been paid" });
+        }
+
+        // Update the order with payment information
+        order.isPaid = true;
+        order.paidAt = new Date();
+        await order.save();
+
+        console.log("Payment verified and order updated:", order);
+
+        break;
+
+      // Add more cases to handle other webhook events if needed
+
+      default:
+        // Handle unrecognized webhook events
+        console.log("Received webhook event:", event.event_type);
+        break;
     }
 
-    // Retrieve the order based on the paymentId or any other relevant identifier
-    const order = await Order.findOne({
-      "paymentInfo.id": paymentId,
-      user: req.user.id,
-    });
-
-    console.log("Retrieved Order:", order);
-
-    // Check if the order exists
-    if (!order) {
-      return res.status(400).json({ error: "Order not found" });
-    }
-
-    // Check if the order has already been paid
-    if (order.isPaid) {
-      return res.status(400).json({ error: "Order has already been paid" });
-    }
-
-    // Update the order with payment information
-    order.isPaid = true;
-    order.paidAt = new Date();
-    await order.save();
-
-    return res.status(200).json({ message: "Payment successfully processed" });
+    // Send a response back to PayPal indicating successful processing of the webhook event
+    res.status(200).end();
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    // Handle errors that occurred during webhook event processing
+    console.error("Error processing webhook event:", error);
+    res.status(500).json({ error: "Failed to process webhook event" });
   }
 };
+
+
+
+
+
 
 
 /**GET MY ORDERS*/
