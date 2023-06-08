@@ -89,7 +89,7 @@ export const payOrder = async (req, res) => {
 
     // Create a payment intent with the customer and order amount
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: order.totalPrice * 100, // Stripe requires the amount in cents
+      amount: (order.totalPrice * 100).toFixed(0), // Stripe requires the amount in cents
       currency: "eur",
       customer: customer.id,
       payment_method: paymentMethod.id,
@@ -132,8 +132,9 @@ export const payOrder = async (req, res) => {
 /**PAY THE ORDER WITH PAYPAL */
 
 export const createPaypalPayment = async (req, res) => {
+  console.log("request body paypal", req.body);
   try {
-    const { orderId } = req.body;
+    const orderId = req.body;
     const userId = req.user.id; // Assuming the user ID is available as userId
 
     // Retrieve the user from the database based on the user ID
