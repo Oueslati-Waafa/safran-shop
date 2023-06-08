@@ -84,6 +84,55 @@ const updateProduct = async (req, res) => {
   }
 };
 
+//Update product's stock
+
+// const updateProductCountInStock = async (req, res) => {
+//   try {
+//     const id = req.params;
+//     const newQuantity = req.body;
+//     console.log("id to update", id);
+//     console.log("newQuantity to update", newQuantity);
+
+//     const product = await Product.findByIdAndUpdate(
+//       id,
+//       { countInStock: countInStock - newQuantity },
+//       { new: true }
+//     );
+//     console.log("found product", product);
+//     if (!product) {
+//       return res.status(404).json({ error: "Product not found" });
+//     }
+
+//     res.status(200).json(product);
+//     console.log("product to update", product);
+//   } catch (error) {
+//     res.status(500).json({ error: error });
+//   }
+// };
+
+// Assuming you have a product model/schema defined and imported
+
+const updateProductCountInStock = async (productId, newCountInStock) => {
+  try {
+    // Find the product by ID
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    // Update the countInStock value
+    product.countInStock = newCountInStock;
+
+    // Save the updated product
+    await product.save();
+
+    return product; // Return the updated product if needed
+  } catch (error) {
+    throw new Error(`Error updating product countInStock: ${error.message}`);
+  }
+};
+
 // DELETE /products/:id
 const deleteProduct = async (req, res) => {
   try {
@@ -102,5 +151,6 @@ export {
   getProductById,
   createProduct,
   updateProduct,
+  updateProductCountInStock,
   deleteProduct,
 };

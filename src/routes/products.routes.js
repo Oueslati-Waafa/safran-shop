@@ -13,6 +13,7 @@ import {
   getProductById,
   createProduct,
   updateProduct,
+  updateProductCountInStock,
   deleteProduct,
 } from "../controllers/Product.controller.js";
 import {
@@ -174,6 +175,7 @@ productsRouter.route("/:id").delete(ensureAdmin, deleteProduct);
  *       bearerFormat: JWT
  */
 productsRouter.route("/:id").put(ensureAdmin, updateProduct);
+productsRouter.route("/stock/:id").put(updateProductCountInStock);
 
 /**
  * @swagger
