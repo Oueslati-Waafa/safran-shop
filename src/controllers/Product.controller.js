@@ -1,4 +1,5 @@
 import Product from "../models/Products.js";
+import cloudinary from "cloudinary";
 
 // GET /products
 const getProducts = async (req, res) => {
