@@ -59,14 +59,14 @@
                 align="left"
                 style="padding: 20px 30px 40px 30px; color: #666666; font-family: Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;"
               >
-                <p>Hi <i>{{user.name}}</i>,</p>
-                <p>Thank you for your purchase. Here is your receipt details:</p>
-                <p>Receipt ID: <strong>{{order.id}}</strong></p>
-                <p>Total Price: <strong>{{order.totalPrice}}€</strong></p>
-                <p>Shipping Fees:<strong>{{order.shippingFees}}€</strong> </p>
-                <p>Order Status: <strong>{{order.orderStatus}}</strong></p>
+                <p>Hallo <i>{{user.name}}</i>,</p>
+                <p>Vielen Dank für Ihren Einkauf. Hier sind Ihre Belegdetails:</p>
+                <p>Beleg-ID: <strong>{{order.id}}</strong></p>
+                <p>Bestell-ID: <strong>{{order.orderId}}</strong></p>
+                <p>Gesamtpreis: <strong>{{order.totalPrice}}€</strong></p>
+                <p>Versandgebühren: <strong>{{order.shippingFees}}€</strong></p>
+                <p>Bestellstatus: <strong>{{order.orderStatus}}</strong></p>
               </td>
-
             </tr>
             <tr>
               <td
@@ -74,10 +74,11 @@
                 align="left"
                 style="padding: 0px 30px 40px 30px; color: #666666; font-family: Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;"
               >
-                <p>Cheers,<br />Soleil Safran Team</p>
+                <p>Viele Grüße,<br />Soleil Safran Team</p>
               </td>
             </tr>
           </table>
+
         </td>
       </tr>
     </table>

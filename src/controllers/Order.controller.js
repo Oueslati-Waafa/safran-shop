@@ -115,6 +115,7 @@ export const payOrder = async (req, res) => {
     // Send receipt email to the customer
     const orderDetails = {
       receiptId: order.paymentInfo.id,
+      orderId: order.id,
       total: order.totalPrice,
       status: order.orderStatus,
       shippingFees: order.shippingPrice,
@@ -129,10 +130,11 @@ export const payOrder = async (req, res) => {
   }
 };
 
+/**CREATE PAYPAL PAYMENT */
 export const createPaypalPayment = async (req, res) => {
   console.log("request body paypal", req.body);
   try {
-    const orderId = req.body;
+    const {orderId} = req.body;
     const userId = req.user.id; // Assuming the user ID is available as userId
 
     // Retrieve the user from the database based on the user ID
@@ -202,13 +204,11 @@ export const createPaypalPayment = async (req, res) => {
   }
 };
 
-
-// paypalController.js
-
-// Controller function for processing PayPal webhook events
+/**CONTROLLER FUNCTION FOR PROCESSING PAYPAL WEBHOOK EVENTS*/
 export const processPayPalWebhookEvent = async (req, res) => {
   // Retrieve the webhook event data from the request body
   const event = req.body;
+  
 
   try {
     // Process the webhook event based on its type
@@ -233,12 +233,29 @@ export const processPayPalWebhookEvent = async (req, res) => {
           return res.status(400).json({ error: "Order has already been paid" });
         }
 
+        // Retrieve the user from the database based on the user ID
+        const user = await User.findById(order.user);
+
+        // Check if the user exists
+        if (!user) {
+          return res.status(400).json({ error: "User not found" });
+        }
+
         // Update the order with payment information
         order.isPaid = true;
         order.paidAt = new Date();
         await order.save();
 
         console.log("Payment verified and order updated:", order);
+        // Send receipt email to the customer
+        const orderDetails = {
+          receiptId: order.paymentInfo.id,
+          orderId: order.id,
+          total: order.totalPrice,
+          status: order.orderStatus,
+          shippingFees: order.shippingPrice,
+        };
+        await sendReceiptEmail(user, orderDetails);
 
         break;
 
@@ -258,12 +275,6 @@ export const processPayPalWebhookEvent = async (req, res) => {
     res.status(500).json({ error: "Failed to process webhook event" });
   }
 };
-
-
-
-
-
-
 
 /**GET MY ORDERS*/
 export const getMyOrders = async (req, res) => {

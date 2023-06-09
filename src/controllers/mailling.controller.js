@@ -220,6 +220,7 @@ export function sendReceiptEmail(user, orderDetails) {
     },
     order: {
       id: orderDetails.receiptId,
+      orderId: orderDetails.orderId,
       totalPrice: orderDetails.total,
       orderStatus: orderDetails.status,
       shippingFees: orderDetails.shippingFees,
