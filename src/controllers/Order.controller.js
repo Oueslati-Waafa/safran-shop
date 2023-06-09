@@ -134,8 +134,10 @@ export const payOrder = async (req, res) => {
 export const createPaypalPayment = async (req, res) => {
   console.log("request body paypal", req.body);
   try {
-    const {orderId} = req.body;
+    const orderId = req.body.orderId;
+    console.log("order id", orderId);
     const userId = req.user.id; // Assuming the user ID is available as userId
+    console.log("user id", userId);
 
     // Retrieve the user from the database based on the user ID
     const user = await User.findById(userId);
@@ -208,7 +210,6 @@ export const createPaypalPayment = async (req, res) => {
 export const processPayPalWebhookEvent = async (req, res) => {
   // Retrieve the webhook event data from the request body
   const event = req.body;
-  
 
   try {
     // Process the webhook event based on its type
