@@ -86,50 +86,24 @@ const updateProduct = async (req, res) => {
 
 //Update product's stock
 
-// const updateProductCountInStock = async (req, res) => {
-//   try {
-//     const id = req.params;
-//     const newQuantity = req.body;
-//     console.log("id to update", id);
-//     console.log("newQuantity to update", newQuantity);
-
-//     const product = await Product.findByIdAndUpdate(
-//       id,
-//       { countInStock: countInStock - newQuantity },
-//       { new: true }
-//     );
-//     console.log("found product", product);
-//     if (!product) {
-//       return res.status(404).json({ error: "Product not found" });
-//     }
-
-//     res.status(200).json(product);
-//     console.log("product to update", product);
-//   } catch (error) {
-//     res.status(500).json({ error: error });
-//   }
-// };
-
-// Assuming you have a product model/schema defined and imported
-
-const updateProductCountInStock = async (productId, newCountInStock) => {
+const updateProductCountInStock = async (req, res) => {
   try {
-    // Find the product by ID
-    const product = await Product.findById(productId);
-
+    const id = req.params.id;
+    const quantity = req.body.quantity;
+    console.log("id to update", id);
+    console.log("newQuantity to update", quantity);
+    const product = await Product.findById(id);
+    console.log("found product", product);
     if (!product) {
-      throw new Error("Product not found");
+      return res.status(404).json({ error: "Product not found" });
     }
-
-    // Update the countInStock value
+    const newCountInStock = product.countInStock - quantity;
     product.countInStock = newCountInStock;
-
-    // Save the updated product
     await product.save();
-
-    return product; // Return the updated product if needed
+    res.status(200).json(product);
+    console.log("product to update", product);
   } catch (error) {
-    throw new Error(`Error updating product countInStock: ${error.message}`);
+    res.status(500).json({ error: error });
   }
 };
 
