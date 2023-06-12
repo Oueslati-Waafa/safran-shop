@@ -1,0 +1,13 @@
+.order-detail {
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+
+.centered-column .cart-item-card:last-of-type {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.centered-column {
+}

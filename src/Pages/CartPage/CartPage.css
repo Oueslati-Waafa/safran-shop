@@ -37,3 +37,8 @@
 .card-item-quantity {
   color: var(--primary);
 }
+
+.card-item-quantity-btn:disabled {
+  border-color: transparent;
+  color: black;
+}

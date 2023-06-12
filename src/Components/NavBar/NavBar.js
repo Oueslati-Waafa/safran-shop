@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./NavBar.css";
 import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
+import { PersonGear } from "react-bootstrap-icons";
 
 export default function NavBar() {
   const [showLinks, setShowLinks] = useState(false);
@@ -51,6 +53,17 @@ export default function NavBar() {
     setIsLoggedIn(loggedIn);
   }, [path]);
 
+  const [dbUser, setDbUser] = useState();
+  useEffect(() => {
+    if (user) {
+      axios.get(`http://localhost:9090/users/${user.id}`).then((result) => {
+        setDbUser(result.data);
+      });
+    } else {
+      return;
+    }
+  }, [user]);
+
   return (
     <nav className="row">
       <div className="logo-cont col-lg-3 col-6">
@@ -84,7 +97,11 @@ export default function NavBar() {
         <ul className={isLoggedIn ? "loggedUl" : "notLoggedUl"}>
           {isLoggedIn ? (
             <li onClick={toggleUserDropdown} className="user-dropdown-toggler">
-              <img src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684329432/Saafran/logos%20and%20icons/ajmb86leiopbfjjqjbkn.png" />
+              {dbUser?.isAdmin ? (
+                <PersonGear color="#f5f5f5" size={25} />
+              ) : (
+                <img src="https://res.cloudinary.com/dvjvlobqp/image/upload/v1684329432/Saafran/logos%20and%20icons/ajmb86leiopbfjjqjbkn.png" />
+              )}
             </li>
           ) : (
             <li>
@@ -179,6 +196,18 @@ export default function NavBar() {
                     <Link to={"/orders"}>Kaufhistorie</Link>
                   </button>
                 </li>
+                {dbUser?.isAdmin ? (
+                  <li className="mt-2">
+                    <button
+                      className="user-nav-button btn"
+                      onClick={() => {
+                        setShowUserDropdown(false);
+                      }}
+                    >
+                      <Link to={"/dashboard"}>Dashboard</Link>
+                    </button>
+                  </li>
+                ) : null}
               </ul>
             </div>
             <div className="user-logOut-cont">

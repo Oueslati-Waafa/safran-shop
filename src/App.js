@@ -15,6 +15,10 @@ import AccountDetails from "./Pages/AccountDetails/AccountDetails";
 import OrderHistory from "./Pages/OrderHistory/OrderHistory";
 import Login from "./Components/Login/Login";
 import NotFoundPage from "./Pages/404Page/NotFoundPage";
+import ContinueOrder from "./Pages/ContinueOrder/ContinueOrder";
+import ThankPage from "./Pages/CheckoutPage/ThankPage";
+import Dashboard from "./Pages/Dashboard/Dashboard";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   return (
@@ -32,7 +36,17 @@ function App() {
             <Route exact path="/account" element={<AccountDetails />} />
             <Route exact path="/orders" element={<OrderHistory />} />
             <Route exact path="/product/:slug" element={<ProductPage />} />
+            <Route exact path="/order/:id" element={<ContinueOrder />} />
             <Route exact path="/log" element={<Login />} />
+            <Route exact path="/thank" element={<ThankPage />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            ></Route>
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>

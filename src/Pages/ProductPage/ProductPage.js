@@ -9,6 +9,7 @@ import { BookmarkHeart, BookmarkHeartFill } from "react-bootstrap-icons";
 import axios from "axios";
 import { Form } from "react-bootstrap";
 import ReviewCard from "./ReviewCard";
+import CountInStockBar from "../../Components/CountInStockBar/CountInStockBar";
 
 export default function ProductPage() {
   const [productId, setProductId] = useState(null);
@@ -61,11 +62,20 @@ export default function ProductPage() {
     setMightLike(getRandomItems(products, 4));
   }, [products]);
 
-  const handleAddToCart = () => {
+  const [prodInCart, setProdInCart] = useState();
+
+  useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const existingProduct = cart.find(
-      (item) => item.productNumber === productId
+      (item) => item._id == currentProduct?._id
     );
+    setProdInCart(existingProduct);
+  }, [currentProduct]);
+
+  const handleAddToCart = () => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingProduct = cart.find((item) => item._id === productId);
+    setProdInCart(existingProduct);
 
     if (existingProduct) {
       existingProduct.quantity += 1;
@@ -223,6 +233,8 @@ export default function ProductPage() {
     );
   };
 
+  // console.log(currentProduct.countInStock);
+
   return (
     <main className="mt-5 py-5 container product-page">
       {currentProduct ? (
@@ -304,12 +316,30 @@ export default function ProductPage() {
               </div>
               <p>{currentProduct.description}</p>
             </div>
-            <div className="w-100">
+            <div className="w-100 row d-flex justify-content-between align-items-center">
+              <div className="col-3">
+                <p
+                  className={`text-dark fw-bold fs-4 mb-0 ${
+                    currentProduct.countInStock === 0 ? "d-none" : null
+                  }`}
+                >
+                  {currentProduct.countInStock}Pcs
+                </p>
+              </div>
               <button
-                className="btn product-page-btn float-end"
+                className="btn product-page-btn col-8"
                 onClick={handleAddToCart}
+                disabled={
+                  currentProduct.countInStock === 0 ||
+                  currentProduct.countInStock == prodInCart?.quantity ||
+                  user.length === 0
+                    ? true
+                    : false
+                }
               >
-                In den Warenkorb
+                {currentProduct.countInStock === 0
+                  ? "Nicht vorrätig"
+                  : "In den Warenkorb"}
               </button>
             </div>
           </div>
@@ -319,7 +349,7 @@ export default function ProductPage() {
       )}
       <Title content={"Das könnte Ihnen auch gefallen"} />
       <Products products={mightLike} />
-      <Title content={"Product reviews"} />
+      <Title content={"Produkthinweise"} />
       <section className="container reviews-section">
         <div className="add-review-box row d-flex justify-content-between align-items-center">
           <div className="user-info col-lg-3 col-12 d-flex flex-column justify-content-center align-items-center">

@@ -119,6 +119,7 @@ export default function CartPage() {
                     <button
                       className="card-item-quantity-btn btn"
                       onClick={() => handleIncreaseQuantity(item.productNumber)}
+                      disabled={item.quantity === item.countInStock}
                     >
                       <PlusLg />
                     </button>

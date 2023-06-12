@@ -1,85 +1,126 @@
 import React, { useEffect, useState } from "react";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import Title from "../../Components/Title/Title";
-import { Rating } from "react-simple-star-rating";
 import "./OrderHistory.css";
+import axios from "axios";
+import OrderItem from "./OrderItem";
+import MyButton from "../../Components/Buttons/MyButton";
 
 export default function OrderHistory() {
-  const [cart, setCart] = useState([]);
+  const [user, setUser] = useState();
+  const [userToken, setUserToken] = useState();
   useEffect(() => {
-    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCart(savedCart);
+    const savedUser = JSON.parse(localStorage.getItem("user")) || [];
+    setUser(savedUser);
+    setUserToken(savedUser.token);
   }, []);
-  const orders = [
-    {
-      orderItems: cart,
-      createdAt: "25/05/2023",
-    },
-    {
-      orderItems: cart,
-      createdAt: "22/05/2023",
-    },
-  ];
+
+  const [myOrders, setMyOrders] = useState([]);
+
+  useEffect(() => {
+    if (!userToken) {
+      return;
+    }
+    axios
+      .get("http://localhost:9090/orders/my-orders", {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+        params: {
+          user: user,
+        },
+      })
+      .then((result) => {
+        setMyOrders(result.data.orders);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [user]);
+
+  const [notice, setNotice] = useState("loading");
+
+  useEffect(() => {
+    setTimeout(() => {
+      setNotice("empty");
+    }, 3000);
+  }, []);
+
+  function transformDateFormat(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Months are zero-based, so we add 1
+    const year = date.getFullYear();
+    const formattedDate = `${day.toString().padStart(2, "0")}/${month
+      .toString()
+      .padStart(2, "0")}/${year}`;
+    return formattedDate;
+  }
 
   const [width, setWidth] = useState(window.innerWidth);
   useEffect(() => {
     setWidth(window.innerWidth);
   }, []);
+
+  console.log(myOrders);
   return (
     <main className="orders-cont container">
       <h1 className="text-center fw-bold display-3 my-5">Kaufhistorie</h1>
-      {orders.map((order, index) => (
-        <div className="order-cont" key={index}>
-          <Title content={order.createdAt} />
-          <div className="cart-items row d-flex justify-content-lg-between justify-content-center">
-            {order.orderItems.map((item, index) => (
-              <div className="cart-item-card col-lg-6 col-11 row mb-3" key={index}>
-                <div className="col-sm-4 col-12 mb-sm-0 mb-3 cart-item-img">
-                  <LazyLoadImage
-                    effect="blur"
-                    src={item.imageUrl[0]}
-                    alt="delete icon"
-                    className="img-fluid"
+      {myOrders.length === 0 ? (
+        notice === "loading" ? (
+          <p className="fs-3 fw-bold text-center">Bitte warten Sie...</p>
+        ) : (
+          <p className="fs-3 fw-bold text-center">
+            Sie haben keine Bestellungen.
+          </p>
+        )
+      ) : (
+        <>
+          {myOrders.map((order, index) => (
+            <div className="order-cont" key={index}>
+              <Title
+                content={`Created at ${transformDateFormat(order.createdAt)}`}
+              />
+              <div
+                className={`cart-items row d-flex justify-content-lg-between justify-content-center ${
+                  order.orderItems.length % 2 === 1 ? "centered-column" : ""
+                }`}
+              >
+                {order.orderItems.map((item, index) => (
+                  <OrderItem key={index} item={item} />
+                ))}
+              </div>
+              <p className="order-detail">
+                Total items price : {order.totalPrice} £
+              </p>
+              {order?.isPaid ? (
+                <p className="order-detail">
+                  Paid at {transformDateFormat(order.paidAt)}
+                </p>
+              ) : (
+                <div className="mb-5">
+                  <MyButton
+                    text={"Pay now"}
+                    size={
+                      width > 992
+                        ? "smallButton"
+                        : width < 992 && width > 576
+                        ? "mediumButton"
+                        : "largeButton"
+                    }
+                    direction={`/order/${order._id}`}
                   />
                 </div>
-                <div className="col-sm-8 col-12 cart-item-info">
-                  <div className="row">
-                    <div className="col-10">
-                      <p>
-                        {item.weight} - {item.name}
-                      </p>
-                      <p>{item.price * item.quantity}£</p>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-sm-8 col d-flex justify-content-center">
-                      <Rating
-                        initialValue={item.rate}
-                        readonly
-                        allowFraction
-                        size={
-                          width < 576
-                            ? 25
-                            : width > 576 && width < 768
-                            ? 10
-                            : width > 768 && width < 992
-                            ? 20
-                            : 30
-                        }
-                      />
-                    </div>
-                    <div className="col-sm-4 col card-item-quantity-cont d-flex justify-content-center align-items-center">
-                      <span className="text-dark text-center">
-                        {item.quantity}{" "}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
+              )}
+              {order?.isPaid ? (
+                <>
+                  <p className="order-detail">Order state</p>
+                  <p className="order-detail">{order.orderStatus}</p>
+                </>
+              ) : null}
+            </div>
+          ))}
+        </>
+      )}
     </main>
   );
 }

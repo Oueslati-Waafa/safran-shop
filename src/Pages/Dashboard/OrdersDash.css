@@ -1,0 +1,8 @@
+.filter-container .form-select {
+  background-color: var(--dark-redish) !important;
+  color: var(--secondary);
+}
+
+.orderStatusSelect {
+  width: max-content;
+}

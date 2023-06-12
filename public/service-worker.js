@@ -9,6 +9,7 @@ const urlsToCache = [
   "/",
   "/index.html",
   "/offline.png",
+  "/logo192.png",
   // Add other files to cache here
 ];
 

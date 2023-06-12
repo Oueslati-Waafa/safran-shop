@@ -5,6 +5,7 @@ import MyButton from "../../Components/Buttons/MyButton";
 import { Link } from "react-router-dom";
 import { Button, Form, Modal } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
+import axios from "axios";
 
 export default function OrderSummary({ setCurrentStep }) {
   const [cart, setCart] = useState([]);
@@ -49,6 +50,47 @@ export default function OrderSummary({ setCurrentStep }) {
 
   console.log(orderToPay);
 
+  /* stock validation */
+
+  const getProductById = async (productId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:9090/products/${productId}`
+      );
+      console.log("found product", response.data);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.error);
+    }
+  };
+
+  console.log(cart);
+
+  const compareProductCountInStockWithCart = async (productId) => {
+    try {
+      const product = await getProductById(productId);
+      const cartItem = cart.find((item) => item._id === productId);
+
+      if (!product) {
+        throw new Error(`Product not found for ID: ${productId}`);
+      }
+
+      if (!cartItem) {
+        throw new Error(`Product with ID ${productId} not found in cart`);
+      }
+
+      const { countInStock } = product;
+      const { quantity } = cartItem;
+
+      return countInStock >= quantity;
+    } catch (error) {
+      console.error("Error comparing product count in stock with cart:", error);
+      throw error;
+    }
+  };
+
+  /* place order */
+
   const makeOrder = async () => {
     const shippingInfo = {
       address: shippingInformation.address,
@@ -61,6 +103,28 @@ export default function OrderSummary({ setCurrentStep }) {
       const { _id, name, price, quantity, weight } = item;
       return { productId: _id, pName: weight + " " + name, price, quantity };
     });
+    for (const item of cart) {
+      const isStockSufficient = await compareProductCountInStockWithCart(
+        item._id
+      );
+      console.log(isStockSufficient);
+      if (!isStockSufficient) {
+        toast.error(
+          `Insufficient stock for product: ${item.weight} - ${item.name}`,
+          {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
+        return; // Exit the function if stock is insufficient
+      }
+    }
     if (orderToPay === "") {
       try {
         const response = await fetch("http://localhost:9090/orders/add", {
@@ -104,6 +168,18 @@ export default function OrderSummary({ setCurrentStep }) {
     }
   };
 
+  const updateProductCountInStock = async (id, quantity) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:9090/products/stock/${id}`,
+        { quantity }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.error);
+    }
+  };
+
   /* stripe part */
 
   const [showStripeModal, setShowStripeModal] = useState(false);
@@ -136,9 +212,18 @@ export default function OrderSummary({ setCurrentStep }) {
     setCvc(inputValue);
   };
 
+  console.log(cart[0]);
+
   async function makeStripePayment(e) {
+    console.log(orderToPay);
     e.preventDefault();
-    if (number === "" || expMonth === "" || expYear === "" || cvc === "") {
+    if (
+      number === "" ||
+      expMonth === "" ||
+      expYear === "" ||
+      cvc === "" ||
+      orderToPay === ""
+    ) {
       return;
     }
     const card = {
@@ -147,10 +232,31 @@ export default function OrderSummary({ setCurrentStep }) {
       exp_year: expYear,
       cvc: cvc,
     };
-    const orderId = orderToPay;
+    for (const item of cart) {
+      const isStockSufficient = await compareProductCountInStockWithCart(
+        item._id
+      );
+      console.log(isStockSufficient);
+      if (!isStockSufficient) {
+        toast.error(
+          `Insufficient stock for product: ${item.weight} - ${item.name}`,
+          {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
+        return; // Exit the function if stock is insufficient
+      }
+    }
     try {
       const requestBody = {
-        orderId: orderId,
+        orderId: orderToPay,
         card: card,
       };
       const response = await fetch(
@@ -166,6 +272,9 @@ export default function OrderSummary({ setCurrentStep }) {
       );
       const data = await response.json();
       if (response.ok) {
+        for (const item of cart) {
+          await updateProductCountInStock(item._id, item.quantity);
+        }
         console.log(data.message);
         toast.success("Payed successfully", {
           position: "top-right",
@@ -211,9 +320,68 @@ export default function OrderSummary({ setCurrentStep }) {
 
   /* PayPal part */
 
-  const makePaypalPayment = async (e) => {
+  async function makePaypalPayment(e) {
     e.preventDefault();
-  };
+    if (!user || !orderToPay || !userToken) {
+      return;
+    }
+    console.log(user);
+    console.log(orderToPay);
+    for (const item of cart) {
+      const isStockSufficient = await compareProductCountInStockWithCart(
+        item._id
+      );
+      console.log(isStockSufficient);
+      if (!isStockSufficient) {
+        toast.error(
+          `Insufficient stock for product: ${item.weight} - ${item.name}`,
+          {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
+        return; // Exit the function if stock is insufficient
+      }
+    }
+    axios
+      .post(
+        "http://localhost:9090/orders/create-paypal-payment",
+        {
+          orderId: orderToPay,
+          user: user,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
+      .then(async (response) => {
+        const data = response.data;
+        // Handle the response from the server
+        if (data.approvalUrl) {
+          for (const item of cart) {
+            await updateProductCountInStock(item._id, item.quantity);
+          }
+          // Redirect the user to the PayPal approval URL
+          window.location.href = data.approvalUrl;
+        } else {
+          console.error(data.error); // Log the error message
+          // Handle the error in your client-side code
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to create PayPal payment:", error);
+        // Handle the error in your client-side code
+      });
+  }
 
   return (
     <main className="orderPay-page container">
@@ -349,7 +517,7 @@ export default function OrderSummary({ setCurrentStep }) {
               </div>
             </Form.Group>
             <Form.Group controlId="cvc">
-              <Form.Label className="text-light">CVC</Form.Label>
+              <Form.Label className="text-light">CVV</Form.Label>
               <Form.Control
                 type="text"
                 pattern="[0-9]{3,4}"

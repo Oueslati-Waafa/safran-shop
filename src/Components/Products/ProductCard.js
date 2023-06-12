@@ -14,13 +14,17 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
     setWidth(window.innerWidth);
   }, []);
 
+  const [prodInCart, setProdInCart] = useState();
+  useEffect(() => {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingProduct = cart.find((item) => item._id == product._id);
+    setProdInCart(existingProduct);
+  }, [product]);
+
   const handleAddToCart2 = (prod) => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existingProduct = cart.find(
-      (item) => item.productNumber == prod.productNumber
-    );
-
-    console.log(existingProduct);
+    const existingProduct = cart.find((item) => item._id == prod._id);
+    setProdInCart(existingProduct);
 
     if (existingProduct) {
       existingProduct.quantity += 1;
@@ -179,8 +183,16 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
       <button
         className="btn product-btn w-100"
         onClick={() => handleAddToCart2(product)}
+        disabled={
+          product.countInStock === 0 ||
+          product.countInStock == prodInCart?.quantity ||
+          savedUser === undefined ||
+          savedUser === null
+            ? true
+            : false
+        }
       >
-        In den Warenkorb
+        {product.countInStock === 0 ? "Nicht vorrätig" : "In den Warenkorb"}
       </button>
     </div>
   );
