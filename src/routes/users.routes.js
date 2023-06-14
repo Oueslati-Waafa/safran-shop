@@ -1,4 +1,5 @@
 import express from 'express';
+import upload from "../middlewares/multer.js";
 
 /**
  * @swagger
@@ -166,7 +167,7 @@ usersRouter.route("/:id").get(getUserById);
  *       200:
  *         description: OK
  */
-usersRouter.route("/:id").put(updateUser).delete(deleteUser);
+usersRouter.route("/:id").put(upload.single("image"), updateUser).delete(deleteUser);
 
 
 /**
