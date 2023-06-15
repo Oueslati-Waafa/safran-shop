@@ -376,21 +376,6 @@ export default function AccountDetails() {
         </div>
         <div></div>
       </section>
-      <Title content={"KAUFINFORMATIONEN"} />
-      <section className="orders-info-cont row d-flex justify-content-evenly">
-        <div className="order-info col-lg-3 col-10 text-center">
-          <p className="order-info-label">Artikel auf Wunschliste</p>
-          <p className="order-info-value">20+</p>
-        </div>
-        <div className="order-info col-lg-3 col-10 text-center">
-          <p className="order-info-label">Artikel gekauft</p>
-          <p className="order-info-value">15+</p>
-        </div>
-        <div className="order-info col-lg-3 col-10 text-center">
-          <p className="order-info-label">Gesamtausgaben</p>
-          <p className="order-info-value">3250€</p>
-        </div>
-      </section>
       <Modal
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
