@@ -1,8 +1,10 @@
-
-import app from './src/app.js';
-import { connectDatabase, disconnectDatabase } from './src/database/database.js';
-import dotenv from 'dotenv';
-import { swaggerSetup } from './swagger.js';
+import app from "./src/app.js";
+import {
+  connectDatabase,
+  disconnectDatabase,
+} from "./src/database/database.js";
+import dotenv from "dotenv";
+import { swaggerSetup } from "./swagger.js";
 
 /* Accessing .env content */
 dotenv.config();
@@ -12,12 +14,11 @@ const hostname = process.env.HOSTNAME;
 const port = process.env.PORT;
 swaggerSetup(app);
 
-
 /* Connecting and disconnecting database */
 connectDatabase()
   .then(() => {
-    app.get('/', (req, res) => {
-      res.send('Home page');
+    app.get("/", (req, res) => {
+      res.send("Home page");
     });
 
     app.listen(port, () => {
@@ -25,5 +26,5 @@ connectDatabase()
     });
   })
   .catch((error) => {
-    console.error('Error connecting to database:', error);
+    console.error("Error connecting to database:", error);
   });
