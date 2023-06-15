@@ -32,9 +32,15 @@ const getProductById = async (req, res) => {
 /**CREATE A NEW PRODUCT */
 const createProduct = async (req, res) => {
   try {
-    const { productNumber, name, description, price, weight, imageUrl } =
-      req.body;
-
+    const {
+      productNumber,
+      name,
+      description,
+      price,
+      weight,
+      imageUrl,
+      countInStock,
+    } = req.body;
     // Check if the product already exists by its product number
     const existingProduct = await Product.findOne({ productNumber });
 
@@ -50,6 +56,7 @@ const createProduct = async (req, res) => {
       price,
       weight,
       imageUrl,
+      countInStock,
     });
 
     res.status(201).json(product);

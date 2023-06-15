@@ -172,7 +172,7 @@ export const createPaypalPayment = async (req, res) => {
       ],
       note_to_payer: "Thank you for your purchase. Please approve the payment.",
       redirect_urls: {
-        return_url: "http://yourwebsite.com/success", // Replace with your success URL
+        return_url: "http://localhost:3000/thank", // Replace with your success URL
         cancel_url: "http://yourwebsite.com/cancel", // Replace with your cancel URL
       },
     };
@@ -297,6 +297,7 @@ export const getMyOrders = async (req, res) => {
 
 /**GET ALL ORDERS */
 export const getAllOrders = async (req, res) => {
+  console.log("request", req);
   try {
     const orders = await Order.find().populate("user");
     res.json(orders);
