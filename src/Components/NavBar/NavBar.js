@@ -217,6 +217,8 @@ export default function NavBar() {
                   setShowUserDropdown(false);
                   localStorage.setItem("loggedIn", false);
                   localStorage.removeItem("user");
+                  localStorage.removeItem("cart");
+                  localStorage.removeItem("shippingInfo");
                 }}
               >
                 <Link to={"/log"}>

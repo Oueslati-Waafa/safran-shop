@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { BookmarkHeart, BookmarkHeartFill } from "react-bootstrap-icons";
 import axios from "axios";
 import "./Products.css";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function ProductCard({ product, index, refresh, setRefresh }) {
   const [hoveredIndex, setHoveredIndex] = useState(null);
@@ -32,8 +33,17 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
       const newProduct = { ...prod, quantity: 1 };
       cart.push(newProduct);
     }
-
     localStorage.setItem("cart", JSON.stringify(cart));
+    toast.success("Product added to cart", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   };
 
   const savedUser = JSON.parse(localStorage.getItem("user"));
@@ -194,6 +204,18 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
       >
         {product.countInStock === 0 ? "Nicht vorrätig" : "In den Warenkorb"}
       </button>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="dark"
+      />
     </div>
   );
 }

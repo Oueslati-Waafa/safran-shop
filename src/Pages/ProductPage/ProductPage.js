@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import { Form } from "react-bootstrap";
 import ReviewCard from "./ReviewCard";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function ProductPage() {
   const [productId, setProductId] = useState(null);
@@ -86,6 +87,16 @@ export default function ProductPage() {
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
+    toast.success("Product added to cart", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });
   };
 
   const [user, setUser] = useState();
@@ -456,6 +467,18 @@ export default function ProductPage() {
           ))}
         </div>
       </section>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="dark"
+      />
     </main>
   );
 }
