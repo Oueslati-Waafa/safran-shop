@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import upload from "../middlewares/multer.js";
 
 /**
@@ -16,7 +16,8 @@ import {
   deleteUser,
   addToWishlist,
   getWishlist,
-  deleteFromWishlist
+  deleteFromWishlist,
+  updateImage,
 } from "../controllers/User.controller.js";
 import { ensureUser, ensureAdmin } from "../middlewares/auth.middleware.js";
 /** Defining the router */
@@ -167,8 +168,8 @@ usersRouter.route("/:id").get(getUserById);
  *       200:
  *         description: OK
  */
-usersRouter.route("/:id").put(upload.single("image"), updateUser).delete(deleteUser);
-
+usersRouter.route("/:id").put(updateUser).delete(deleteUser);
+usersRouter.route("/image/:id").put(upload.single("file"), updateImage);
 
 /**
  * @swagger
@@ -231,9 +232,8 @@ usersRouter.route("/wishlist/add/:id").post(ensureUser, addToWishlist);
  *       scheme: bearer
  *       bearerFormat: JWT
  */
-usersRouter.route("/wishlist/delete/:id").delete(ensureUser, deleteFromWishlist);
-
-
-
+usersRouter
+  .route("/wishlist/delete/:id")
+  .delete(ensureUser, deleteFromWishlist);
 
 export { usersRouter };

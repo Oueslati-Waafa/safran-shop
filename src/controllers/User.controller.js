@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { validationResult } from "express-validator";
 import upload from "../middlewares/multer.js";
 import uploadToCloudinary from "../cloudinaryConfig.js";
-import fs from 'fs'
+import fs from "fs";
 
 // GET /users
 const getUsers = async (req, res) => {
@@ -37,14 +37,7 @@ const getUserById = async (req, res) => {
 /**CREATE A NEW USER */
 const createUser = async (req, res) => {
   try {
-    const {
-      fname,
-      lname,
-      email,
-      phoneNumber,
-      password,
-      isAdmin,
-    } = req.body;
+    const { fname, lname, email, phoneNumber, password, isAdmin } = req.body;
 
     const existingUser = await User.findOne({ email });
 
@@ -75,52 +68,66 @@ const createUser = async (req, res) => {
   }
 };
 
-
-
 // PUT /users/:id
-const updateUser = async (req, res) => {
+const updateImage = async (req, res) => {
+  console.log("request body", req);
   try {
     const { id } = req.params;
-
     // Check if req.file exists
-    if (!req.file) {
-      console.error("No file uploaded");
-      return res.status(400).json({ error: "No file uploaded" });
-    }
+    if (req.file) {
+      // Get the file path from multer
+      const file = req.file.path;
+      console.log("Image path:", file); // Add this console log
 
-    // Get the file path from multer
-    const file = req.file.path;
-    console.log("Image path:", file); // Add this console log
+      try {
+        // Upload image to Cloudinary
+        const cloudinaryResponse = await uploadToCloudinary(
+          file,
+          "safran-shop-assets"
+        );
+        console.log("Cloudinary response:", cloudinaryResponse); // Add this console log
 
-    try {
-      // Upload image to Cloudinary
-      const cloudinaryResponse = await uploadToCloudinary(
-        file,
-        "safran-shop-assets"
-      );
-      console.log("Cloudinary response:", cloudinaryResponse); // Add this console log
+        const user = await User.findByIdAndUpdate(
+          id,
+          { imageUrl: cloudinaryResponse.url },
+          { new: true }
+        );
 
-      const user = await User.findByIdAndUpdate(
-        id,
-        { imageUrl: cloudinaryResponse.url },
-        { new: true }
-      );
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
 
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
+        res.status(200).json(user);
+      } catch (error) {
+        console.error("Error uploading image to Cloudinary:", error);
+        return res.status(500).json({ error: "Image upload failed" });
       }
-
-      res.status(200).json(user);
-    } catch (error) {
-      console.error("Error uploading image to Cloudinary:", error);
-      return res.status(500).json({ error: "Image upload failed" });
+    } else {
+      return res.status(400).json({ error: "No file uploaded" });
     }
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByIdAndUpdate(
+      id,
+      req.body, // Assuming other details are in the req.body
+      { new: true }
+    );
 
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
 // DELETE /users/:id
 const deleteUser = async (req, res) => {
@@ -141,7 +148,7 @@ export const addToWishlist = async (req, res) => {
     const userId = req.user.id; // Retrieve the user ID from the authenticated request
     const productId = req.params.id; // Retrieve the product ID from the request parameters
 
-    console.log(productId)
+    console.log(productId);
     const user = await User.findById(userId); // Find the user by ID
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -222,4 +229,11 @@ export const getWishlist = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-export { getUsers, getUserById, createUser, updateUser, deleteUser };
+export {
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  updateImage,
+  deleteUser,
+};
