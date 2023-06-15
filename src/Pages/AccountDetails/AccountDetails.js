@@ -3,7 +3,7 @@ import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { Form, InputGroup, Modal } from "react-bootstrap";
-import { Eye, EyeSlash } from "react-bootstrap-icons";
+import { Camera, Eye, EyeSlash } from "react-bootstrap-icons";
 import PhoneInput from "react-phone-input-2";
 import { toast, ToastContainer } from "react-toastify";
 import Title from "../../Components/Title/Title";
@@ -16,6 +16,7 @@ export default function AccountDetails() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [filePath, setFilePath] = useState(null);
   const [allowModifyButton, setAllowModifyButton] = useState(false);
   const [allowModifyPWButton, setAllowModifyPWButton] = useState(false);
   const [isValidModification, setIsValidModification] = useState(true);
@@ -126,6 +127,71 @@ export default function AccountDetails() {
       }
     }
   };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setFilePath(file);
+  };
+
+  const updateUserImg = async (e) => {
+    e.preventDefault();
+
+    if (!filePath) {
+      // Handle error if no file is selected
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append("file", filePath);
+
+      const response = await axios.put(
+        `http://localhost:9090/users/image/${user.id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      // Update the user object in local storage with the new image URL
+      const updatedUser = {
+        ...user,
+        img: response.data.imageUrl[0],
+      };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      // Update the state to trigger re-rendering
+      setRefreshUser(refreshUser + 1);
+      setIsImgModalOpen(false);
+
+      // Show success message
+      toast.success("Image updated successfully", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    } catch (error) {
+      // Handle error response
+      console.error(error.response.data);
+      toast.error(error.response.data, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
+    }
+  };
+
   const updateUserPW = async (e) => {
     e.preventDefault();
     if (oldPassword === "" || newPassword === "") {
@@ -192,11 +258,14 @@ export default function AccountDetails() {
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isImgModalOpen, setIsImgModalOpen] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
 
   const showPassword = () => {
     setHidePassword(!hidePassword);
   };
+
+  console.log(filePath);
 
   return (
     <main className="account-page container mb-5">
@@ -216,11 +285,21 @@ export default function AccountDetails() {
       <Title content={"Persönliche Informationen"} />
       <section className="personal-info-cont row d-flex justify-content-evenly">
         <div className="col-lg-2 col-6 d-flex flex-column align-items-center justify-content-center">
-          <img
-            className="img-fluid personal-info-img rounded-circle img-thumbnail"
-            alt="profile image"
-            src={user?.img}
-          />
+          <div className="personal-info-img-cont">
+            <img
+              className="img-fluid personal-info-img rounded-circle img-thumbnail"
+              alt="profile image"
+              src={user?.img}
+            />
+            <button
+              className="personal-info-img-modify btn btn-link"
+              onClick={() => {
+                setIsImgModalOpen(true);
+              }}
+            >
+              <Camera color="#841315" size={25} />
+            </button>
+          </div>
           <p className="personal-info-name mt-3">
             {user?.fname} {user?.lname}
           </p>
@@ -373,6 +452,41 @@ export default function AccountDetails() {
               type="submit"
               className="btn btn-light account-btn"
               disabled={!allowModifyPWButton}
+            >
+              Speichern
+            </button>
+          </Form>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        show={isImgModalOpen}
+        onHide={() => setIsImgModalOpen(false)}
+      >
+        <Modal.Body>
+          <p className="text-light fw-bold fs-3">Update profile image</p>
+          <Form
+            className="row d-flex justify-content-evenly align-items-center"
+            onSubmit={(e) => {
+              updateUserImg(e);
+            }}
+          >
+            <Form.Group className="col-10 mb-3">
+              <Form.Label className="text-light">
+                Select a local file
+              </Form.Label>
+              <Form.Control
+                type={"file"}
+                value={filePath === null ? "" : filePath.path}
+                onChange={handleFileChange}
+              ></Form.Control>
+            </Form.Group>
+            <button
+              type="submit"
+              className="btn btn-light account-btn"
+              disabled={filePath === ""}
             >
               Speichern
             </button>
