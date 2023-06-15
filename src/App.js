@@ -19,11 +19,13 @@ import ContinueOrder from "./Pages/ContinueOrder/ContinueOrder";
 import ThankPage from "./Pages/CheckoutPage/ThankPage";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import ProtectedRoute from "./ProtectedRoute";
+import { useState } from "react";
 
 function App() {
+  const [isDashboard, setIsDashboard] = useState(false);
   return (
     <Router>
-      <div className="App">
+      <div className={isDashboard ? "App-no-footer" : "App"}>
         <NavBar />
         <main>
           <Routes>
@@ -43,14 +45,14 @@ function App() {
               path="/dashboard"
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <Dashboard setIsDashboard={setIsDashboard} />
                 </ProtectedRoute>
               }
             ></Route>
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
-        <Footer />
+        {!isDashboard && <Footer />}
       </div>
     </Router>
   );

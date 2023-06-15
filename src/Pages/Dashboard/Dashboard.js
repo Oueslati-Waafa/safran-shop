@@ -7,7 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import OrdersDash from "./OrdersDash";
 import ProductsDash from "./ProductsDash";
 
-export default function Dashboard() {
+export default function Dashboard(props) {
   const [currentDash, setCurrentDash] = useState("orders");
   const [user, setUser] = useState();
   const [userToken, setUserToken] = useState();
@@ -48,6 +48,14 @@ export default function Dashboard() {
     }
   }, [user]);
   console.log(orders);
+  useEffect(() => {
+    props.setIsDashboard(true);
+
+    return () => {
+      props.setIsDashboard(false);
+    };
+  }, []);
+
   return (
     <main className="container">
       <ToastContainer
@@ -66,10 +74,10 @@ export default function Dashboard() {
         <title>Dashboard</title>
       </Helmet>
       {currentDash === "orders" ? (
-        <OrdersDash orders={orders} />
-      ) : (
-        <ProductsDash />
-      )}
+        <OrdersDash orders={orders} setCurrentDash={setCurrentDash} />
+      ) : currentDash === "products" ? (
+        <ProductsDash setCurrentDash={setCurrentDash} />
+      ) : null}
     </main>
   );
 }

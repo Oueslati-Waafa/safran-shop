@@ -179,6 +179,26 @@ export default function OrderCard(props) {
                 <p>Email:</p>
                 <p>{props.order.user.email}</p>
               </div>
+              <div className="orderSummary-fee">
+                <p>Address:</p>
+                <p>{props.order.shippingInfo.address}</p>
+              </div>
+              <div className="orderSummary-fee">
+                <p>City:</p>
+                <p>{props.order.shippingInfo.city}</p>
+              </div>
+              <div className="orderSummary-fee">
+                <p>Country:</p>
+                <p>{props.order.shippingInfo.country}</p>
+              </div>
+              <div className="orderSummary-fee">
+                <p>State:</p>
+                <p>{props.order.shippingInfo.state}</p>
+              </div>
+              <div className="orderSummary-fee">
+                <p>Zip code:</p>
+                <p>{props.order.shippingInfo.postalCode}</p>
+              </div>
             </div>
           </div>
         </Modal.Body>

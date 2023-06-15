@@ -5,11 +5,14 @@ import { Rating } from "react-simple-star-rating";
 import Title from "../../Components/Title/Title";
 import Products from "../../Components/Products/Products";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { BookmarkHeart, BookmarkHeartFill } from "react-bootstrap-icons";
+import {
+  ArrowClockwise,
+  BookmarkHeart,
+  BookmarkHeartFill,
+} from "react-bootstrap-icons";
 import axios from "axios";
 import { Form } from "react-bootstrap";
 import ReviewCard from "./ReviewCard";
-import CountInStockBar from "../../Components/CountInStockBar/CountInStockBar";
 
 export default function ProductPage() {
   const [productId, setProductId] = useState(null);
@@ -43,8 +46,6 @@ export default function ProductPage() {
       return;
     }
   }, [refreshProduct, productId]);
-
-  console.log(refreshProduct);
 
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [mightLike, setMightLike] = useState([]);
@@ -112,17 +113,29 @@ export default function ProductPage() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [productId]);
 
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
+    if (likedProducts.length === 0 || productId === null) {
+      return;
+    }
     if (likedProducts.some((item) => item._id === productId)) {
       setLiked(true);
     } else {
       setLiked(false);
     }
   }, [productId, likedProducts]);
+
+  const [loadingLike, setLoadingLike] = useState(true);
+
+  useEffect(() => {
+    setLoadingLike(true);
+    setTimeout(() => {
+      setLoadingLike(false);
+    }, 2000);
+  }, [productId]);
 
   const handleToggleLike = (productId) => {
     if (likedProducts.some((item) => item._id === productId)) {
@@ -240,14 +253,31 @@ export default function ProductPage() {
       {currentProduct ? (
         <div className="row">
           <div className="col-md-5 col-12 mb-md-0 mb-5">
-            {liked ? (
-              <BookmarkHeartFill
-                className="product-like-icon"
+            {loadingLike ? (
+              <ArrowClockwise
+                className="product-page-like-icon"
                 size={
                   width > 992
                     ? 40
                     : width < 992 && width > 576
-                    ? 50
+                    ? 35
+                    : width < 576 && width > 425
+                    ? 40
+                    : 30
+                }
+                color="#f5f5f5"
+                onClick={() => {
+                  handleToggleLike(productId);
+                }}
+              />
+            ) : liked === true ? (
+              <BookmarkHeartFill
+                className="product-page-like-icon"
+                size={
+                  width > 992
+                    ? 40
+                    : width < 992 && width > 576
+                    ? 35
                     : width < 576 && width > 425
                     ? 40
                     : 30
@@ -259,12 +289,12 @@ export default function ProductPage() {
               />
             ) : (
               <BookmarkHeart
-                className="product-like-icon"
+                className="product-page-like-icon"
                 size={
                   width > 992
                     ? 40
                     : width < 992 && width > 576
-                    ? 50
+                    ? 35
                     : width < 576 && width > 425
                     ? 40
                     : 30

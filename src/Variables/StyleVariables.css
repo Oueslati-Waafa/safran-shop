@@ -34,6 +34,15 @@
   justify-content: space-between;
 }
 
+.App-no-footer {
+  overflow-x: hidden;
+  font-family: "Manrope", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
 a {
   text-decoration: none;
   color: var(--primary) !important;

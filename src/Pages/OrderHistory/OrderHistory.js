@@ -4,6 +4,7 @@ import "./OrderHistory.css";
 import axios from "axios";
 import OrderItem from "./OrderItem";
 import MyButton from "../../Components/Buttons/MyButton";
+import { BoxSeam, Clock, Truck, XCircle } from "react-bootstrap-icons";
 
 export default function OrderHistory() {
   const [user, setUser] = useState();
@@ -114,7 +115,18 @@ export default function OrderHistory() {
               {order?.isPaid ? (
                 <>
                   <p className="order-detail">Order state</p>
-                  <p className="order-detail">{order.orderStatus}</p>
+                  <p className="order-detail">
+                    {order.orderStatus}{" "}
+                    {order.orderStatus === "Cancelled" ? (
+                      <XCircle color="#841315" size={30} />
+                    ) : order.orderStatus === "Processing" ? (
+                      <Clock color="#e5ba5d" size={30} />
+                    ) : order.orderStatus === "Shipped" ? (
+                      <Truck color="#e5ba5d" size={30} />
+                    ) : order.orderStatus === "Delivered" ? (
+                      <BoxSeam color="green" size={30} />
+                    ) : null}
+                  </p>
                 </>
               ) : null}
             </div>
