@@ -1,0 +1,336 @@
+@media (min-width: 1200px) {
+  .customer-service-numbers {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+  }
+
+  .customer-service-number {
+    font-size: 2rem;
+  }
+
+  .customer-service-addresses {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+  }
+
+  .customer-service-address {
+    font-size: 1.2rem;
+  }
+
+  .customer-service-emails {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+  }
+
+  .customer-service-email {
+    font-size: 1.2rem;
+  }
+
+  .contact-text {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-top: 10rem;
+    text-align: center;
+  }
+}
+@media (min-width: 992px) and (max-width: 1200px) {
+  .customer-service-numbers {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+  }
+
+  .customer-service-number {
+    font-size: 2rem;
+  }
+
+  .customer-service-addresses {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+  }
+
+  .customer-service-address {
+    font-size: 1rem;
+  }
+
+  .customer-service-emails {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+  }
+
+  .customer-service-email {
+    font-size: 1rem;
+  }
+
+  .contact-text {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-top: 10rem;
+    text-align: center;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .customer-service-numbers {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+  }
+
+  .customer-service-number {
+    font-size: 1.3rem;
+  }
+
+  .customer-service-addresses {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+  }
+
+  .customer-service-address {
+    font-size: 0.7rem;
+    letter-spacing: 0.05rem;
+    font-weight: 800;
+  }
+
+  .customer-service-emails {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
+  }
+
+  .customer-service-email {
+    font-size: 0.7rem;
+    letter-spacing: 0.05rem;
+    font-weight: 800;
+  }
+
+  .contact-text {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-top: 10rem;
+    text-align: center;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  .customer-service-calling {
+    display: flex;
+    align-items: center;
+  }
+
+  .customer-service-numbers {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .customer-service-number {
+    font-size: 1rem;
+    font-weight: 800;
+  }
+
+  .customer-service-location {
+    display: flex;
+    align-items: center;
+  }
+
+  .customer-service-addresses {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .customer-service-address {
+    font-size: 0.7rem;
+    letter-spacing: 0.05rem;
+    font-weight: 800;
+  }
+
+  .customer-service-mailing {
+    display: flex;
+    align-items: center;
+  }
+
+  .customer-service-emails {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .customer-service-email {
+    font-size: 0.7rem;
+    letter-spacing: 0.05rem;
+    font-weight: 800;
+  }
+
+  .contact-text {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-top: 10rem;
+    text-align: center;
+  }
+}
+
+@media (min-width: 425px) and (max-width: 576px) {
+  .customer-service-calling {
+    display: flex;
+    align-items: center;
+  }
+
+  .customer-service-numbers {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .customer-service-number {
+    font-size: 0.7rem;
+    font-weight: 800;
+  }
+
+  .customer-service-location {
+    display: flex;
+    align-items: center;
+  }
+
+  .customer-service-addresses {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .customer-service-address {
+    font-size: 0.7rem;
+    letter-spacing: 0.05rem;
+    font-weight: 800;
+  }
+
+  .customer-service-mailing {
+    display: flex;
+    align-items: center;
+  }
+
+  .customer-service-emails {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .customer-service-email {
+    font-size: 0.7rem;
+    letter-spacing: 0.05rem;
+    font-weight: 800;
+  }
+
+  .contact-text {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-top: 5rem;
+    text-align: center;
+  }
+}
+@media (max-width: 425px) {
+  .customer-service-calling {
+    display: flex;
+    align-items: center;
+  }
+
+  .customer-service-numbers {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .customer-service-number {
+    font-size: 0.65rem;
+    font-weight: 800;
+  }
+
+  .customer-service-location {
+    display: flex;
+    align-items: center;
+  }
+
+  .customer-service-addresses {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .customer-service-address {
+    font-size: 0.6rem;
+    letter-spacing: 0.05rem;
+    font-weight: 800;
+  }
+
+  .customer-service-mailing {
+    display: flex;
+    align-items: center;
+  }
+
+  .customer-service-emails {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    height: 100%;
+    margin-bottom: 0;
+  }
+
+  .customer-service-email {
+    font-size: 0.6rem;
+    letter-spacing: 0.05rem;
+    font-weight: 800;
+  }
+
+  .contact-text {
+    font-size: 0.6rem;
+    font-weight: 800;
+    margin-top: 5rem;
+    text-align: center;
+  }
+}
+
+.social-media-icon:hover {
+  scale: 1.1;
+  cursor: pointer;
+}

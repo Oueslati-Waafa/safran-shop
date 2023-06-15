@@ -1,0 +1,42 @@
+.carousel-indicators button {
+  border-radius: 50%;
+  width: 1rem !important;
+  height: 1rem !important;
+  background-color: #ffffd0 !important;
+  margin: 0 5px !important;
+  border: 1px solid transparent !important;
+  opacity: 1 !important;
+}
+
+.carousel-indicators .active {
+  background-color: var(--yellish) !important;
+  outline: 1px solid #fff;
+}
+
+.products-cont-home {
+  background-color: #fff;
+}
+
+.homepage-cont {
+  max-width: 100%;
+}
+
+@media (max-width: 576px) {
+  .carousel-img {
+    height: 50vh;
+  }
+
+  .carousel-img {
+    object-fit: fill;
+  }
+
+  .products-cont-home {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .products-cont-home {
+    padding: 0 6rem;
+  }
+}

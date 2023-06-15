@@ -1,0 +1,112 @@
+@media (max-width: 992px) {
+  .product-card {
+    width: 80%;
+  }
+  .products-cont div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .product-caption h4,
+  .product-caption h3 {
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 0.34rem;
+    text-align: center;
+  }
+  .product-btn {
+    background-color: var(--dark-redish) !important;
+    color: var(--secondary) !important;
+    font-weight: 800;
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .product-card {
+    width: 40%;
+  }
+  .products-cont div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  .product-caption h4,
+  .product-caption h3 {
+    font-weight: 800;
+    letter-spacing: 0.34rem;
+    text-align: center;
+  }
+  .product-btn {
+    background-color: var(--dark-redish) !important;
+    color: var(--secondary) !important;
+    font-weight: 800;
+    font-size: 1.5rem;
+  }
+}
+
+.product-img {
+  border-radius: 2rem;
+  max-height: 500px;
+}
+
+.product-img-cont {
+  position: relative;
+  display: inline-block;
+}
+
+.product-like-icon {
+  position: absolute;
+  z-index: 100;
+}
+
+@media (min-width: 992px) {
+  .product-like-icon {
+    margin-top: 1rem;
+    margin-left: 1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .product-like-icon {
+    margin-top: 1rem;
+    left: 20%;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+  .product-like-icon {
+    margin-top: 1rem;
+    left: 12%;
+  }
+}
+
+@media (min-width: 425px) and (max-width: 576px) {
+  .product-like-icon {
+    margin-top: 1rem;
+    left: 17%;
+  }
+}
+
+@media (max-width: 425px) {
+  .product-like-icon {
+    margin-top: 1rem;
+    left: 20%;
+  }
+}
+
+.product-img-cont::before {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  width: 100%; /* Adjust the width of the frame */
+  height: 100%; /* Adjust the height of the frame */
+  background-color: transparent; /* Adjust the color of the frame */
+  border: 3px solid var(--redish);
+  border-radius: 2rem;
+}
+
+.product-btn:hover {
+  opacity: 0.9;
+}
