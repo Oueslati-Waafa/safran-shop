@@ -31,10 +31,6 @@
     "paypal": "^1.0.1",
     "paypal-rest-sdk": "^1.8.1",
     "stripe": "^12.7.0",
-    "swagger-autogen": "^2.23.1",
-    "swagger-express-validator": "^1.0.2",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.6.3",
     "url": "^0.11.0",
     "uuid": "^9.0.0",
     "validator": "^13.9.0"

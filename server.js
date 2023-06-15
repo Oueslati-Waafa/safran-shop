@@ -4,7 +4,7 @@ import {
   disconnectDatabase,
 } from "./src/database/database.js";
 import dotenv from "dotenv";
-import { swaggerSetup } from "./swagger.js";
+
 
 /* Accessing .env content */
 dotenv.config();
@@ -12,7 +12,7 @@ dotenv.config();
 /* Defining server's HOSTNAME & PORT */
 const hostname = process.env.HOSTNAME;
 const port = process.env.PORT;
-swaggerSetup(app);
+
 
 /* Connecting and disconnecting database */
 connectDatabase()
