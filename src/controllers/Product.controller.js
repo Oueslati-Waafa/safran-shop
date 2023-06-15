@@ -1,5 +1,6 @@
 import Product from "../models/Products.js";
 
+
 // GET /products
 const getProducts = async (req, res) => {
   try {

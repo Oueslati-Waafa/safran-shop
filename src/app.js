@@ -7,8 +7,6 @@ import { authentication } from "./routes/authentication.routes.js";
 import { ordersRouter } from "./routes/order.routes.js";
 import dotenv from "dotenv";
 import { testimonialRoutes } from "./routes/testimonials.routes.js";
-import Order from "./models/Order.js";
-import { ensureUser } from "./middlewares/auth.middleware.js";
 import { processPayPalWebhookEvent } from "./controllers/Order.controller.js";
 
 /* Accessing .env content */

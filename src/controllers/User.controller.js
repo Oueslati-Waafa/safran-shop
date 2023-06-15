@@ -2,6 +2,10 @@ import User from "../models/Users.js";
 import Product from "../models/Products.js";
 import mongoose from "mongoose";
 import { validationResult } from "express-validator";
+import upload from "../middlewares/multer.js";
+import uploadToCloudinary from "../cloudinaryConfig.js";
+import fs from 'fs'
+
 // GET /users
 const getUsers = async (req, res) => {
   try {
@@ -40,7 +44,6 @@ const createUser = async (req, res) => {
       phoneNumber,
       password,
       isAdmin,
-      shippingDetails,
     } = req.body;
 
     const existingUser = await User.findOne({ email });
@@ -72,20 +75,52 @@ const createUser = async (req, res) => {
   }
 };
 
+
+
 // PUT /users/:id
 const updateUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
+    const { id } = req.params;
+
+    // Check if req.file exists
+    if (!req.file) {
+      console.error("No file uploaded");
+      return res.status(400).json({ error: "No file uploaded" });
     }
-    res.status(200).json(user);
+
+    // Get the file path from multer
+    const file = req.file.path;
+    console.log("Image path:", file); // Add this console log
+
+    try {
+      // Upload image to Cloudinary
+      const cloudinaryResponse = await uploadToCloudinary(
+        file,
+        "safran-shop-assets"
+      );
+      console.log("Cloudinary response:", cloudinaryResponse); // Add this console log
+
+      const user = await User.findByIdAndUpdate(
+        id,
+        { imageUrl: cloudinaryResponse.url },
+        { new: true }
+      );
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      res.status(200).json(user);
+    } catch (error) {
+      console.error("Error uploading image to Cloudinary:", error);
+      return res.status(500).json({ error: "Image upload failed" });
+    }
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
 
 // DELETE /users/:id
 const deleteUser = async (req, res) => {
