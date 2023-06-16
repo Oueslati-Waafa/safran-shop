@@ -10,7 +10,7 @@ export default function ProductsDash(props) {
   const [refreshProducts, setRefreshProducts] = useState(0);
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    axios.get("https://safran.onrender.com/products/getAll").then((result) => {
+    axios.get("http://localhost:9090/products/getAll").then((result) => {
       setProducts(result.data);
     });
   }, []);
@@ -91,7 +91,7 @@ export default function ProductsDash(props) {
     };
     try {
       const response = await axios.post(
-        "https://safran.onrender.com/products/add",
+        "http://localhost:9090/products/add",
         productData,
         {
           headers: {

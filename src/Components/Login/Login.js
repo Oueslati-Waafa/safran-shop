@@ -48,10 +48,13 @@ const Login = () => {
     }
     if (isValidLogIn) {
       try {
-        const response = await axios.post("https://safran.onrender.com/auth/login", {
-          email: logInEmail,
-          password: logInPassword,
-        });
+        const response = await axios.post(
+          "http://localhost:9090/auth/login",
+          {
+            email: logInEmail,
+            password: logInPassword,
+          }
+        );
         console.log(response);
         const userToSave = {
           fname: response.data.fname,
@@ -64,7 +67,7 @@ const Login = () => {
         };
         localStorage.setItem("user", JSON.stringify(userToSave));
         localStorage.setItem("loggedIn", true);
-        toast.success("Logged in successfully", {
+        toast.success("Erfolgreich eingeloggt", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -106,10 +109,10 @@ const Login = () => {
     }
     try {
       const response = await axios.get(
-        `https://safran.onrender.com/auth/reset/${resetEmail}`
+        `http://localhost:9090/auth/reset/${resetEmail}`
       );
       console.log(response);
-      toast.success("Reset code sent", {
+      toast.success("Reset-Code wurde gesendet", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -173,7 +176,7 @@ const Login = () => {
         const toSendNumber = "+" + signUpNumber;
         console.log(toSendNumber);
         const response = await axios.post(
-          "https://safran.onrender.com/auth/register",
+          "http://localhost:9090/auth/register",
           {
             fname: signUpFname,
             lname: signUpLname,
@@ -193,7 +196,7 @@ const Login = () => {
           id: response.data.id,
         };
         localStorage.setItem("user", JSON.stringify(userToSave));
-        toast.success("Verification code sent", {
+        toast.success("Verifizierungscode wurde gesendet", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -206,7 +209,7 @@ const Login = () => {
         setLogAction("verify");
       } catch (error) {
         console.error(error.response.data); // error message if not successful
-        toast.error("an error occurred!", {
+        toast.error("Es ist ein Fehler aufgetreten!", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -224,12 +227,12 @@ const Login = () => {
     event.preventDefault(); // prevent from submission
     try {
       const response = await axios.post(
-        `https://safran.onrender.com/auth/verify/${signUpEmail}`,
+        `http://localhost:9090/auth/verify/${signUpEmail}`,
         {
           verificationCode: vrfCode,
         }
       );
-      toast.success("Verification success", {
+      toast.success("Verifizierung erfolgreich", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -249,7 +252,7 @@ const Login = () => {
       }
       navigate("/");
     } catch (error) {
-      toast.error("Invalid code!", {
+      toast.error("Ungültiger Code!", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -266,9 +269,9 @@ const Login = () => {
     console.log(signUpEmail);
     try {
       const response = await axios.get(
-        `https://safran.onrender.com/auth/resend-verification/${signUpEmail}`
+        `http://localhost:9090/auth/resend-verification/${signUpEmail}`
       );
-      toast.success("Verification code resent", {
+      toast.success("Verifizierungscode erneut gesendet", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -310,7 +313,7 @@ const Login = () => {
       {logAction === "login" ? (
         <>
           <section className="login-box mb-5 d-flex flex-column justify-content-center">
-            <p className="log-title text-center display-5 fw-bold">Log in</p>
+            <p className="log-title text-center display-5 fw-bold">Anmelden</p>
             <Form
               className="log-form mb-5"
               onSubmit={(e) => {
@@ -357,7 +360,7 @@ const Login = () => {
                 </FloatingLabel>
               </InputGroup>
               <button type="submit" className="btn log-btn">
-                Log in
+                Anmelden
               </button>
             </Form>
             <p className="log-reset-link text-center">
@@ -367,19 +370,19 @@ const Login = () => {
                   setLogAction("reset");
                 }}
               >
-                Forgot password ?
+                Passwort vergessen?
               </Link>
             </p>
           </section>
           <p className="log-link-cont">
-            Don't have an account?{" "}
+            Sie haben noch keinen Account?{" "}
             <Link
               className="log-link"
               onClick={() => {
                 setLogAction("register");
               }}
             >
-              Sign Up
+              Registrieren
             </Link>
           </p>
         </>
@@ -387,7 +390,7 @@ const Login = () => {
         <>
           <section className="login-box mb-5 d-flex flex-column justify-content-center">
             <p className="log-title text-center display-5 fw-bold mb-4">
-              Reset password
+              Passwort zurücksetzen
             </p>
             <Form
               className="log-form mb-5"
@@ -415,29 +418,31 @@ const Login = () => {
                 </FloatingLabel>
               </InputGroup>
               <small className="text-muted">
-                We'll send you a reset code by email .
+                Wir senden Ihnen einen Zurücksetzungscode per E-Mail.
               </small>
               <button type="submit" className="btn log-btn mt-4">
-                Submit
+                Absenden
               </button>
             </Form>
           </section>
           <p className="log-link-cont">
-            Don't have an account?{" "}
+            Sie haben noch keinen Account?{" "}
             <Link
               className="log-link"
               onClick={() => {
                 setLogAction("register");
               }}
             >
-              Sign Up
+              Registrieren
             </Link>
           </p>
         </>
       ) : logAction === "register" ? (
         <>
           <section className="login-box mb-5 d-flex flex-column justify-content-center">
-            <p className="log-title text-center display-5 fw-bold">Sign up</p>
+            <p className="log-title text-center display-5 fw-bold">
+              Registrieren
+            </p>
             <Form
               className="log-form mb-5"
               onSubmit={(e) => {
@@ -554,19 +559,19 @@ const Login = () => {
                 </FloatingLabel>
               </InputGroup>
               <button type="submit" className="btn log-btn">
-                Sign up
+                Registrieren
               </button>
             </Form>
           </section>
           <p className="log-link-cont">
-            Already have an account?{" "}
+            Sie haben bereits ein Konto?{" "}
             <Link
               className="log-link"
               onClick={() => {
                 setLogAction("login");
               }}
             >
-              Log in
+              Einloggen
             </Link>
           </p>
         </>
@@ -574,7 +579,7 @@ const Login = () => {
         <>
           <section className="login-box mb-5 d-flex flex-column justify-content-center">
             <p className="log-title text-center display-5 fw-bold">
-              Verification
+              Verifizierung
             </p>
             <Form
               className="log-form mb-5"
@@ -602,19 +607,19 @@ const Login = () => {
                 </FloatingLabel>
               </InputGroup>
               <button type="submit" className="btn log-btn">
-                Verify
+                Verifizieren
               </button>
             </Form>
           </section>
           <p className="log-link-cont">
-            Didn't recieve code ?{" "}
+            Haben Sie den Code nicht erhalten?{" "}
             <Link
               className="log-link"
               onClick={() => {
                 handleResendCodeVerification();
               }}
             >
-              Resend
+              Erneut senden
             </Link>
           </p>
         </>

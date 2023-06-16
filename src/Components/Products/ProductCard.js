@@ -52,7 +52,7 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
   const [likedProducts, setLikedProducts] = useState([]);
   useEffect(() => {
     axios
-      .get("https://safran.onrender.com/users/wishlist", {
+      .get("http://localhost:9090/users/wishlist", {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
@@ -81,7 +81,7 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
   const handleToggleLike = (productId) => {
     if (likedProducts.some((item) => item._id === productId)) {
       // Object with matching id found in likedProducts
-      fetch(`https://safran.onrender.com/users/wishlist/delete/${productId}`, {
+      fetch(`http://localhost:9090/users/wishlist/delete/${productId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +99,7 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
         .catch((error) => console.log(error));
     } else {
       // Object with matching id not found in likedProducts
-      fetch(`https://safran.onrender.com/users/wishlist/add/${productId}`, {
+      fetch(`http://localhost:9090/users/wishlist/add/${productId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -161,14 +161,19 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
         onMouseEnter={() => setHoveredIndex(index)}
         onMouseLeave={() => setHoveredIndex(null)}
       >
-        <LazyLoadImage
-          src={
-            hoveredIndex === index ? product.imageUrl[1] : product.imageUrl[0]
-          }
-          alt="product"
-          className="img-fluid product-img"
-          effect="blur"
-        />
+        <Link
+          to={`/product/${product._id}`}
+          onClick={() => window.scrollTo(0, 0)}
+        >
+          <LazyLoadImage
+            src={
+              hoveredIndex === index ? product.imageUrl[1] : product.imageUrl[0]
+            }
+            alt="product"
+            className="img-fluid product-img"
+            effect="blur"
+          />
+        </Link>
       </div>
       <div className="product-caption d-flex align-items-center">
         <h4>

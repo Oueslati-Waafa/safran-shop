@@ -4,8 +4,6 @@ import "./HomePage.css";
 import Title from "../../Components/Title/Title";
 import Products from "../../Components/Products/Products";
 import Testimonials from "../../Components/Testimonials/Testimonials";
-import Footer from "../../Components/Footer/Footer";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import axios from "axios";
 
@@ -143,7 +141,7 @@ export default function HomePage() {
 
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    axios.get("https://safran.onrender.com/products/getAll").then((result) => {
+    axios.get("http://localhost:9090/products/getAll").then((result) => {
       setProducts(result.data);
     });
   }, []);
@@ -154,11 +152,10 @@ export default function HomePage() {
         <Carousel fade controls={false}>
           {banners.map((banner, index) => (
             <Carousel.Item key={index}>
-              <LazyLoadImage
+              <img
                 className="d-block w-100 carousel-img"
                 src={banner}
                 alt="slide"
-                effect="blur"
               />
             </Carousel.Item>
           ))}

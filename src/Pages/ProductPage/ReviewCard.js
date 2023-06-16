@@ -26,7 +26,7 @@ export default function ReviewCard(props) {
   useEffect(() => {
     if (props.review) {
       axios
-        .get(`https://safran.onrender.com/users/${props.review.User}`)
+        .get(`http://localhost:9090/users/${props.review.User}`)
         .then((result) => {
           setRvUser(result.data);
         });
@@ -38,7 +38,7 @@ export default function ReviewCard(props) {
   const deleteReview = async (rvId) => {
     try {
       if (userToken) {
-        await axios.delete(`https://safran.onrender.com/products/reviews/${rvId}`, {
+        await axios.delete(`http://localhost:9090/products/reviews/${rvId}`, {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
@@ -88,7 +88,7 @@ export default function ReviewCard(props) {
     }
     try {
       const response = await axios.put(
-        `https://safran.onrender.com/products/reviews/${rvId}`,
+        `http://localhost:9090/products/reviews/${rvId}`,
         {
           rating: editedRating,
           description: editedDescription,

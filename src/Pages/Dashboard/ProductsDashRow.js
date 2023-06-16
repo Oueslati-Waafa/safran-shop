@@ -23,7 +23,7 @@ export default function ProductsDashRow(props) {
   const deleteProduct = async (productId) => {
     try {
       if (userToken) {
-        await axios.delete(`https://safran.onrender.com/products/${productId}`, {
+        await axios.delete(`http://localhost:9090/products/${productId}`, {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
@@ -63,7 +63,7 @@ export default function ProductsDashRow(props) {
   const updateProduct = async (productId, updatedData) => {
     try {
       const response = await axios.put(
-        `https://safran.onrender.com/products/${productId}`,
+        `http://localhost:9090/products/${productId}`,
         updatedData,
         {
           headers: {

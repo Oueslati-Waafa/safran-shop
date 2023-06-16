@@ -14,7 +14,7 @@ export default function OrderItem({ item }) {
   useEffect(() => {
     if (item) {
       axios
-        .get(`https://safran.onrender.com/products/${item.productId}`)
+        .get(`http://localhost:9090/products/${item.productId}`)
         .then((result) => {
           setOrderProduct(result.data);
         });

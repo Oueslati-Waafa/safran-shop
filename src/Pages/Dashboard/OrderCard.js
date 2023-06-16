@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { Trash } from "react-bootstrap-icons";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function OrderCard(props) {
   //   const calculateTotal = () => {
@@ -53,7 +54,7 @@ export default function OrderCard(props) {
     }
     try {
       const response = await axios.put(
-        `https://safran.onrender.com/orders/${orderId}`,
+        `http://localhost:9090/orders/${orderId}`,
         updateFields,
         {
           headers: {
@@ -76,8 +77,28 @@ export default function OrderCard(props) {
       await updateOrder(props.order._id, { orderStatus: selectedStatus });
       // Update the order data after successful update
       props.order.orderStatus = selectedStatus;
+      toast.success("Order updated successfully", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     } catch (error) {
       console.error(error);
+      toast.error("Error while updating the order", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
   return (
@@ -93,19 +114,19 @@ export default function OrderCard(props) {
       <div className="orderSummary-divider"></div>
       <div className="orderSummary-fees">
         <div className="orderSummary-fee">
-          <p>Created at</p>
+          <p>Erstellt am</p>
           <p>{transformDateFormat(props.order.createdAt)}</p>
         </div>
         <div className="orderSummary-fee">
-          <p>Paid at</p>
+          <p>Bezahlt am</p>
           <p>
             {props.order.isPaid
               ? transformDateFormat(props.order.paidAt)
-              : "pending"}
+              : "Ausstehend"}
           </p>
         </div>
         <div className="orderSummary-fee">
-          <p>Order state</p>
+          <p>Bestellstatus</p>
           <Form.Select
             aria-label="shippment filter"
             defaultValue={props.order.orderStatus}
@@ -116,30 +137,30 @@ export default function OrderCard(props) {
               defaultValue="Processing"
               selected={props.order.orderStatus === "Processing"}
             >
-              Processing
+              In Bearbeitung
             </option>
             <option
               defaultValue="Shipped"
               selected={props.order.orderStatus === "Shipped"}
             >
-              Shipped
+              Versandt
             </option>
             <option
               defaultValue="Delivered"
               selected={props.order.orderStatus === "Delivered"}
             >
-              Delivered
+              Zugestellt
             </option>
             <option
               defaultValue="Cancelled"
               selected={props.order.orderStatus === "Cancelled"}
             >
-              Cancelled
+              Storniert
             </option>
           </Form.Select>
         </div>
         <div className="orderSummary-fee">
-          <p>Client</p>
+          <p>Kunde</p>
           <p>
             <Link className="text-light" onClick={handleModalOpen}>
               {props.order.user.fname} {props.order.user.lname}
@@ -149,7 +170,7 @@ export default function OrderCard(props) {
       </div>
       <div className="orderSummary-divider"></div>
       <div className="orderSummary-total">
-        <p>Order total</p>
+        <p>Gesamtbestellwert</p>
         <p>{props.order.totalPrice} €</p>
       </div>
       <Modal
@@ -170,40 +191,51 @@ export default function OrderCard(props) {
             </div>
             <div className="orderSummary-fees text-light col-md-8 col-12">
               <div className="orderSummary-fee">
-                <p>Full name:</p>
+                <p>Vollständiger Name:</p>
                 <p>
                   {props.order.user.fname} {props.order.user.lname}
                 </p>
               </div>
               <div className="orderSummary-fee">
-                <p>Email:</p>
+                <p>E-Mail:</p>
                 <p>{props.order.user.email}</p>
               </div>
               <div className="orderSummary-fee">
-                <p>Address:</p>
+                <p>Adress:</p>
                 <p>{props.order.shippingInfo.address}</p>
               </div>
               <div className="orderSummary-fee">
-                <p>City:</p>
+                <p>Stadt:</p>
                 <p>{props.order.shippingInfo.city}</p>
               </div>
               <div className="orderSummary-fee">
-                <p>Country:</p>
+                <p>Land:</p>
                 <p>{props.order.shippingInfo.country}</p>
               </div>
               <div className="orderSummary-fee">
-                <p>State:</p>
+                <p>Bundesland:</p>
                 <p>{props.order.shippingInfo.state}</p>
               </div>
               <div className="orderSummary-fee">
-                <p>Zip code:</p>
+                <p>Postleitzahl:</p>
                 <p>{props.order.shippingInfo.postalCode}</p>
               </div>
             </div>
           </div>
         </Modal.Body>
       </Modal>
-      {/* <button className="btn btn-link"><Trash color="yellow" size={25} /></button> */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="dark"
+      />
     </section>
   );
 }

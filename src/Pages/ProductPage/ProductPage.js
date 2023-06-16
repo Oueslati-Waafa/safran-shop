@@ -27,7 +27,7 @@ export default function ProductPage() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get("https://safran.onrender.com/products/getAll").then((result) => {
+    axios.get("http://localhost:9090/products/getAll").then((result) => {
       setProducts(result.data);
       console.log(products);
     });
@@ -39,7 +39,7 @@ export default function ProductPage() {
   useEffect(() => {
     if (productId) {
       axios
-        .get(`https://safran.onrender.com/products/${productId}`)
+        .get(`http://localhost:9090/products/${productId}`)
         .then((result) => {
           setCurrentProduct(result.data);
         });
@@ -110,7 +110,7 @@ export default function ProductPage() {
   const [likedProducts, setLikedProducts] = useState([]);
   useEffect(() => {
     axios
-      .get("https://safran.onrender.com/users/wishlist", {
+      .get("http://localhost:9090/users/wishlist", {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
@@ -151,7 +151,7 @@ export default function ProductPage() {
   const handleToggleLike = (productId) => {
     if (likedProducts.some((item) => item._id === productId)) {
       // Object with matching id found in likedProducts
-      fetch(`https://safran.onrender.com/users/wishlist/delete/${productId}`, {
+      fetch(`http://localhost:9090/users/wishlist/delete/${productId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -168,7 +168,7 @@ export default function ProductPage() {
         .catch((error) => console.log(error));
     } else {
       // Object with matching id not found in likedProducts
-      fetch(`https://safran.onrender.com/users/wishlist/add/${productId}`, {
+      fetch(`http://localhost:9090/users/wishlist/add/${productId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -197,7 +197,7 @@ export default function ProductPage() {
   useEffect(() => {
     if (productId) {
       axios
-        .get(`https://safran.onrender.com/products/${productId}/reviews`)
+        .get(`http://localhost:9090/products/${productId}/reviews`)
         .then((result) => {
           setReviews(result.data.reviews);
         });
@@ -215,7 +215,7 @@ export default function ProductPage() {
 
     try {
       const response = await axios.post(
-        `https://safran.onrender.com/products/${pId}/reviews`,
+        `http://localhost:9090/products/${pId}/reviews`,
         {
           rating: rating,
           description: description,
