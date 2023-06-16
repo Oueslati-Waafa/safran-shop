@@ -54,7 +54,7 @@ export default function ProductsDashRow(props) {
             (prevRefreshProducts) => prevRefreshProducts + 1
           );
 
-          toast.success("Product deleted successfully", {
+          toast.success("Produkt erfolgreich gelöscht", {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -69,7 +69,7 @@ export default function ProductsDashRow(props) {
         return;
       }
     } catch (error) {
-      toast.error("Error while deleting the product", {
+      toast.error("Fehler beim Löschen des Produkts", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -94,7 +94,7 @@ export default function ProductsDashRow(props) {
           },
         }
       );
-      toast.success("Product updated successfully", {
+      toast.success("Produkt erfolgreich aktualisiert", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -106,7 +106,7 @@ export default function ProductsDashRow(props) {
       });
       return response.data;
     } catch (error) {
-      toast.error("Error while updating the product", {
+      toast.error("Fehler beim Aktualisieren des Produkts", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,

@@ -104,7 +104,7 @@ export default function ReviewCard(props) {
       console.log();
       props.changeReview(rvId, response.data.review);
       props.setRefreshProduct((prevRefreshProduct) => prevRefreshProduct + 1);
-      toast.success("Review updated", {
+      toast.success("Rezension aktualisiert", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -115,7 +115,7 @@ export default function ReviewCard(props) {
         theme: "dark",
       });
     } catch (error) {
-      toast.error("An error occured", {
+      toast.error("Ein Fehler ist aufgetreten", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,

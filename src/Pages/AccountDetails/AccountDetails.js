@@ -166,7 +166,7 @@ export default function AccountDetails() {
       setIsImgModalOpen(false);
 
       // Show success message
-      toast.success("Image updated successfully", {
+      toast.success("Bild erfolgreich aktualisiert", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,

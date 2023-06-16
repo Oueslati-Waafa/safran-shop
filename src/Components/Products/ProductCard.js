@@ -34,7 +34,7 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
       cart.push(newProduct);
     }
     localStorage.setItem("cart", JSON.stringify(cart));
-    toast.success("Product added to cart", {
+    toast.success("Produkt zum Warenkorb hinzugefügt", {
       position: "top-right",
       autoClose: 2000,
       hideProgressBar: false,

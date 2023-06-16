@@ -197,16 +197,19 @@ export default function ContinueOrder() {
       );
       console.log(isStockSufficient);
       if (!isStockSufficient) {
-        toast.error(`Insufficient stock for product: ${item.pName}`, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        toast.error(
+          `Unzureichender Lagerbestand für das Produkt: ${item.pName}`,
+          {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
         return; // Exit the function if stock is insufficient
       }
     }
@@ -232,7 +235,7 @@ export default function ContinueOrder() {
           await updateProductCountInStock(item.productId, item.quantity);
         }
         console.log(data.message);
-        toast.success("Payed successfully", {
+        toast.success("Erfolgreich bezahlt", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -246,7 +249,7 @@ export default function ContinueOrder() {
       } else {
         // Payment failed
         console.error(data.error);
-        toast.error(`Error while paying: ${data.error}`, {
+        toast.error(`Fehler beim Bezahlen: ${data.error}`, {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -259,8 +262,8 @@ export default function ContinueOrder() {
         // Display an error message to the user or handle the error accordingly
       }
     } catch (error) {
-      console.error("An error occurred:", error);
-      toast.error(`Error while paying: ${error}`, {
+      console.error("Ein Fehler ist aufgetreten:", error);
+      toast.error(`Fehler beim Bezahlen: ${error}`, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -291,16 +294,19 @@ export default function ContinueOrder() {
       );
       console.log(isStockSufficient);
       if (!isStockSufficient) {
-        toast.error(`Insufficient stock for product: ${item.pName}`, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+        toast.error(
+          `Unzureichender Lagerbestand für das Produkt: ${item.pName}`,
+          {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
         return; // Exit the function if stock is insufficient
       }
     }
@@ -333,7 +339,7 @@ export default function ContinueOrder() {
         }
       })
       .catch((error) => {
-        console.error("Failed to create PayPal payment:", error);
+        console.error("PayPal-Zahlung konnte nicht erstellt werden:", error);
         // Handle the error in your client-side code
       });
   }

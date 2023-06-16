@@ -77,7 +77,7 @@ export default function OrderCard(props) {
       await updateOrder(props.order._id, { orderStatus: selectedStatus });
       // Update the order data after successful update
       props.order.orderStatus = selectedStatus;
-      toast.success("Order updated successfully", {
+      toast.success("Bestellung erfolgreich aktualisiert", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
@@ -89,7 +89,7 @@ export default function OrderCard(props) {
       });
     } catch (error) {
       console.error(error);
-      toast.error("Error while updating the order", {
+      toast.error("Fehler beim Aktualisieren der Bestellung", {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,

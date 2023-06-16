@@ -276,7 +276,7 @@ export default function OrderSummary({ setCurrentStep }) {
           await updateProductCountInStock(item._id, item.quantity);
         }
         console.log(data.message);
-        toast.success("Payed successfully", {
+        toast.success("Erfolgreich bezahlt", {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -290,7 +290,7 @@ export default function OrderSummary({ setCurrentStep }) {
       } else {
         // Payment failed
         console.error(data.error);
-        toast.error(`Error while paying: ${data.error}`, {
+        toast.error(`Fehler beim Bezahlen: ${data.error}`, {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -303,8 +303,8 @@ export default function OrderSummary({ setCurrentStep }) {
         // Display an error message to the user or handle the error accordingly
       }
     } catch (error) {
-      console.error("An error occurred:", error);
-      toast.error(`Error while paying: ${error}`, {
+      console.error("Ein Fehler ist aufgetreten:", error);
+      toast.error(`Fehler beim Bezahlen: ${error}`, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
