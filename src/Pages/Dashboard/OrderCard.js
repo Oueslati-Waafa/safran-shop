@@ -54,7 +54,7 @@ export default function OrderCard(props) {
     }
     try {
       const response = await axios.put(
-        `http://localhost:9090/orders/${orderId}`,
+        `https://safran.onrender.com/orders/${orderId}`,
         updateFields,
         {
           headers: {

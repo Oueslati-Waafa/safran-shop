@@ -13,10 +13,15 @@ td {
 }
 
 .table-head {
-    background-color: var(--dark-redish);
-    color: var(--secondary);
+  background-color: var(--dark-redish);
+  color: var(--secondary);
 }
 
 .add_prod_form label {
-    color: var(--secondary);
+  color: var(--secondary);
+}
+
+.swal-confirm-button {
+  background-color: var(--dark-redish) !important;
+  color: var(--secondary) !important;
 }

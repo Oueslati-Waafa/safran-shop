@@ -9,7 +9,7 @@ export default function Testimonials(props) {
   const [testimonials, setTestimonials] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:9090/testimonials/getAll").then((result) => {
+    axios.get("https://safran.onrender.com/testimonials/getAll").then((result) => {
       setTestimonials(result.data.testimonials);
     });
   }, []);

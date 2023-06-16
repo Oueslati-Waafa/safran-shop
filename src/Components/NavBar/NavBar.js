@@ -56,7 +56,7 @@ export default function NavBar() {
   const [dbUser, setDbUser] = useState();
   useEffect(() => {
     if (user) {
-      axios.get(`http://localhost:9090/users/${user.id}`).then((result) => {
+      axios.get(`https://safran.onrender.com/users/${user.id}`).then((result) => {
         setDbUser(result.data);
       });
     } else {

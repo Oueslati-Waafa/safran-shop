@@ -52,7 +52,7 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
   const [likedProducts, setLikedProducts] = useState([]);
   useEffect(() => {
     axios
-      .get("http://localhost:9090/users/wishlist", {
+      .get("https://safran.onrender.com/users/wishlist", {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
@@ -81,7 +81,7 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
   const handleToggleLike = (productId) => {
     if (likedProducts.some((item) => item._id === productId)) {
       // Object with matching id found in likedProducts
-      fetch(`http://localhost:9090/users/wishlist/delete/${productId}`, {
+      fetch(`https://safran.onrender.com/users/wishlist/delete/${productId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -99,7 +99,7 @@ export default function ProductCard({ product, index, refresh, setRefresh }) {
         .catch((error) => console.log(error));
     } else {
       // Object with matching id not found in likedProducts
-      fetch(`http://localhost:9090/users/wishlist/add/${productId}`, {
+      fetch(`https://safran.onrender.com/users/wishlist/add/${productId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

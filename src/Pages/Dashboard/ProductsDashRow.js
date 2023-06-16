@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import { Pen, Trash } from "react-bootstrap-icons";
 import { toast, ToastContainer } from "react-toastify";
+import Swal from "sweetalert2";
 import "./ProductsDash.css";
 
 export default function ProductsDashRow(props) {
@@ -23,25 +24,47 @@ export default function ProductsDashRow(props) {
   const deleteProduct = async (productId) => {
     try {
       if (userToken) {
-        await axios.delete(`http://localhost:9090/products/${productId}`, {
-          headers: {
-            Authorization: `Bearer ${userToken}`,
+        // Show confirmation dialog before deleting the product
+        const result = await Swal.fire({
+          title: "Confirmation",
+          text: "Are you sure you want to delete this product?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Delete",
+          cancelButtonText: "Cancel",
+          reverseButtons: true,
+          customClass: {
+            confirmButton: "swal-confirm-button",
           },
         });
-        props.removeProduct(productId);
-        props.setRefreshProducts(
-          (prevRefreshProducts) => prevRefreshProducts + 1
-        );
-        toast.success("Product deleted successfully", {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "dark",
-        });
+
+        // If the user confirms deletion, proceed with the delete operation
+        if (result.isConfirmed) {
+          await axios.delete(
+            `https://safran.onrender.com/products/${productId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${userToken}`,
+              },
+            }
+          );
+
+          props.removeProduct(productId);
+          props.setRefreshProducts(
+            (prevRefreshProducts) => prevRefreshProducts + 1
+          );
+
+          toast.success("Product deleted successfully", {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+        }
       } else {
         return;
       }
@@ -63,7 +86,7 @@ export default function ProductsDashRow(props) {
   const updateProduct = async (productId, updatedData) => {
     try {
       const response = await axios.put(
-        `http://localhost:9090/products/${productId}`,
+        `https://safran.onrender.com/products/${productId}`,
         updatedData,
         {
           headers: {

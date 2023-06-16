@@ -23,7 +23,7 @@ export default function Dashboard(props) {
     }
     try {
       axios
-        .get("http://localhost:9090/orders/getAll", {
+        .get("https://safran.onrender.com/orders/getAll", {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },

@@ -7,7 +7,7 @@ export default function TestimonialCard({ testimonial }) {
   useEffect(() => {
     if (testimonial) {
       axios
-        .get(`http://localhost:9090/users/${testimonial?.userId}`)
+        .get(`https://safran.onrender.com/users/${testimonial?.userId}`)
         .then((result) => {
           setTsUser(result.data);
         });

@@ -55,7 +55,7 @@ export default function OrderSummary({ setCurrentStep }) {
   const getProductById = async (productId) => {
     try {
       const response = await axios.get(
-        `http://localhost:9090/products/${productId}`
+        `https://safran.onrender.com/products/${productId}`
       );
       console.log("found product", response.data);
       return response.data;
@@ -127,7 +127,7 @@ export default function OrderSummary({ setCurrentStep }) {
     }
     if (orderToPay === "") {
       try {
-        const response = await fetch("http://localhost:9090/orders/add", {
+        const response = await fetch("https://safran.onrender.com/orders/add", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -171,7 +171,7 @@ export default function OrderSummary({ setCurrentStep }) {
   const updateProductCountInStock = async (id, quantity) => {
     try {
       const response = await axios.put(
-        `http://localhost:9090/products/stock/${id}`,
+        `https://safran.onrender.com/products/stock/${id}`,
         { quantity }
       );
       return response.data;
@@ -260,7 +260,7 @@ export default function OrderSummary({ setCurrentStep }) {
         card: card,
       };
       const response = await fetch(
-        "http://localhost:9090/orders/stripe-payment",
+        "https://safran.onrender.com/orders/stripe-payment",
         {
           method: "POST",
           headers: {
@@ -351,7 +351,7 @@ export default function OrderSummary({ setCurrentStep }) {
     }
     axios
       .post(
-        "http://localhost:9090/orders/create-paypal-payment",
+        "https://safran.onrender.com/orders/create-paypal-payment",
         {
           orderId: orderToPay,
           user: user,
