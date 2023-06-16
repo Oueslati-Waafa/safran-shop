@@ -35,7 +35,7 @@ export default function Footer() {
     }
     try {
       const response = await axios.post(
-        "http://localhost:9090/testimonials/add",
+        "https://safran.onrender.com/testimonials/add",
         {
           text: inputValue,
           savedUser: user,

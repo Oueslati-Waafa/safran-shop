@@ -81,7 +81,7 @@ export default function AccountDetails() {
     if (isValidModification) {
       try {
         const response = await axios.put(
-          `http://localhost:9090/users/${user.id}`,
+          `https://safran.onrender.com/users/${user.id}`,
           {
             fname: fname,
             lname: lname,
@@ -145,7 +145,7 @@ export default function AccountDetails() {
       formData.append("file", filePath);
 
       const response = await axios.put(
-        `http://localhost:9090/users/image/${user.id}`,
+        `https://safran.onrender.com/users/image/${user.id}`,
         formData,
         {
           headers: {
@@ -223,7 +223,7 @@ export default function AccountDetails() {
     if (isValidPWModification) {
       try {
         const response = await axios.post(
-          `http://localhost:9090/auth/reset/${user.id}`,
+          `https://safran.onrender.com/auth/reset/${user.id}`,
           {
             oldPassword: oldPassword,
             newPassword: newPassword,

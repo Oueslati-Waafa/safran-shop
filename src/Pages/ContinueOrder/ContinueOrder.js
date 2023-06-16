@@ -29,7 +29,7 @@ export default function ContinueOrder() {
   useEffect(() => {
     if (orderId) {
       axios
-        .get(`http://localhost:9090/orders/${orderId}`, {
+        .get(`https://safran.onrender.com/orders/${orderId}`, {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
@@ -94,7 +94,7 @@ export default function ContinueOrder() {
   const updateProductCountInStock = async (id, quantity) => {
     try {
       const response = await axios.put(
-        `http://localhost:9090/products/stock/${id}`,
+        `https://safran.onrender.com/products/stock/${id}`,
         { quantity }
       );
       return response.data;
@@ -108,7 +108,7 @@ export default function ContinueOrder() {
   const getProductById = async (productId) => {
     try {
       const response = await axios.get(
-        `http://localhost:9090/products/${productId}`
+        `https://safran.onrender.com/products/${productId}`
       );
       console.log("found product", response.data);
       return response.data;
@@ -216,7 +216,7 @@ export default function ContinueOrder() {
         card: card,
       };
       const response = await fetch(
-        "http://localhost:9090/orders/stripe-payment",
+        "https://safran.onrender.com/orders/stripe-payment",
         {
           method: "POST",
           headers: {
@@ -306,7 +306,7 @@ export default function ContinueOrder() {
     }
     axios
       .post(
-        "http://localhost:9090/orders/create-paypal-payment",
+        "https://safran.onrender.com/orders/create-paypal-payment",
         {
           orderId: orderId,
           user: user,

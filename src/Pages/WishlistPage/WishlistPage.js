@@ -10,7 +10,7 @@ export default function WishlistPage() {
   const [refresh, setRefresh] = useState(0);
   useEffect(() => {
     axios
-      .get("http://localhost:9090/users/wishlist", {
+      .get("https://safran.onrender.com/users/wishlist", {
         headers: {
           Authorization: `Bearer ${savedUser.token}`,
         },

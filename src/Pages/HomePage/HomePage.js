@@ -143,7 +143,7 @@ export default function HomePage() {
 
   const [products, setProducts] = useState([]);
   useEffect(() => {
-    axios.get("http://localhost:9090/products/getAll").then((result) => {
+    axios.get("https://safran.onrender.com/products/getAll").then((result) => {
       setProducts(result.data);
     });
   }, []);

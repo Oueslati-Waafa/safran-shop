@@ -22,7 +22,7 @@ export default function OrderHistory() {
       return;
     }
     axios
-      .get("http://localhost:9090/orders/my-orders", {
+      .get("https://safran.onrender.com/orders/my-orders", {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },

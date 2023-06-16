@@ -48,7 +48,7 @@ const Login = () => {
     }
     if (isValidLogIn) {
       try {
-        const response = await axios.post("http://localhost:9090/auth/login", {
+        const response = await axios.post("https://safran.onrender.com/auth/login", {
           email: logInEmail,
           password: logInPassword,
         });
@@ -106,7 +106,7 @@ const Login = () => {
     }
     try {
       const response = await axios.get(
-        `http://localhost:9090/auth/reset/${resetEmail}`
+        `https://safran.onrender.com/auth/reset/${resetEmail}`
       );
       console.log(response);
       toast.success("Reset code sent", {
@@ -173,7 +173,7 @@ const Login = () => {
         const toSendNumber = "+" + signUpNumber;
         console.log(toSendNumber);
         const response = await axios.post(
-          "http://localhost:9090/auth/register",
+          "https://safran.onrender.com/auth/register",
           {
             fname: signUpFname,
             lname: signUpLname,
@@ -224,7 +224,7 @@ const Login = () => {
     event.preventDefault(); // prevent from submission
     try {
       const response = await axios.post(
-        `http://localhost:9090/auth/verify/${signUpEmail}`,
+        `https://safran.onrender.com/auth/verify/${signUpEmail}`,
         {
           verificationCode: vrfCode,
         }
@@ -266,7 +266,7 @@ const Login = () => {
     console.log(signUpEmail);
     try {
       const response = await axios.get(
-        `http://localhost:9090/auth/resend-verification/${signUpEmail}`
+        `https://safran.onrender.com/auth/resend-verification/${signUpEmail}`
       );
       toast.success("Verification code resent", {
         position: "top-right",

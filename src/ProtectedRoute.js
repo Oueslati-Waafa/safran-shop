@@ -9,7 +9,7 @@
 //     const savedUser = JSON.parse(localStorage.getItem("user")) || null;
 //     if (savedUser) {
 //       axios
-//         .get(`http://localhost:9090/users/${savedUser.id}`)
+//         .get(`https://safran.onrender.com/users/${savedUser.id}`)
 //         .then((result) => {
 //           setIsAuthenticated(result.data.isAdmin);
 //         });
@@ -41,7 +41,7 @@ export default function ProtectedRoute({ children }) {
     async function getUser() {
       try {
         const response = await axios.get(
-          `http://localhost:9090/users/${savedUser.id}`
+          `https://safran.onrender.com/users/${savedUser.id}`
         );
         const user = response.data;
         setIsAuthenticated(user.isAdmin);
