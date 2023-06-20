@@ -70,7 +70,7 @@ const createUser = async (req, res) => {
 
 // PUT /users/:id
 const updateImage = async (req, res) => {
-  console.log("request body", req);
+  console.log("request body", req.body);
   try {
     const { id } = req.params;
     // Check if req.file exists
@@ -81,9 +81,11 @@ const updateImage = async (req, res) => {
 
       try {
         // Upload image to Cloudinary
+        console.log("id", id);
         const cloudinaryResponse = await uploadToCloudinary(
           file,
-          "safran-shop-assets"
+          "Saafran/users",
+          id
         );
         console.log("Cloudinary response:", cloudinaryResponse); // Add this console log
 

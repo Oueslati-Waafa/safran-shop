@@ -10,7 +10,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET_KEY,
 });
 
-const uploadToCloudinary = (file, folder) => {
+const uploadToCloudinary = (file, folder, userId) => {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
       file,
@@ -25,6 +25,7 @@ const uploadToCloudinary = (file, folder) => {
         }
       },
       {
+        public_id: userId,
         resource_type: "auto",
         folder: folder,
       }
