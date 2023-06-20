@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "swagger:generate": "node swagger.js",
-    "start": "nodemon server.js"
+    "start": "node server.js"
   },
   "author": "wafa oueslati",
   "license": "ISC",
